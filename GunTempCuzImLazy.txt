@@ -1,0 +1,27 @@
+public static void GunByJax() //also this is slightly edited it aint a straight skid lol
+ {
+     if (ControllerInputPoller.instance.rightGrab)
+     {
+         RaycastHit raycastHit;
+         if (Physics.Raycast(GorillaLocomotion.Player.Instance.rightControllerTransform.position - GorillaLocomotion.Player.Instance.rightControllerTransform.up, -GorillaLocomotion.Player.Instance.rightControllerTransform.up, out raycastHit) && GunThingie == null)
+         {
+             GunThingie = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+             UnityEngine.Object.Destroy(GunThingie.GetComponent<Rigidbody>());
+             UnityEngine.Object.Destroy(GunThingie.GetComponent<SphereCollider>());
+             GunThingie.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+
+             ColorChanger colorChanger = GunThingie.AddComponent<ColorChanger>();
+             colorChanger.colorInfo = newBackroundColor;
+             colorChanger.Start();
+         }
+         GunThingie.transform.position = raycastHit.point;
+         if (ControllerInputPoller.instance.rightControllerIndexFloat > 0f)
+         {
+            //shoot
+         }
+     }
+     else
+     {
+         Object.Destroy(GunThingie);
+     }
+ }
