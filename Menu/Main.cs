@@ -22,7 +22,6 @@ namespace StupidTemplate.Menu
     [HarmonyPatch("LateUpdate", MethodType.Normal)]
     public class Main : MonoBehaviour
     {
-        static bool hasAddedOtherButtons = false;
         // Constant
         public static void Prefix()
         {
@@ -319,11 +318,6 @@ namespace StupidTemplate.Menu
                     component.sizeDelta = new Vector2(0.2f, 0.03f);
                     component.localPosition = new Vector3(0.064f, -0.195f, 0f);
                     component.rotation = Quaternion.Euler(new Vector3(180f, 90f, 90f));
-
-            if (PhotonNetwork.LocalPlayer.UserId == "E98F4FDDE75922E6" || PhotonNetwork.LocalPlayer.UserId == "DC467397864EA36B")
-            {
-                //admin code
-            }
 
             // Mod Buttons
             ButtonInfo[] activeButtons = buttons[buttonsType].Skip(pageNumber * buttonsPerPage).Take(buttonsPerPage).ToArray();
