@@ -32,23 +32,32 @@ namespace StupidTemplate.Mods
                 if (ControllerInputPoller.instance.rightControllerIndexFloat > 0f)
                 {
                     GorillaTagger.Instance.offlineVRRig.enabled = false;
+
+                    try
+                    {
+                        GorillaTagger.Instance.myVRRig.enabled = false;
+                    }
+                    catch
+                    {
+                    }
                     whereRigGo = GunThingie.transform.position;
                 }
             }
             else
             {
-                GorillaTagger.Instance.offlineVRRig.enabled = true;
+                fixRig();
                 Object.Destroy(GunThingie);
             }
 
             if (whereRigGo != null && !GorillaTagger.Instance.offlineVRRig.enabled)
             {
+                GorillaTagger.Instance.offlineVRRig.transform.position = Vector3.MoveTowards(GorillaTagger.Instance.offlineVRRig.transform.position, whereRigGo, (float)0.2);
+
                 try
                 {
                     GorillaTagger.Instance.myVRRig.transform.position = Vector3.MoveTowards(GorillaTagger.Instance.myVRRig.transform.position, whereRigGo, (float)0.2);
                 }
                 catch {
-                    GorillaTagger.Instance.offlineVRRig.transform.position = Vector3.MoveTowards(GorillaTagger.Instance.offlineVRRig.transform.position, whereRigGo, (float)0.2);
                 }
             }
         }
@@ -79,15 +88,17 @@ namespace StupidTemplate.Mods
 
         public static void heliMonke()
         {
+            GorillaTagger.Instance.offlineVRRig.enabled = false;
+            GorillaTagger.Instance.offlineVRRig.transform.position += new Vector3(0, 0.020f, 0);
+            GorillaTagger.Instance.offlineVRRig.transform.rotation = Quaternion.Euler(GorillaTagger.Instance.offlineVRRig.transform.rotation.eulerAngles + new Vector3(0f, 10f, 0f));
+
             try
             {
+                GorillaTagger.Instance.myVRRig.enabled = false;
                 GorillaTagger.Instance.myVRRig.transform.position = GorillaTagger.Instance.offlineVRRig.transform.position;
                 GorillaTagger.Instance.myVRRig.transform.rotation = Quaternion.Euler(GorillaTagger.Instance.myVRRig.transform.rotation.eulerAngles + new Vector3(0f, 10f, 0f));
             }
             catch {
-                GorillaTagger.Instance.offlineVRRig.enabled = false;
-                GorillaTagger.Instance.offlineVRRig.transform.position += new Vector3(0, 0.020f, 0);
-                GorillaTagger.Instance.offlineVRRig.transform.rotation = Quaternion.Euler(GorillaTagger.Instance.offlineVRRig.transform.rotation.eulerAngles + new Vector3(0f, 10f, 0f));
             }
         }
 
@@ -101,6 +112,14 @@ namespace StupidTemplate.Mods
         public static void ghostMonke()
         {
             GorillaTagger.Instance.offlineVRRig.enabled = ControllerInputPoller.instance.leftControllerPrimaryButton;
+
+            try
+            {
+                GorillaTagger.Instance.myVRRig.enabled = ControllerInputPoller.instance.leftControllerPrimaryButton;
+            }
+            catch
+            {
+            }
         }
 
         static Vector3 oldLHandTracking = GorillaTagger.Instance.offlineVRRig.leftHand.trackingPositionOffset;
@@ -118,6 +137,13 @@ namespace StupidTemplate.Mods
             GorillaTagger.Instance.offlineVRRig.leftHand.trackingRotationOffset = oldLHandTrackingRotation;
             GorillaTagger.Instance.offlineVRRig.rightHand.trackingRotationOffset = oldRHandTrackingRotation;
             GorillaTagger.Instance.offlineVRRig.enabled = true;
+            try
+            {
+                GorillaTagger.Instance.myVRRig.enabled = true;
+            }
+            catch
+            {
+            }
         }
     }
 }
