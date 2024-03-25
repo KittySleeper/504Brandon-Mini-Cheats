@@ -33,13 +33,6 @@ namespace StupidTemplate.Mods
                 {
                     GorillaTagger.Instance.offlineVRRig.enabled = false;
 
-                    try
-                    {
-                        GorillaTagger.Instance.myVRRig.enabled = false;
-                    }
-                    catch
-                    {
-                    }
                     whereRigGo = GunThingie.transform.position;
                 }
             }
@@ -89,14 +82,14 @@ namespace StupidTemplate.Mods
         public static void heliMonke()
         {
             GorillaTagger.Instance.offlineVRRig.enabled = false;
+
             GorillaTagger.Instance.offlineVRRig.transform.position += new Vector3(0, 0.020f, 0);
             GorillaTagger.Instance.offlineVRRig.transform.rotation = Quaternion.Euler(GorillaTagger.Instance.offlineVRRig.transform.rotation.eulerAngles + new Vector3(0f, 10f, 0f));
 
             try
             {
-                GorillaTagger.Instance.myVRRig.enabled = false;
                 GorillaTagger.Instance.myVRRig.transform.position = GorillaTagger.Instance.offlineVRRig.transform.position;
-                GorillaTagger.Instance.myVRRig.transform.rotation = Quaternion.Euler(GorillaTagger.Instance.myVRRig.transform.rotation.eulerAngles + new Vector3(0f, 10f, 0f));
+                GorillaTagger.Instance.myVRRig.transform.rotation = GorillaTagger.Instance.myVRRig.transform.rotation;
             }
             catch {
             }
@@ -112,38 +105,26 @@ namespace StupidTemplate.Mods
         public static void ghostMonke()
         {
             GorillaTagger.Instance.offlineVRRig.enabled = ControllerInputPoller.instance.leftControllerPrimaryButton;
-
-            try
-            {
-                GorillaTagger.Instance.myVRRig.enabled = ControllerInputPoller.instance.leftControllerPrimaryButton;
-            }
-            catch
-            {
-            }
         }
 
         static Vector3 oldLHandTracking = GorillaTagger.Instance.offlineVRRig.leftHand.trackingPositionOffset;
-        static Vector3 oldRHandTracking = GorillaTagger.Instance.offlineVRRig.rightHand.trackingPositionOffset;
-
         static Vector3 oldLHandTrackingRotation = GorillaTagger.Instance.offlineVRRig.leftHand.trackingRotationOffset;
+
+        static Vector3 oldRHandTracking = GorillaTagger.Instance.offlineVRRig.rightHand.trackingPositionOffset;
         static Vector3 oldRHandTrackingRotation = GorillaTagger.Instance.offlineVRRig.rightHand.trackingRotationOffset;
+
+        static Vector3 oldHeadTracking = GorillaTagger.Instance.offlineVRRig.head.trackingPositionOffset;
+        static Vector3 oldHeadTrackingRotation = GorillaTagger.Instance.offlineVRRig.head.trackingRotationOffset;
 
         public static void fixRig()
         {
-            GorillaTagger.Instance.offlineVRRig.head.trackingPositionOffset.Set(0, 0, 0);
+            GorillaTagger.Instance.offlineVRRig.head.trackingPositionOffset = oldHeadTracking;
+            GorillaTagger.Instance.offlineVRRig.head.trackingRotationOffset = oldHeadTrackingRotation;
             GorillaTagger.Instance.offlineVRRig.leftHand.trackingPositionOffset = oldLHandTracking;
             GorillaTagger.Instance.offlineVRRig.rightHand.trackingPositionOffset = oldRHandTracking;
-            GorillaTagger.Instance.offlineVRRig.head.trackingRotationOffset.Set(0, 0, 0);
             GorillaTagger.Instance.offlineVRRig.leftHand.trackingRotationOffset = oldLHandTrackingRotation;
             GorillaTagger.Instance.offlineVRRig.rightHand.trackingRotationOffset = oldRHandTrackingRotation;
             GorillaTagger.Instance.offlineVRRig.enabled = true;
-            try
-            {
-                GorillaTagger.Instance.myVRRig.enabled = true;
-            }
-            catch
-            {
-            }
         }
     }
 }
