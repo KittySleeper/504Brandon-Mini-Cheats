@@ -60,22 +60,10 @@ namespace StupidTemplate.Mods
 
         public static void NoClip()
         {
-            if (ControllerInputPoller.instance.leftControllerIndexFloat > 0.1f)
             {
+                foreach (MeshCollider meshCollider in Resources.FindObjectsOfTypeAll<MeshCollider>())
                 {
-                    foreach (MeshCollider meshCollider in Resources.FindObjectsOfTypeAll<MeshCollider>())
-                    {
-                        meshCollider.enabled = false;
-                    }
-                }
-            }
-            else
-            {
-                {
-                    foreach (MeshCollider meshCollider in Resources.FindObjectsOfTypeAll<MeshCollider>())
-                    {
-                        meshCollider.enabled = true;
-                    }
+                    meshCollider.enabled = ControllerInputPoller.instance.leftControllerIndexFloat !> 0.1f;
                 }
             }
         }
@@ -110,26 +98,13 @@ namespace StupidTemplate.Mods
 
         public static void TeleportToRandom()
         {
-            foreach (VRRig FullPlayers in GorillaParent.instance.vrrigs)
+            foreach (MeshCollider meshCollider in Resources.FindObjectsOfTypeAll<MeshCollider>())
             {
-                bool flag = Random.Range(0, 100) >= 75;
+                meshCollider.enabled = !ControllerInputPoller.instance.leftControllerPrimaryButton;
+            }
 
-                if (flag)
-                {
-                    Player.Instance.transform.position = FullPlayers.transform.position;
-
-                    foreach (MeshCollider meshCollider in Resources.FindObjectsOfTypeAll<MeshCollider>())
-                    {
-                        meshCollider.enabled = false;
-                    }
-
-                    foreach (MeshCollider meshCollider in Resources.FindObjectsOfTypeAll<MeshCollider>())
-                    {
-                        meshCollider.enabled = true;
-                    }
-
-                    break;
-                }
+            if (ControllerInputPoller.instance.leftControllerPrimaryButton) {
+                Player.Instance.transform.position = RigManager.GetRandomVRRig(false).transform.position;
             }
         }
     }

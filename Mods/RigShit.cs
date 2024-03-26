@@ -107,6 +107,24 @@ namespace StupidTemplate.Mods
             GorillaTagger.Instance.offlineVRRig.enabled = ControllerInputPoller.instance.leftControllerPrimaryButton;
         }
 
+        public static void invisMonke()
+        {
+            ghostMonke();
+
+            if (!GorillaTagger.Instance.offlineVRRig.enabled)
+            {
+                GorillaTagger.Instance.offlineVRRig.transform.position = new Vector3(int.MaxValue, 0, 0);
+
+                try
+                {
+                    GorillaTagger.Instance.myVRRig.transform.position = new Vector3(int.MaxValue, 0, 0);
+                }
+                catch
+                {
+                }
+            }
+        }
+
         static Vector3 oldLHandTracking = GorillaTagger.Instance.offlineVRRig.leftHand.trackingPositionOffset;
         static Vector3 oldLHandTrackingRotation = GorillaTagger.Instance.offlineVRRig.leftHand.trackingRotationOffset;
 

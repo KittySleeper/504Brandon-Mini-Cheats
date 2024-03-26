@@ -38,6 +38,11 @@ namespace StupidTemplate.Mods
             buttonsType = 6;
         }
 
+        public static void Safety()
+        {
+            buttonsType = 7;
+        }
+
         public static void RightHand()
         {
             rightHanded = true;

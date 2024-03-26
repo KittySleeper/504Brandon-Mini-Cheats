@@ -25,6 +25,15 @@ namespace StupidTemplate.Menu
         // Constant
         public static void Prefix()
         {
+            try
+            {
+                if (reportBoards == null)
+                    reportBoards = FindObjectsOfType<GorillaScoreBoard>(); //for antireport and maybe more if i wanna
+            }
+            catch
+            {
+            }
+
             GameObject.Find("motdtext").GetComponent<Text>().text = "HEY THANKS FOR USING <color=#ff9400>" + PluginInfo.Name + " V:" + PluginInfo.Version + "</color> THIS MENU IS VERY SIMPLE BUT THANKS FOR USING IT!";
             GameObject.Find("COC Text").GetComponent<Text>().text = "IT IS PRETTY SIMPLE TO USE THIS MENU IF YOU GET BANNED 504BRANDON TAKES NO RESPONSIBILITY!\nANYTHING THAT IS <color=#ff9400>THIS COLOR</color> MEANS THAT IS THE BUTTON TO USE FOR EXAMPLE [<color=#ff9400>B</color>] MEANS TO USE B FOR THE MOD\nANYTHING THAT IS <color=#570000>THIS COLOR</color> OR [<color=#570000>D</color>] BY IT MEANS DETECTED\nANYTHING THAT IS <color=#ffcc00>THIS COLOR</color> OR HAS [<color=#ffcc00>D?/EX</color>] BY IT MEANS THE MOD IS POSSIBLY DETECTED AND OR IS EXPERIMENTAL\n\nTHATS ABOUT IT HAPPY <color=#570000>ILLEGAL</color> MODDING";//COC writing
             GameObject.Find("CodeOfConduct").GetComponent<Text>().text = "HOW TO USE <color=#ff9400>504MC</color>";//COC Title
@@ -167,7 +176,7 @@ namespace StupidTemplate.Menu
                 component.position = new Vector3(0.06f, 0f, 0.082f);
             component.rotation = Quaternion.Euler(new Vector3(180f, 90f, 90f));
 
-            /*if (fpsCounter)
+            if (fpsCounter)
             {
                 fpsObject = new GameObject
                 {
@@ -191,7 +200,7 @@ namespace StupidTemplate.Menu
                 component2.sizeDelta = new Vector2(0.28f, 0.02f);
                 component2.position = new Vector3(component.position.x, component.position.y, component.position.z - 0.02f);
                 component2.rotation = Quaternion.Euler(new Vector3(180f, 90f, 90f));
-            }*/
+            }
 
             // Buttons
             // Disconnect
@@ -473,6 +482,7 @@ namespace StupidTemplate.Menu
         public static void Toggle(string buttonText)
         {
             int lastPage = ((buttons[buttonsType].Length + buttonsPerPage - 1) / buttonsPerPage) - 1;
+
             if (buttonText == "PreviousPage")
             {
                 pageNumber--;
@@ -481,53 +491,51 @@ namespace StupidTemplate.Menu
                     pageNumber = lastPage;
                 }
             }
-            else
+
+            if (buttonText == "NextPage")
             {
-                if (buttonText == "NextPage")
+                pageNumber++;
+                if (pageNumber > lastPage)
                 {
-                    pageNumber++;
-                    if (pageNumber > lastPage)
-                    {
-                        pageNumber = 0;
-                    }
+                    pageNumber = 0;
                 }
-                else
+            }
+
+            if (buttonText == "Disconnect")
+                PhotonNetwork.Disconnect();
+
+            if (buttonText == "Disconnect")
+                PhotonNetwork.Disconnect();
+
+            ButtonInfo target = GetIndex(buttonText);
+            if (target != null)
+            {
+                if (target.isTogglable)
                 {
-                    ButtonInfo target = GetIndex(buttonText);
-                    if (target != null)
+                    target.enabled = !target.enabled;
+                    if (target.enabled)
                     {
-                        if (target.isTogglable)
+                        NotifiLib.SendNotification("<color=grey>[</color><color=green>ENABLE</color><color=grey>]</color> " + target.toolTip);
+                        if (target.enableMethod != null)
                         {
-                            target.enabled = !target.enabled;
-                            if (target.enabled)
-                            {
-                                NotifiLib.SendNotification("<color=grey>[</color><color=green>ENABLE</color><color=grey>]</color> " + target.toolTip);
-                                if (target.enableMethod != null)
-                                {
-                                    try { target.enableMethod.Invoke(); } catch { }
-                                }
-                            }
-                            else
-                            {
-                                NotifiLib.SendNotification("<color=grey>[</color><color=red>DISABLE</color><color=grey>]</color> " + target.toolTip);
-                                if (target.disableMethod != null)
-                                {
-                                    try { target.disableMethod.Invoke(); } catch { }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            NotifiLib.SendNotification("<color=grey>[</color><color=green>ENABLE</color><color=grey>]</color> " + target.toolTip);
-                            if (target.method != null)
-                            {
-                                try { target.method.Invoke(); } catch { }
-                            }
+                            try { target.enableMethod.Invoke(); } catch { }
                         }
                     }
                     else
                     {
-                        UnityEngine.Debug.LogError(buttonText + " does not exist");
+                        NotifiLib.SendNotification("<color=grey>[</color><color=red>DISABLE</color><color=grey>]</color> " + target.toolTip);
+                        if (target.disableMethod != null)
+                        {
+                            try { target.disableMethod.Invoke(); } catch { }
+                        }
+                    }
+                }
+                else
+                {
+                    NotifiLib.SendNotification("<color=grey>[</color><color=green>ENABLE</color><color=grey>]</color> " + target.toolTip);
+                    if (target.method != null)
+                    {
+                        try { target.method.Invoke(); } catch { }
                     }
                 }
             }
@@ -570,6 +578,7 @@ namespace StupidTemplate.Menu
 
         // Variables
         // Important
+        public static GorillaScoreBoard[] reportBoards = null;
         // Objects
         public static GameObject menu;
         public static GameObject menuBackground;
