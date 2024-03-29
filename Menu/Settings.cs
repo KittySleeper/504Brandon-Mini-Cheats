@@ -1,4 +1,5 @@
 ﻿using StupidTemplate.Classes;
+using System;
 using UnityEngine;
 using static StupidTemplate.Menu.Main;
 
@@ -42,5 +43,8 @@ namespace StupidTemplate
         public static Vector3 menuSize = new Vector3(0.1f, 1.5f, 0.5f); // Depth, Width, Height
         public static int buttonsPerPage = 3;
         public static int theme = 1;
+
+        public static String[] platformShapes = {"Square", "Circle"};
+        public static int platformShapeInt = 0;
     }
 }

@@ -5,6 +5,8 @@ using UnityEngine;
 using GorillaLocomotion;
 using UnityEngine.UIElements;
 using ExitGames.Client.Photon.StructWrapping;
+using StupidTemplate.Menu;
+using UnityEngine.Assertions.Must;
 
 namespace StupidTemplate.Mods
 {
@@ -18,9 +20,13 @@ namespace StupidTemplate.Mods
         {
             if (ControllerInputPoller.instance.leftGrab && platL == null)
             {
-                platL = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                PrimitiveType[] platformShapeObjects = {PrimitiveType.Cube, PrimitiveType.Sphere};
+
+                platL = GameObject.CreatePrimitive(platformShapeObjects[platformShapeInt]);
                 platL.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
                 platL.transform.position = GorillaTagger.Instance.leftHandTransform.position;
+                platL.GetComponent<Renderer>().forceRenderingOff = GetIndex("Invis Platforms").enabled;
+
                 ColorChanger colorChanger = platL.AddComponent<ColorChanger>();
                 colorChanger.colorInfo = newBackroundColor;
                 colorChanger.Start();
@@ -33,9 +39,12 @@ namespace StupidTemplate.Mods
 
             if (ControllerInputPoller.instance.rightGrab && platR == null)
             {
-                platR = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                PrimitiveType[] platformShapeObjects =  {PrimitiveType.Cube, PrimitiveType.Sphere};
+
+                platR = GameObject.CreatePrimitive(platformShapeObjects[platformShapeInt]);
                 platR.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
                 platR.transform.position = GorillaTagger.Instance.rightHandTransform.position;
+                platR.GetComponent<Renderer>().forceRenderingOff = GetIndex("Invis Platforms").enabled;
 
                 ColorChanger colorChanger = platR.AddComponent<ColorChanger>();
                 colorChanger.colorInfo = newBackroundColor;
@@ -63,7 +72,7 @@ namespace StupidTemplate.Mods
             {
                 foreach (MeshCollider meshCollider in Resources.FindObjectsOfTypeAll<MeshCollider>())
                 {
-                    meshCollider.enabled = ControllerInputPoller.instance.leftControllerIndexFloat !> 0.1f;
+                    meshCollider.enabled = ControllerInputPoller.instance.leftControllerIndexFloat > 0.1f;
                 }
             }
         }

@@ -34,7 +34,7 @@ namespace StupidTemplate.Menu
             {
             }
 
-            GameObject.Find("motdtext").GetComponent<Text>().text = "HEY THANKS FOR USING <color=#ff9400>" + PluginInfo.Name + " V:" + PluginInfo.Version + "</color> THIS MENU IS VERY SIMPLE BUT THANKS FOR USING IT!";
+            GameObject.Find("motdtext").GetComponent<Text>().text = "HEY THANKS FOR USING <color=#ff9400>" + PluginInfo.Name + " V:" + PluginInfo.Version + "</color> THIS MENU IS VERY SIMPLE BUT THANKS FOR USING IT!\n\nALSO THIS MENU IS PRIMARLY FOR GHOST TROLLING DONT USE IT IF YOU WANT A WHOLE BUNCH OF OP SHIT YOU WILL BE DISSAPOINTED";
             GameObject.Find("COC Text").GetComponent<Text>().text = "IT IS PRETTY SIMPLE TO USE THIS MENU IF YOU GET BANNED 504BRANDON TAKES NO RESPONSIBILITY!\nANYTHING THAT IS <color=#ff9400>THIS COLOR</color> MEANS THAT IS THE BUTTON TO USE FOR EXAMPLE [<color=#ff9400>B</color>] MEANS TO USE B FOR THE MOD\nANYTHING THAT IS <color=#570000>THIS COLOR</color> OR [<color=#570000>D</color>] BY IT MEANS DETECTED\nANYTHING THAT IS <color=#ffcc00>THIS COLOR</color> OR HAS [<color=#ffcc00>D?/EX</color>] BY IT MEANS THE MOD IS POSSIBLY DETECTED AND OR IS EXPERIMENTAL\n\nTHATS ABOUT IT HAPPY <color=#570000>ILLEGAL</color> MODDING";//COC writing
             GameObject.Find("CodeOfConduct").GetComponent<Text>().text = "HOW TO USE <color=#ff9400>504MC</color>";//COC Title
 

@@ -83,6 +83,17 @@ namespace StupidTemplate.Mods
             disconnectButton = false;
         }
 
+        public static void ChangePlatformShape()
+        {
+            ButtonInfo button = GetIndex("Platform Shape [" + platformShapes[platformShapeInt] + "]");
+
+            platformShapeInt++;
+            if (platformShapeInt > 1)
+                platformShapeInt = 0;
+
+            button.overlapText = "Platform Shape [" + platformShapes[platformShapeInt] + "]";
+        }
+
         public static void LongMenu()
         {
             //it is no longer mini wtf

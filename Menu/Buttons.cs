@@ -10,17 +10,17 @@ namespace StupidTemplate.Menu
         {
             new ButtonInfo[] { // Main Mods
                 new ButtonInfo { buttonText = "Settings", method =() => SettingsMods.EnterSettings(), isTogglable = false, toolTip = "Opens the main settings page for the menu."},
-                new ButtonInfo { buttonText = "Movement", method =() => SettingsMods.Movement(), isTogglable = false, toolTip = "Movement Mods."},
-                new ButtonInfo { buttonText = "Rig", method =() => SettingsMods.Rig(), isTogglable = false, toolTip = "Rig Mods."},
-                new ButtonInfo { buttonText = "Saftey", method =() => SettingsMods.Safety(), isTogglable = false, toolTip = "Saftey Mods."},
+                new ButtonInfo { buttonText = "Tag Gun [<color=#ffcc00>D?/EX</color>]", method =() => AdvantageShit.TagGun(), toolTip = "Aim And Tag."},
+                new ButtonInfo { buttonText = "Movement Mods", method =() => SettingsMods.Movement(), isTogglable = false, toolTip = "Movement Mods."},
+                new ButtonInfo { buttonText = "Rig Mods", method =() => SettingsMods.Rig(), isTogglable = false, toolTip = "Rig Mods."},
+                new ButtonInfo { buttonText = "Saftey Mods", method =() => SettingsMods.Safety(), isTogglable = false, toolTip = "Saftey Mods."},
                 //new ButtonInfo { buttonText = "Snowball Launcher [<color=#ff9400>RG</color>]", method=() => ProjectileShit.ShootProjectile(), toolTip= "Shoot Snowballs."}, doesnt work smh
             },
 
             new ButtonInfo[] { // Settings
                 new ButtonInfo { buttonText = "Return to Main", method =() => Global.ReturnHome(), isTogglable = false, toolTip = "Returns to the main page of the menu."},
-                new ButtonInfo { buttonText = "Menu", method =() => SettingsMods.MenuSettings(), isTogglable = false, toolTip = "Opens the settings for the menu."},
-                new ButtonInfo { buttonText = "Movement", method =() => SettingsMods.MovementSettings(), isTogglable = false, toolTip = "Opens the movement settings for the menu."},
-                new ButtonInfo { buttonText = "Projectile", method =() => SettingsMods.ProjectileSettings(), isTogglable = false, toolTip = "Opens the projectile settings for the menu."},
+                new ButtonInfo { buttonText = "Menu Settings", method =() => SettingsMods.MenuSettings(), isTogglable = false, toolTip = "Opens the settings for the menu."},
+                new ButtonInfo { buttonText = "Movement Settings", method =() => SettingsMods.MovementSettings(), isTogglable = false, toolTip = "Opens the movement settings for the menu."},
             },
 
             new ButtonInfo[] { // Menu Settings
@@ -36,10 +36,13 @@ namespace StupidTemplate.Menu
 
             new ButtonInfo[] { // Movement Settings
                 new ButtonInfo { buttonText = "Return to Settings", method =() => SettingsMods.EnterSettings(), isTogglable = false, toolTip = "Returns to the main settings page for the menu."},
+                new ButtonInfo { buttonText = "Platform Settings", method =() => SettingsMods.ProjectileSettings(), isTogglable = false, toolTip = "Opens the platfrorm settings for the menu."},
             },
 
-            new ButtonInfo[] { // Projectile Settings
-                new ButtonInfo { buttonText = "Return to Settings", method =() => SettingsMods.MenuSettings(), isTogglable = false, toolTip = "Opens the settings for the menu."},
+            new ButtonInfo[] { // Platform Settings
+                new ButtonInfo { buttonText = "Return to Settings", method =() => SettingsMods.MovementSettings(), isTogglable = false, toolTip = "Opens the movement settings for the menu."},
+                new ButtonInfo { buttonText = "Invis Platforms", toolTip = "Invisible Platforms."},
+                new ButtonInfo { buttonText = "Platform Shape [" + platformShapes[platformShapeInt] + "]", method =() => SettingsMods.ChangePlatformShape(), isTogglable = false, toolTip = "Change your platform shape."},
             },
 
             new ButtonInfo[] { // Movement Mods
@@ -54,6 +57,7 @@ namespace StupidTemplate.Menu
             new ButtonInfo[] { // Rig Mods
                 new ButtonInfo { buttonText = "Return to Main", method =() => Global.ReturnHome(), isTogglable = false, toolTip = "Returns to the main page of the menu."},
                 new ButtonInfo { buttonText = "Fly Gun", method=() => RigShit.FlyGun(), toolTip= "Fly Arround Using A Gun Lmao."},
+                new ButtonInfo { buttonText = "Fly To Player Gun", method=() => RigShit.FlyToPlayerGun(), toolTip= "Fly To A Player Using A Gun Lmao."},
                 new ButtonInfo { buttonText = "Ghost Monke [<color=#ff9400>X</color>]", method=() => RigShit.ghostMonke(), disableMethod=() => RigShit.fixRig(), toolTip= "Freeze Your Rig."},
                 new ButtonInfo { buttonText = "Invis Monke [<color=#ff9400>X</color>]", method=() => RigShit.invisMonke(), disableMethod=() => RigShit.fixRig(), toolTip= "Make Your Rig Invisible."},
                 new ButtonInfo { buttonText = "Lag Monke", method=() => RigShit.lagMonke(), disableMethod=() => RigShit.fixRig(), toolTip= "Makes You Look Laggy But You Arent Acctually Lagging."},

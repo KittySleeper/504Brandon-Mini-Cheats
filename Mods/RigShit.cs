@@ -55,6 +55,55 @@ namespace StupidTemplate.Mods
             }
         }
 
+        static VRRig personToFollow;
+        public static void FlyToPlayerGun()
+        {
+            if (ControllerInputPoller.instance.rightGrab)
+            {
+                RaycastHit raycastHit;
+                if (Physics.Raycast(GorillaLocomotion.Player.Instance.rightControllerTransform.position - GorillaLocomotion.Player.Instance.rightControllerTransform.up, -GorillaLocomotion.Player.Instance.rightControllerTransform.up, out raycastHit) && GunThingie == null)
+                {
+                    GunThingie = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                    UnityEngine.Object.Destroy(GunThingie.GetComponent<Rigidbody>());
+                    UnityEngine.Object.Destroy(GunThingie.GetComponent<SphereCollider>());
+                    GunThingie.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+
+                    ColorChanger colorChanger = GunThingie.AddComponent<ColorChanger>();
+                    colorChanger.colorInfo = newBackroundColor;
+                    colorChanger.Start();
+                }
+                GunThingie.transform.position = raycastHit.point;
+
+                if (ControllerInputPoller.instance.rightControllerIndexFloat > 0f)
+                {
+                    VRRig possibly = raycastHit.collider.GetComponentInParent<VRRig>();
+                    if (possibly && possibly != GorillaTagger.Instance.offlineVRRig)
+                    {
+                        personToFollow = possibly;
+                        GorillaTagger.Instance.offlineVRRig.enabled = false;
+                    }
+                }
+            }
+            else
+            {
+                fixRig();
+                Object.Destroy(GunThingie);
+            }
+
+            if (personToFollow != null && !GorillaTagger.Instance.offlineVRRig.enabled)
+            {
+                GorillaTagger.Instance.offlineVRRig.transform.position = Vector3.MoveTowards(GorillaTagger.Instance.offlineVRRig.transform.position, personToFollow.transform.position, (float)0.2);
+
+                try
+                {
+                    GorillaTagger.Instance.myVRRig.transform.position = Vector3.MoveTowards(GorillaTagger.Instance.myVRRig.transform.position, personToFollow.transform.position, (float)0.2);
+                }
+                catch
+                {
+                }
+            }
+        }
+
         public static void WTFMonke()
         {
             if (ControllerInputPoller.instance.rightControllerIndexFloat > 0f)
