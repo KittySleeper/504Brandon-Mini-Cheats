@@ -35,7 +35,7 @@ namespace StupidTemplate.Mods
             {
                 timerForReconnect += 0.1f;
 
-                if (timerForReconnect >= 0.30f)
+                if (timerForReconnect >= 0.5f)
                 {
                     PhotonNetwork.JoinRoom(roomKickedFrom);
                     PhotonNetwork.InRoom.Equals(true);

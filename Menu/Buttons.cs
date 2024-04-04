@@ -10,11 +10,11 @@ namespace StupidTemplate.Menu
         {
             new ButtonInfo[] { // Main Mods
                 new ButtonInfo { buttonText = "Settings", method =() => SettingsMods.EnterSettings(), isTogglable = false, toolTip = "Opens the main settings page for the menu."},
-                new ButtonInfo { buttonText = "Tag Gun [<color=#ffcc00>D?/EX</color>]", method =() => AdvantageShit.TagGun(), toolTip = "Aim And Tag."},
                 new ButtonInfo { buttonText = "Movement Mods", method =() => SettingsMods.Movement(), isTogglable = false, toolTip = "Movement Mods."},
                 new ButtonInfo { buttonText = "Rig Mods", method =() => SettingsMods.Rig(), isTogglable = false, toolTip = "Rig Mods."},
+                new ButtonInfo { buttonText = "Cheat Mods", method =() => SettingsMods.Cheats(), isTogglable = false, toolTip = "Cheat Mods."},
                 new ButtonInfo { buttonText = "Saftey Mods", method =() => SettingsMods.Safety(), isTogglable = false, toolTip = "Saftey Mods."},
-                //new ButtonInfo { buttonText = "Snowball Launcher [<color=#ff9400>RG</color>]", method=() => ProjectileShit.ShootProjectile(), toolTip= "Shoot Snowballs."}, doesnt work smh
+                new ButtonInfo { buttonText = "Snowball Launcher [<color=#ff9400>RG</color>]", method=() => ProjectileShit.projectileSpam(), toolTip= "Shoot Snowballs."},
             },
 
             new ButtonInfo[] { // Settings
@@ -43,6 +43,7 @@ namespace StupidTemplate.Menu
                 new ButtonInfo { buttonText = "Return to Settings", method =() => SettingsMods.MovementSettings(), isTogglable = false, toolTip = "Opens the movement settings for the menu."},
                 new ButtonInfo { buttonText = "Invis Platforms", toolTip = "Invisible Platforms."},
                 new ButtonInfo { buttonText = "Platform Shape [" + platformShapes[platformShapeInt] + "]", method =() => SettingsMods.ChangePlatformShape(), isTogglable = false, toolTip = "Change your platform shape."},
+                new ButtonInfo { buttonText = "Trigger Platforms", toolTip = "Use Platforms By Pressing Your Triggers."},
             },
 
             new ButtonInfo[] { // Movement Mods
@@ -70,6 +71,12 @@ namespace StupidTemplate.Menu
                 new ButtonInfo { buttonText = "Return to Main", method =() => Global.ReturnHome(), isTogglable = false, toolTip = "Returns to the main page of the menu."},
                 new ButtonInfo { buttonText = "Flush Rpc", method =() => SafetyShit.RpcFlush(), isTogglable = false, toolTip = "Fake anti ban goes hard (/hj)."},
                 new ButtonInfo { buttonText = "Anti Report (forest)", method =() => SafetyShit.AntiReport(), toolTip = "Kids cant report you anymore (ONLY USE IN FOREST)."},
+            },
+
+           new ButtonInfo[] { // Cheat Mods
+                new ButtonInfo { buttonText = "Return to Main", method =() => Global.ReturnHome(), isTogglable = false, toolTip = "Returns to the main page of the menu."},
+                new ButtonInfo { buttonText = "Tag Gun [<color=#ffcc00>D?/EX</color>]", method =() => AdvantageShit.TagGun(), toolTip = "Aim And Tag."},
+                new ButtonInfo { buttonText = "Tag All", method=() => AdvantageShit.tagAll(), toolTip= "Tag Everyone."},
             },
         };
     }

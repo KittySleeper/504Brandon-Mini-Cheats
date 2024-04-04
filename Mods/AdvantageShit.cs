@@ -77,5 +77,19 @@ namespace StupidTemplate.Mods
                 player = null;
             }
         }
+        public static void tagAll()
+        {
+            VRRig rando = RigManager.GetRandomVRRig(false);
+            if (PhotonNetwork.CurrentRoom.CustomProperties.ToString().Contains("INFECTION") && !rando.mainSkin.material.name.Contains("fected"))
+            {
+                GorillaTagger.Instance.offlineVRRig.enabled = false;
+                GorillaTagger.Instance.offlineVRRig.transform.position = RigManager.GetRandomVRRig(false).transform.position - new Vector3(0f, 3.7f, 0f);
+                GorillaLocomotion.Player.Instance.rightControllerTransform.position = rando.transform.position;
+            }
+            else
+            {
+                GorillaTagger.Instance.offlineVRRig.enabled = true;
+            }
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using StupidTemplate.Classes;
+using StupidTemplate.Menu;
 using System.IO;
 using System.Reflection;
 using UnityEngine;
@@ -43,6 +44,11 @@ namespace StupidTemplate.Mods
             buttonsType = 7;
         }
 
+        public static void Cheats()
+        {
+            buttonsType = 8;
+        }
+
         public static void RightHand()
         {
             rightHanded = true;
@@ -85,10 +91,10 @@ namespace StupidTemplate.Mods
 
         public static void ChangePlatformShape()
         {
-            ButtonInfo button = GetIndex("Platform Shape [" + platformShapes[platformShapeInt] + "]");
+            ButtonInfo button = Buttons.buttons[4][2];
 
             platformShapeInt++;
-            if (platformShapeInt > 1)
+            if (platformShapeInt > 2)
                 platformShapeInt = 0;
 
             button.overlapText = "Platform Shape [" + platformShapes[platformShapeInt] + "]";
@@ -99,7 +105,7 @@ namespace StupidTemplate.Mods
             //it is no longer mini wtf
             longMenu = !longMenu;
 
-            if (longMenu == true)
+            if (longMenu)
             {
                 buttonsPerPage = 8;
                 menuSize = new Vector3(0.1f, 1f, 1f);

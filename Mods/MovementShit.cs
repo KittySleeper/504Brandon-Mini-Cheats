@@ -18,12 +18,22 @@ namespace StupidTemplate.Mods
 
         public static void PlatformMonk() //imma be honest this took way to long to code the plats wouldent destroy for some reason-
         {
-            if (ControllerInputPoller.instance.leftGrab && platL == null)
+            bool[] controls;
+
+            if (GetIndex("Trigger Platforms").enabled)
+                controls = new bool[] {ControllerInputPoller.instance.leftControllerIndexFloat > 0.1f, ControllerInputPoller.instance.rightControllerIndexFloat > 0.1f };
+            else
+                controls = new bool[] { ControllerInputPoller.instance.leftGrab, ControllerInputPoller.instance.rightGrab};
+
+            if (controls[0] && platL == null)
             {
-                PrimitiveType[] platformShapeObjects = {PrimitiveType.Cube, PrimitiveType.Sphere};
+                PrimitiveType[] platformShapeObjects = {PrimitiveType.Cube, PrimitiveType.Cube, PrimitiveType.Sphere};
 
                 platL = GameObject.CreatePrimitive(platformShapeObjects[platformShapeInt]);
-                platL.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
+                if (platformShapeInt == 1)
+                    platL.transform.localScale = new Vector3(0.25f, 0.015f, 0.25f);
+                else
+                    platL.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
                 platL.transform.position = GorillaTagger.Instance.leftHandTransform.position;
                 platL.GetComponent<Renderer>().forceRenderingOff = GetIndex("Invis Platforms").enabled;
 
@@ -31,18 +41,21 @@ namespace StupidTemplate.Mods
                 colorChanger.colorInfo = newBackroundColor;
                 colorChanger.Start();
             }
-            else if (!ControllerInputPoller.instance.leftGrab && platL != null)
+            else if (!controls[0] && platL != null)
             {
                 Object.Destroy(platL);
                 platL = null;
             }
 
-            if (ControllerInputPoller.instance.rightGrab && platR == null)
+            if (controls[1] && platR == null)
             {
-                PrimitiveType[] platformShapeObjects =  {PrimitiveType.Cube, PrimitiveType.Sphere};
+                PrimitiveType[] platformShapeObjects =  { PrimitiveType.Cube, PrimitiveType.Cube, PrimitiveType.Sphere };
 
                 platR = GameObject.CreatePrimitive(platformShapeObjects[platformShapeInt]);
-                platR.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
+                if (platformShapeInt == 1)
+                    platR.transform.localScale = new Vector3(0.25f, 0.015f, 0.25f);
+                else
+                    platR.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
                 platR.transform.position = GorillaTagger.Instance.rightHandTransform.position;
                 platR.GetComponent<Renderer>().forceRenderingOff = GetIndex("Invis Platforms").enabled;
 
@@ -50,7 +63,7 @@ namespace StupidTemplate.Mods
                 colorChanger.colorInfo = newBackroundColor;
                 colorChanger.Start();
             }
-            else if (!ControllerInputPoller.instance.rightGrab && platR != null)
+            else if (!controls[1] && platR != null)
             {
 
                 Object.Destroy(platR);
@@ -72,7 +85,7 @@ namespace StupidTemplate.Mods
             {
                 foreach (MeshCollider meshCollider in Resources.FindObjectsOfTypeAll<MeshCollider>())
                 {
-                    meshCollider.enabled = ControllerInputPoller.instance.leftControllerIndexFloat > 0.1f;
+                    meshCollider.enabled = ControllerInputPoller.instance.leftControllerIndexFloat < 0.1f;
                 }
             }
         }

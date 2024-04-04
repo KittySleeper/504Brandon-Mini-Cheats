@@ -44,7 +44,7 @@ namespace StupidTemplate
         public static int buttonsPerPage = 3;
         public static int theme = 1;
 
-        public static String[] platformShapes = {"Square", "Circle"};
+        public static String[] platformShapes = {"Cube", "Square", "Circle"};
         public static int platformShapeInt = 0;
     }
 }
