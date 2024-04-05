@@ -30,23 +30,28 @@ namespace StupidTemplate.Mods
             buttonsType = 4;
         }
 
-        public static void Movement()
+        public static void MiscellaneousMods()
         {
             buttonsType = 5;
         }
 
-        public static void Rig() {
+        public static void Movement()
+        {
             buttonsType = 6;
+        }
+
+        public static void Rig() {
+            buttonsType = 7;
         }
 
         public static void Safety()
         {
-            buttonsType = 7;
+            buttonsType = 8;
         }
 
         public static void Cheats()
         {
-            buttonsType = 8;
+            buttonsType = 9;
         }
 
         public static void RightHand()

@@ -21,9 +21,9 @@ namespace StupidTemplate.Mods
             bool[] controls;
 
             if (GetIndex("Trigger Platforms").enabled)
-                controls = new bool[] {ControllerInputPoller.instance.leftControllerIndexFloat > 0.1f, ControllerInputPoller.instance.rightControllerIndexFloat > 0.1f };
+                controls = new bool[] {ControllerInputPoller.instance.leftControllerIndexFloat > 0.1f, ControllerInputPoller.instance.rightControllerIndexFloat > 0.1f};
             else
-                controls = new bool[] { ControllerInputPoller.instance.leftGrab, ControllerInputPoller.instance.rightGrab};
+                controls = new bool[] {ControllerInputPoller.instance.leftGrab, ControllerInputPoller.instance.rightGrab};
 
             if (controls[0] && platL == null)
             {
@@ -128,6 +128,21 @@ namespace StupidTemplate.Mods
             if (ControllerInputPoller.instance.leftControllerPrimaryButton) {
                 Player.Instance.transform.position = RigManager.GetRandomVRRig(false).transform.position;
             }
+        }
+
+        public static void SpeedBoost(float speed)
+        {
+            Player.Instance.maxJumpSpeed = speed;
+            Player.Instance.jumpMultiplier = speed - 1.5f;
+        }
+
+        static Vector3 normGrav = Physics.gravity;
+        public static void GravityMod(float GravEffect)
+        {
+            if (ControllerInputPoller.instance.leftGrab)
+                Physics.gravity = new Vector3(0f, GravEffect, 0f);
+            else
+                Physics.gravity = normGrav;
         }
     }
 }
