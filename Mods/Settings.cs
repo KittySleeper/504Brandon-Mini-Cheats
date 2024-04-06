@@ -94,6 +94,20 @@ namespace StupidTemplate.Mods
             disconnectButton = false;
         }
 
+        public static void enableModSaving()
+        {
+            shouldSaveMods = true;
+            PlayerPrefs.SetInt("shouldSaveMods", 1);
+            PlayerPrefs.Save();
+        }
+
+        public static void disableModSaving()
+        {
+            shouldSaveMods = false;
+            PlayerPrefs.SetInt("shouldSaveMods", 0);
+            PlayerPrefs.Save();
+        }
+
         public static void ChangePlatformShape()
         {
             ButtonInfo button = Buttons.buttons[4][2];
@@ -101,6 +115,9 @@ namespace StupidTemplate.Mods
             platformShapeInt++;
             if (platformShapeInt > 2)
                 platformShapeInt = 0;
+
+            PlayerPrefs.SetInt("platformShapeInt", platformShapeInt);
+            PlayerPrefs.Save();
 
             button.overlapText = "Platform Shape [" + platformShapes[platformShapeInt] + "]";
         }
@@ -114,21 +131,31 @@ namespace StupidTemplate.Mods
             {
                 buttonsPerPage = 8;
                 menuSize = new Vector3(0.1f, 1f, 1f);
+                PlayerPrefs.SetInt("longMenu", 1);
             }
             else
             {
                 menuSize = new Vector3(0.1f, 1.5f, 0.5f); // Depth, Width, Height
                 buttonsPerPage = 3;
+                PlayerPrefs.SetInt("longMenu", 0);
             }
+
+            PlayerPrefs.Save();
 
             RecreateMenu();
         }
 
-        public static void setTheme()
+        public static void setTheme(bool change = true)
         {
-            theme++;
-            if (theme > 5)
-                theme = 1;
+            if (change)
+            {
+                theme++;
+                if (theme > 5)
+                    theme = 1;
+            }
+
+            PlayerPrefs.SetInt("themeInt", theme);
+            PlayerPrefs.Save();
 
             if (theme == 1) //Default Theme
             {

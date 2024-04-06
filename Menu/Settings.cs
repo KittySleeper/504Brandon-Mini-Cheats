@@ -37,6 +37,7 @@ namespace StupidTemplate
         public static bool rightHanded = true;
         public static bool disableNotifications = false;
         public static bool longMenu = false;
+        public static bool shouldSaveMods = false;
 
         public static KeyCode keyboardButton = KeyCode.Q;
 

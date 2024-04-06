@@ -38,6 +38,34 @@ namespace StupidTemplate.Menu
             GameObject.Find("COC Text").GetComponent<Text>().text = "IT IS PRETTY SIMPLE TO USE THIS MENU IF YOU GET BANNED 504BRANDON TAKES NO RESPONSIBILITY!\nANYTHING THAT IS <color=#ff9400>THIS COLOR</color> MEANS THAT IS THE BUTTON TO USE FOR EXAMPLE [<color=#ff9400>B</color>] MEANS TO USE B FOR THE MOD\nANYTHING THAT IS <color=#570000>THIS COLOR</color> OR [<color=#570000>D</color>] BY IT MEANS DETECTED\nANYTHING THAT IS <color=#ffcc00>THIS COLOR</color> OR HAS [<color=#ffcc00>D?/EX</color>] BY IT MEANS THE MOD IS POSSIBLY DETECTED AND OR IS EXPERIMENTAL\n\nTHATS ABOUT IT HAPPY <color=#570000>ILLEGAL</color> MODDING";//COC writing
             GameObject.Find("CodeOfConduct").GetComponent<Text>().text = "HOW TO USE <color=#ff9400>504MC</color>";//COC Title
 
+            if (!hasLoaded)
+            {
+                longMenu = PlayerPrefs.GetInt("longMenu") == 1;
+                if (longMenu)
+                {
+                    menuSize = new Vector3(0.1f, 1f, 1f);
+                }
+
+                if (PlayerPrefs.GetInt("themeInt") >= 0)
+                    theme = PlayerPrefs.GetInt("themeInt");
+                SettingsMods.setTheme(false);
+
+                GetIndex("Should Save Mods").enabled = PlayerPrefs.GetInt("shouldSaveMods") == 1;
+
+                if (PlayerPrefs.GetInt("shouldSaveMods") == 1 && PlayerPrefs.GetString("modsEnabled") != null && PlayerPrefs.GetString("modsEnabled") != "")
+                {
+                    foreach (string key in PlayerPrefs.GetString("modsEnabled").Split("|"))
+                    {
+                        if (key != "Should Save Mods")
+                            Toggle(key, false);
+                    }
+                }
+
+                descriptionText = "Click a mod!";
+
+                hasLoaded = true;
+            }
+
             // Initialize Menu
             try
             {
@@ -247,6 +275,27 @@ namespace StupidTemplate.Menu
                     rectt.localPosition = new Vector3(0.064f, 0f, 0.13f);
                 rectt.rotation = Quaternion.Euler(new Vector3(180f, 90f, 90f));
             }
+
+            Text descriptionObject = new GameObject
+            {
+                transform =
+                            {
+                                parent = canvasObject.transform
+                            }
+            }.AddComponent<Text>();
+            descriptionObject.text = descriptionText;
+            descriptionObject.font = currentFont;
+            descriptionObject.fontSize = 1;
+            descriptionObject.color = textColors[0];
+            descriptionObject.alignment = TextAnchor.MiddleCenter;
+            descriptionObject.resizeTextForBestFit = true;
+            descriptionObject.resizeTextMinSize = 0;
+
+            RectTransform rectt2 = descriptionObject.GetComponent<RectTransform>();
+            rectt2.localPosition = Vector3.zero;
+            rectt2.sizeDelta = new Vector2(0.3f, 0.04f);
+            rectt2.localPosition = new Vector3(0.064f, 0f, -0.088f);
+            rectt2.rotation = Quaternion.Euler(new Vector3(180f, 90f, 90f));
 
             // Page Buttons
             GameObject gameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -479,7 +528,7 @@ namespace StupidTemplate.Menu
             colorChanger.Start();
         }
 
-        public static void Toggle(string buttonText)
+        public static void Toggle(string buttonText, bool shouldSave = true)
         {
             int lastPage = ((buttons[buttonsType].Length + buttonsPerPage - 1) / buttonsPerPage) - 1;
 
@@ -500,9 +549,6 @@ namespace StupidTemplate.Menu
                     pageNumber = 0;
                 }
             }
-
-            if (buttonText == "Disconnect")
-                PhotonNetwork.Disconnect();
 
             if (buttonText == "Disconnect")
                 PhotonNetwork.Disconnect();
@@ -539,6 +585,32 @@ namespace StupidTemplate.Menu
                     }
                 }
             }
+
+            if (buttonText != "NextPage" && buttonText != "PreviousPage" && buttonText != "Disconnect")
+            {
+                if (target.isTogglable && shouldSave && shouldSaveMods)
+                {
+                    if (target.enabled)
+                    {
+                        if (PlayerPrefs.GetString("modsEnabled") == null || PlayerPrefs.GetString("modsEnabled") == "")
+                            PlayerPrefs.SetString("modsEnabled", target.buttonText);
+                        else
+                            PlayerPrefs.SetString("modsEnabled", PlayerPrefs.GetString("modsEnabled") + "|" + target.buttonText);
+                    }
+                    else
+                    {
+                        if (PlayerPrefs.GetString("modsEnabled") != null || PlayerPrefs.GetString("modsEnabled") != "") {
+                            if (PlayerPrefs.GetString("modsEnabled").Contains("|" + buttonText))
+                                PlayerPrefs.SetString("modsEnabled", PlayerPrefs.GetString("modsEnabled").Replace("|" + buttonText, ""));
+                            else if (PlayerPrefs.GetString("modsEnabled").Contains(buttonText))
+                                PlayerPrefs.SetString("modsEnabled", PlayerPrefs.GetString("modsEnabled").Replace(buttonText, ""));
+                        }
+                    }
+                }
+
+                descriptionText = target.buttonText + ": " + target.toolTip;
+            }
+
             RecreateMenu();
         }
 
@@ -588,6 +660,10 @@ namespace StupidTemplate.Menu
         public static SphereCollider buttonCollider;
         public static Camera TPC;
         public static Text fpsObject;
+        public static Text descriptionObject;
+        public static String descriptionText;
+
+        public static bool hasLoaded = false;
 
         // Data
         public static int pageNumber = 0;

@@ -9,6 +9,7 @@ using Photon.Pun;
 using StupidTemplate.Notifications;
 using System;
 using System.Runtime.InteropServices;
+using StupidTemplate.Menu;
 
 namespace StupidTemplate.Mods
 {
@@ -17,35 +18,52 @@ namespace StupidTemplate.Mods
         static float projDebounce = 0f;
 
         static float projDebounceType = 0.1f;
+        public static void SlingshotSpam()
+        {
+            bool rightGrab = ControllerInputPoller.instance.rightGrab;
+            if (rightGrab)
+            {
+                Vector3 position = Player.Instance.rightControllerTransform.transform.position;
+                Vector3 currentVelocity = Player.Instance.currentVelocity;
+                Vector3 forward = Player.Instance.rightControllerTransform.transform.forward;
+                BetaFireProjectile("SlingshotProjectile", position, forward, new Color32(250, 250, 250, byte.MaxValue), false);
+            }
+            bool leftGrab = ControllerInputPoller.instance.leftGrab;
+            if (leftGrab)
+            {
+                Vector3 position2 = Player.Instance.leftControllerTransform.transform.position;
+                Vector3 currentVelocity2 = Player.Instance.currentVelocity;
+                Vector3 forward2 = Player.Instance.leftControllerTransform.transform.forward;
+                BetaFireProjectile("SlingshotProjectile", position2, forward2, new Color32(250, 250, 250, byte.MaxValue), false);
+            }
+        }
+
+        // Token: 0x0600006C RID: 108 RVA: 0x00004718 File Offset: 0x00002918
         public static void BetaFireProjectile(string projectileName, Vector3 position, Vector3 velocity, Color color, bool noDelay = false)
         {
-            if (Time.time > projDebounce)
+            bool flag = Time.time > projDebounce;
+            if (flag)
             {
-                Vector3 startpos = position;
-                Vector3 charvel = velocity;
-
-                Vector3 oldVel = GorillaTagger.Instance.GetComponent<Rigidbody>().velocity;
-                GorillaTagger.Instance.GetComponent<Rigidbody>().velocity = charvel;
-                SnowballThrowable fart = GameObject.Find("Player Objects/Local VRRig/Local Gorilla Player/rig/body/shoulder.R/upper_arm.R/forearm.R/hand.R/palm.01.R/TransferrableItemRightHand/SnowballRightAnchor").transform.Find("LMACF.").GetComponent<SnowballThrowable>();
-                Vector3 oldPos = fart.transform.position;
-                fart.randomizeColor = true;
+                Vector3 velocity2 = GorillaTagger.Instance.GetComponent<Rigidbody>().velocity;
+                GorillaTagger.Instance.GetComponent<Rigidbody>().velocity = velocity;
+                SnowballThrowable component = GameObject.Find("Player Objects/Local VRRig/Local Gorilla Player/rig/body/shoulder.R/upper_arm.R/forearm.R/hand.R/palm.01.R/TransferrableItemRightHand/SnowballRightAnchor").transform.Find("LMACF.").GetComponent<SnowballThrowable>();
+                Vector3 position2 = component.transform.position;
+                component.randomizeColor = true;
                 GorillaTagger.Instance.offlineVRRig.SetThrowableProjectileColor(false, color);
-                fart.transform.position = startpos;
-                fart.projectilePrefab.tag = projectileName;
-                fart.OnRelease(null, null);
-                fart.transform.position = oldPos;
-                GorillaTagger.Instance.GetComponent<Rigidbody>().velocity = oldVel;
-                fart.randomizeColor = false;
-                fart.projectilePrefab.tag = "WaterballoonProjectile(Clone)";
-                if (projDebounceType > 0f && !noDelay)
+                component.transform.position = position;
+                component.projectilePrefab.tag = projectileName;
+                component.OnRelease(null, null);
+                SafetyShit.RpcFlush();
+                component.transform.position = position2;
+                GorillaTagger.Instance.GetComponent<Rigidbody>().velocity = velocity2;
+                component.randomizeColor = false;
+                component.projectilePrefab.tag = "SnowballProjectile";
+                bool flag2 = projDebounceType > 0f && !noDelay;
+                if (flag2)
                 {
                     projDebounce = Time.time + projDebounceType;
                 }
             }
-        }
-        public static void projectileSpam(string Projectile = "SnowBall")
-        {
-            BetaFireProjectile(Projectile, GorillaTagger.Instance.leftHandTransform.position, GorillaTagger.Instance.GetComponent<Rigidbody>().velocity, Color.white);
         }
     }
 }

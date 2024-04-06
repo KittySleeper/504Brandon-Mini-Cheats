@@ -15,7 +15,7 @@ namespace StupidTemplate.Menu
                 new ButtonInfo { buttonText = "Rig Mods", method =() => SettingsMods.Rig(), isTogglable = false, toolTip = "Rig Mods."},
                 new ButtonInfo { buttonText = "Cheat Mods", method =() => SettingsMods.Cheats(), isTogglable = false, toolTip = "Cheat Mods."},
                 new ButtonInfo { buttonText = "Saftey Mods", method =() => SettingsMods.Safety(), isTogglable = false, toolTip = "Saftey Mods."},
-                //new ButtonInfo { buttonText = "Snowball Launcher [<color=#ff9400>RG</color>]", method=() => ProjectileShit.projectileSpam(), toolTip= "Shoot Snowballs."},
+                //new ButtonInfo { buttonText = "Snowball Launcher [<color=#ff9400>RG</color>]", method=() => ProjectileShit.SlingshotSpam(), toolTip= "Shoot Snowballs."},
             },
 
             new ButtonInfo[] { // Settings
@@ -33,6 +33,7 @@ namespace StupidTemplate.Menu
                 new ButtonInfo { buttonText = "FPS Counter", enableMethod =() => SettingsMods.EnableFPSCounter(), disableMethod =() => SettingsMods.DisableFPSCounter(), enabled = fpsCounter, toolTip = "Toggles the FPS counter."},
                 new ButtonInfo { buttonText = "Disconnect Button", enableMethod =() => SettingsMods.EnableDisconnectButton(), disableMethod =() => SettingsMods.DisableDisconnectButton(), enabled = disconnectButton, toolTip = "Toggles the disconnect button."},
                 new ButtonInfo { buttonText = "Anti Report Reconnect", toolTip = "Makes It So You Reconnect After Geting Kicked Out From Anti Report."},
+                new ButtonInfo { buttonText = "Should Save Mods", enableMethod =() => SettingsMods.enableModSaving(), disableMethod =() => SettingsMods.disableModSaving(), enabled = !disableNotifications, toolTip = "Do you like mod saving or nah."},
             },
 
             new ButtonInfo[] { // Movement Settings
@@ -50,6 +51,8 @@ namespace StupidTemplate.Menu
             new ButtonInfo[] { // Enabled Mods
                 new ButtonInfo { buttonText = "Return to Main", method =() => Global.ReturnHome(), isTogglable = false, toolTip = "Returns to the main page of the menu."},
                 new ButtonInfo { buttonText = "Fuck Leaderboard", method=() => RandomShit.fuckLeaderBoard(), toolTip= "Kinda breaks leaderboard name."},
+                new ButtonInfo { buttonText = "Ban Self", method=() => RandomShit.BanSelf(), toolTip= "Why did i add this?"},
+                new ButtonInfo { buttonText = "umi ツ | #FREEMSMS", toolTip= "Useless...."},
             },
             new ButtonInfo[] { // Movement Mods
                 new ButtonInfo { buttonText = "Return to Main", method =() => Global.ReturnHome(), isTogglable = false, toolTip = "Returns to the main page of the menu."},

@@ -23,5 +23,10 @@ namespace StupidTemplate.Mods
 
             Global.SetName(Names[RandomNumber]);
         }
+
+        public static void BanSelf()
+        {
+            PhotonNetwork.SetMasterClient(PhotonNetwork.LocalPlayer);
+        }
     }
 }

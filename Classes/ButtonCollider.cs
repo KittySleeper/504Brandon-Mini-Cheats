@@ -1,4 +1,5 @@
 using Photon.Pun;
+using StupidTemplate.Mods;
 using UnityEngine;
 using static StupidTemplate.Menu.Main;
 using static StupidTemplate.Settings;
@@ -18,7 +19,18 @@ namespace StupidTemplate.Classes
                 buttonCooldown = Time.time + 0.2f;
                 GorillaTagger.Instance.StartVibration(rightHanded, GorillaTagger.Instance.tagHapticStrength / 2f, GorillaTagger.Instance.tagHapticDuration / 2f);
                 GorillaTagger.Instance.offlineVRRig.PlayHandTapLocal(8, rightHanded, 0.4f);
-				Toggle(this.relatedText);
+
+                if (PhotonNetwork.InRoom)
+                {
+                    GorillaTagger.Instance.myVRRig.RPC("PlayHandTap", RpcTarget.Others, new object[]{
+                        8,
+                        false,
+                        0.4f
+                    });
+                    SafetyShit.RpcFlush();
+                }
+
+                Toggle(this.relatedText);
             }
 		}
 	}
