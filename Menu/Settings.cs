@@ -51,8 +51,6 @@ namespace StupidTemplate
         public static int buttonsPerPage = 3;
         public static int mainColor = 7;
         public static int secondColor = 8;
-        public static int thirdColor = 7;
-        public static int fourthColor = 8;
         public static int buttonColor = 0;
         public static int buttonEnabledColor = 0;
         public static int buttonTextColor = 1;

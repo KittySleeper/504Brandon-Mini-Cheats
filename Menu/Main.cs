@@ -38,7 +38,7 @@ namespace StupidTemplate.Menu
             GameObject.Find("COC Text").GetComponent<Text>().text = "IT IS PRETTY SIMPLE TO USE THIS MENU IF YOU GET BANNED 504BRANDON TAKES NO RESPONSIBILITY!\nANYTHING THAT IS <color=#ff9400>THIS COLOR</color> MEANS THAT IS THE BUTTON TO USE FOR EXAMPLE [<color=#ff9400>B</color>] MEANS TO USE B FOR THE MOD\nANYTHING THAT IS <color=#570000>THIS COLOR</color> OR [<color=#570000>D</color>] BY IT MEANS DETECTED\nANYTHING THAT IS <color=#ffcc00>THIS COLOR</color> OR HAS [<color=#ffcc00>D?/EX</color>] BY IT MEANS THE MOD IS POSSIBLY DETECTED AND OR IS EXPERIMENTAL\n\nTHATS ABOUT IT HAPPY <color=#570000>ILLEGAL</color> MODDING";//COC writing
             GameObject.Find("CodeOfConduct").GetComponent<Text>().text = "HOW TO USE <color=#ff9400>504MC</color>";//COC Title
 
-            if (!hasLoaded)
+            if (!hasLoaded && PlayerPrefs.GetInt("hasLoaded504minimenureal") == 1)
             {
                 longMenu = PlayerPrefs.GetInt("longMenu") == 1;
                 if (longMenu)
@@ -91,9 +91,20 @@ namespace StupidTemplate.Menu
                 }
 
                 descriptionText = "Click a mod!";
-
-                hasLoaded = true;
             }
+
+            hasLoaded = true;
+
+            if (PlayerPrefs.GetInt("hasLoaded504minimenureal") != 1) { // theme fix ig?
+                PlayerPrefs.SetInt("mainThemeColor", 7);
+                PlayerPrefs.SetInt("secondThemeColor", 8);
+                PlayerPrefs.SetInt("buttonColor", 0);
+                PlayerPrefs.SetInt("buttonEnabledColor", 0);
+                PlayerPrefs.SetInt("buttonTextColor", 1);
+                PlayerPrefs.SetInt("buttonTextEnabledColor", 3);
+            }
+
+            PlayerPrefs.SetInt("hasLoaded504minimenureal", 1);
 
             if (buttonLayout == 2 && Time.time > timeTilYouCanClickAgain && menu != null)
             {
