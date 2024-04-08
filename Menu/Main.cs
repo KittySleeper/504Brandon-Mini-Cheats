@@ -44,13 +44,30 @@ namespace StupidTemplate.Menu
                 if (longMenu)
                 {
                     menuSize = new Vector3(0.1f, 1f, 1f);
+                    buttonsPerPage = 8;
                 }
 
                 if (PlayerPrefs.GetInt("themeInt") >= 0)
                     theme = PlayerPrefs.GetInt("themeInt");
                 SettingsMods.setTheme(false);
 
+                if (PlayerPrefs.GetInt("platformShapeInt") >= 0)
+                {
+                    platformShapeInt = PlayerPrefs.GetInt("platformShapeInt");
+                }
+
+                if (PlayerPrefs.GetInt("hitSoundValue") >= 0)
+                {
+                    hitSoundValue = PlayerPrefs.GetInt("hitSoundValue");
+                }
+
+                if (PlayerPrefs.GetInt("buttonLayout") >= 0)
+                {
+                    buttonLayout = PlayerPrefs.GetInt("buttonLayout");
+                }
+
                 GetIndex("Should Save Mods").enabled = PlayerPrefs.GetInt("shouldSaveMods") == 1;
+                shouldSaveMods = GetIndex("Should Save Mods").enabled;
 
                 if (PlayerPrefs.GetInt("shouldSaveMods") == 1 && PlayerPrefs.GetString("modsEnabled") != null && PlayerPrefs.GetString("modsEnabled") != "")
                 {
@@ -64,6 +81,21 @@ namespace StupidTemplate.Menu
                 descriptionText = "Click a mod!";
 
                 hasLoaded = true;
+            }
+
+            if (buttonLayout == 2 && Time.time > timeTilYouCanClickAgain && menu != null)
+            {
+                if (ControllerInputPoller.instance.rightControllerIndexFloat > 0.1)
+                {
+                    Toggle("NextPage", false);
+                    timeTilYouCanClickAgain = Time.time + 0.5f;
+                }
+
+                if (ControllerInputPoller.instance.leftControllerIndexFloat > 0.1)
+                {
+                    Toggle("PreviousPage", false);
+                    timeTilYouCanClickAgain = Time.time + 0.5f;
+                }
             }
 
             // Initialize Menu
@@ -86,7 +118,7 @@ namespace StupidTemplate.Menu
                 }
                 else
                 {
-                    if ((toOpen || keyboardOpen))
+                    if (toOpen || keyboardOpen)
                     {
                         RecenterMenu(rightHanded, keyboardOpen);
                     }
@@ -294,83 +326,89 @@ namespace StupidTemplate.Menu
             RectTransform rectt2 = descriptionObject.GetComponent<RectTransform>();
             rectt2.localPosition = Vector3.zero;
             rectt2.sizeDelta = new Vector2(0.3f, 0.04f);
-            rectt2.localPosition = new Vector3(0.064f, 0f, -0.088f);
+            rectt2.localPosition = new Vector3(0.064f, 0f, -0.2f);
             rectt2.rotation = Quaternion.Euler(new Vector3(180f, 90f, 90f));
 
-            // Page Buttons
-            GameObject gameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            if (!UnityInput.Current.GetKey(KeyCode.Q))
-            {
-                gameObject.layer = 2;
-            }
-            UnityEngine.Object.Destroy(gameObject.GetComponent<Rigidbody>());
-            gameObject.GetComponent<BoxCollider>().isTrigger = true;
-            gameObject.transform.parent = menu.transform;
-            gameObject.transform.rotation = Quaternion.identity;
-            if (longMenu)
-                gameObject.transform.localScale = new Vector3(0.09f, 0.2f, 0.9f);
-            else
-                gameObject.transform.localScale = new Vector3(0.09f, 0.2f, 0.50f);
-            gameObject.transform.localPosition = new Vector3(0.56f, 0.65f, 0);
-            gameObject.GetComponent<Renderer>().material.color = buttonColors[0].colors[0].color;
-            gameObject.AddComponent<Classes.Button>().relatedText = "PreviousPage";
+            if (!longMenu)
+                rectt2.localPosition += new Vector3(0f, 0f, 0.092f);
 
-            text = new GameObject
+            if (buttonLayout != 2)
             {
-                transform =
+                // Page Buttons
+                GameObject gameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                if (!UnityInput.Current.GetKey(KeyCode.Q))
+                {
+                    gameObject.layer = 2;
+                }
+                UnityEngine.Object.Destroy(gameObject.GetComponent<Rigidbody>());
+                gameObject.GetComponent<BoxCollider>().isTrigger = true;
+                gameObject.transform.parent = menu.transform;
+                gameObject.transform.rotation = Quaternion.identity;
+                if (longMenu)
+                    gameObject.transform.localScale = new Vector3(0.09f, 0.2f, 0.9f);
+                else
+                    gameObject.transform.localScale = new Vector3(0.09f, 0.2f, 0.50f);
+                gameObject.transform.localPosition = new Vector3(0.56f, 0.65f, 0);
+                gameObject.GetComponent<Renderer>().material.color = buttonColors[0].colors[0].color;
+                gameObject.AddComponent<Classes.Button>().relatedText = "PreviousPage";
+
+                text = new GameObject
+                {
+                    transform =
                         {
                             parent = canvasObject.transform
                         }
-            }.AddComponent<Text>();
-            text.font = currentFont;
-            text.text = "<";
-            text.fontSize = 1;
-            text.color = textColors[0];
-            text.alignment = TextAnchor.MiddleCenter;
-            text.resizeTextForBestFit = true;
-            text.resizeTextMinSize = 0;
-            component = text.GetComponent<RectTransform>();
-            component.localPosition = Vector3.zero;
-            component.sizeDelta = new Vector2(0.2f, 0.03f);
-            component.localPosition = new Vector3(0.064f, 0.195f, 0f);
-            component.rotation = Quaternion.Euler(new Vector3(180f, 90f, 90f));
+                }.AddComponent<Text>();
+                text.font = currentFont;
+                text.text = "<";
+                text.fontSize = 1;
+                text.color = textColors[0];
+                text.alignment = TextAnchor.MiddleCenter;
+                text.resizeTextForBestFit = true;
+                text.resizeTextMinSize = 0;
+                component = text.GetComponent<RectTransform>();
+                component.localPosition = Vector3.zero;
+                component.sizeDelta = new Vector2(0.2f, 0.03f);
+                component.localPosition = new Vector3(0.064f, 0.195f, 0f);
+                component.rotation = Quaternion.Euler(new Vector3(180f, 90f, 90f));
 
-            gameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            if (!UnityInput.Current.GetKey(KeyCode.Q))
-            {
-                gameObject.layer = 2;
-            }
-            UnityEngine.Object.Destroy(gameObject.GetComponent<Rigidbody>());
-            gameObject.GetComponent<BoxCollider>().isTrigger = true;
-            gameObject.transform.parent = menu.transform;
-            gameObject.transform.rotation = Quaternion.identity;
-            if (longMenu)
-                gameObject.transform.localScale = new Vector3(0.09f, 0.2f, 0.9f);
-            else
-                gameObject.transform.localScale = new Vector3(0.09f, 0.2f, 0.50f);
-            gameObject.transform.localPosition = new Vector3(0.56f, -0.65f, 0);
-            gameObject.GetComponent<Renderer>().material.color = buttonColors[0].colors[0].color;
-            gameObject.AddComponent<Classes.Button>().relatedText = "NextPage";
+                gameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                if (!UnityInput.Current.GetKey(KeyCode.Q))
+                {
+                    gameObject.layer = 2;
+                }
+                UnityEngine.Object.Destroy(gameObject.GetComponent<Rigidbody>());
+                gameObject.GetComponent<BoxCollider>().isTrigger = true;
+                gameObject.transform.parent = menu.transform;
+                gameObject.transform.rotation = Quaternion.identity;
+                if (longMenu)
+                    gameObject.transform.localScale = new Vector3(0.09f, 0.2f, 0.9f);
+                else
+                    gameObject.transform.localScale = new Vector3(0.09f, 0.2f, 0.50f);
+                gameObject.transform.localPosition = new Vector3(0.56f, -0.65f, 0);
+                gameObject.GetComponent<Renderer>().material.color = buttonColors[0].colors[0].color;
+                gameObject.AddComponent<Classes.Button>().relatedText = "NextPage";
 
-            text = new GameObject
-            {
-                transform =
+                text = new GameObject
+                {
+                    transform =
                         {
                             parent = canvasObject.transform
                         }
-            }.AddComponent<Text>();
-            text.font = currentFont;
-            text.text = ">";
-            text.fontSize = 1;
-            text.color = textColors[0];
-            text.alignment = TextAnchor.MiddleCenter;
-            text.resizeTextForBestFit = true;
-            text.resizeTextMinSize = 0;
-            component = text.GetComponent<RectTransform>();
-            component.localPosition = Vector3.zero;
-            component.sizeDelta = new Vector2(0.2f, 0.03f);
-            component.localPosition = new Vector3(0.064f, -0.195f, 0f);
-            component.rotation = Quaternion.Euler(new Vector3(180f, 90f, 90f));
+                }.AddComponent<Text>();
+                text.font = currentFont;
+                text.text = ">";
+                text.fontSize = 1;
+                text.color = textColors[0];
+                text.alignment = TextAnchor.MiddleCenter;
+                text.resizeTextForBestFit = true;
+                text.resizeTextMinSize = 0;
+                component = text.GetComponent<RectTransform>();
+                component.localPosition = Vector3.zero;
+                component.sizeDelta = new Vector2(0.2f, 0.03f);
+                component.localPosition = new Vector3(0.064f, -0.195f, 0f);
+                component.rotation = Quaternion.Euler(new Vector3(180f, 90f, 90f));
+            }
 
             // Mod Buttons
             ButtonInfo[] activeButtons = buttons[buttonsType].Skip(pageNumber * buttonsPerPage).Take(buttonsPerPage).ToArray();
@@ -381,7 +419,6 @@ namespace StupidTemplate.Menu
                 else
                     CreateButton(i * 0.1f + 0.20f, activeButtons[i]);
             }
-
             //if (isOutdated)
             //NotifiLib.SendNotification("<color=#570000>MENU IS OUTDATED UPDATE TO </color> [<color=#ff9400>" + GetHttp("") + "</color>] IF YOU DO NOT WANT TO RISK GETTING <color=#570000>BANNED</color>");
         }
@@ -663,10 +700,10 @@ namespace StupidTemplate.Menu
         public static Text descriptionObject;
         public static String descriptionText;
 
-        public static bool hasLoaded = false;
-
         // Data
+        public static bool hasLoaded = false;
         public static int pageNumber = 0;
         public static int buttonsType = 0;
+        public static float timeTilYouCanClickAgain = 0;
     }
 }

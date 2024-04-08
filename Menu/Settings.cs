@@ -41,11 +41,16 @@ namespace StupidTemplate
 
         public static KeyCode keyboardButton = KeyCode.Q;
 
-        public static Vector3 menuSize = new Vector3(0.1f, 1.5f, 0.5f); // Depth, Width, Height
+        public static Vector3 menuSize = new Vector3(0.1f, 1f, 0.5f); // Depth, Width, Height
         public static int buttonsPerPage = 3;
         public static int theme = 1;
+        public static int buttonLayout = 1;
 
         public static String[] platformShapes = {"Cube", "Square", "Circle"};
         public static int platformShapeInt = 0;
+
+        public static String[] hitSoundNames = {"Hand Tap", "AK-47", "Big Crystal", "Normal Crystal", "Random"};
+        public static int[] hitSoundValues = {8, 203, 213, 244, UnityEngine.Random.Range(8, 244)};
+        public static int hitSoundValue = 0;
     }
 }

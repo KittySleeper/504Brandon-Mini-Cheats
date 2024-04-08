@@ -122,6 +122,20 @@ namespace StupidTemplate.Mods
             button.overlapText = "Platform Shape [" + platformShapes[platformShapeInt] + "]";
         }
 
+        public static void ChangeHandTapValue()
+        {
+            ButtonInfo button = Buttons.buttons[2][9];
+
+            hitSoundValue++;
+            if (hitSoundValue > 4)
+                hitSoundValue = 0;
+
+            PlayerPrefs.SetInt("hitSoundValue", hitSoundValue);
+            PlayerPrefs.Save();
+
+            button.overlapText = "Sound When You Tap The Menu [" + hitSoundNames[hitSoundValue] + "]";
+        }
+
         public static void LongMenu()
         {
             //it is no longer mini wtf
@@ -135,7 +149,7 @@ namespace StupidTemplate.Mods
             }
             else
             {
-                menuSize = new Vector3(0.1f, 1.5f, 0.5f); // Depth, Width, Height
+                menuSize = new Vector3(0.1f, 1f, 0.5f); // Depth, Width, Height
                 buttonsPerPage = 3;
                 PlayerPrefs.SetInt("longMenu", 0);
             }
@@ -143,6 +157,16 @@ namespace StupidTemplate.Mods
             PlayerPrefs.Save();
 
             RecreateMenu();
+        }
+
+        public static void ChangePageLayout() //i just wanna handle everything else in main.cs cuz im lazy
+        {
+            buttonLayout++;
+            if (buttonLayout > 2)
+                buttonLayout = 1;
+
+            PlayerPrefs.SetInt("buttonLayout", buttonLayout);
+            PlayerPrefs.Save();
         }
 
         public static void setTheme(bool change = true)

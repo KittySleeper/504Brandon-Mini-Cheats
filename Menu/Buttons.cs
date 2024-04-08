@@ -29,11 +29,13 @@ namespace StupidTemplate.Menu
                 new ButtonInfo { buttonText = "Change Menu Theme", method =() => SettingsMods.setTheme(), isTogglable = false, toolTip = "Changes The Menu Theme."},
                 new ButtonInfo { buttonText = "Long Menu", method =() => SettingsMods.LongMenu(), isTogglable = false, toolTip = "You Ruined The Silly."},
                 new ButtonInfo { buttonText = "Right Hand", enableMethod =() => SettingsMods.RightHand(), disableMethod =() => SettingsMods.LeftHand(), toolTip = "Puts the menu on your right hand.", enabled = true},
+                new ButtonInfo { buttonText = "Change Page Layout", method =() => SettingsMods.ChangePageLayout(), isTogglable = false, toolTip = "Changes How You Change The Pages."},
                 new ButtonInfo { buttonText = "Notifications", enableMethod =() => SettingsMods.EnableNotifications(), disableMethod =() => SettingsMods.DisableNotifications(), enabled = !disableNotifications, toolTip = "Toggles the notifications."},
-                new ButtonInfo { buttonText = "FPS Counter", enableMethod =() => SettingsMods.EnableFPSCounter(), disableMethod =() => SettingsMods.DisableFPSCounter(), enabled = fpsCounter, toolTip = "Toggles the FPS counter."},
-                new ButtonInfo { buttonText = "Disconnect Button", enableMethod =() => SettingsMods.EnableDisconnectButton(), disableMethod =() => SettingsMods.DisableDisconnectButton(), enabled = disconnectButton, toolTip = "Toggles the disconnect button."},
+                new ButtonInfo { buttonText = "FPS Counter", enableMethod =() => SettingsMods.EnableFPSCounter(), disableMethod =() => SettingsMods.DisableFPSCounter(), toolTip = "Toggles the FPS counter."},
+                new ButtonInfo { buttonText = "Disconnect Button", enableMethod =() => SettingsMods.EnableDisconnectButton(), disableMethod =() => SettingsMods.DisableDisconnectButton(), toolTip = "Toggles the disconnect button."},
                 new ButtonInfo { buttonText = "Anti Report Reconnect", toolTip = "Makes It So You Reconnect After Geting Kicked Out From Anti Report."},
-                new ButtonInfo { buttonText = "Should Save Mods", enableMethod =() => SettingsMods.enableModSaving(), disableMethod =() => SettingsMods.disableModSaving(), enabled = !disableNotifications, toolTip = "Do you like mod saving or nah."},
+                new ButtonInfo { buttonText = "Sound When You Tap The Menu [" + hitSoundNames[hitSoundValue] + "]", method =() => SettingsMods.ChangeHandTapValue(), isTogglable = false},
+                new ButtonInfo { buttonText = "Should Save Mods", enableMethod =() => SettingsMods.enableModSaving(), disableMethod =() => SettingsMods.disableModSaving(), toolTip = "Do you like mod saving or nah."},
             },
 
             new ButtonInfo[] { // Movement Settings
@@ -48,7 +50,7 @@ namespace StupidTemplate.Menu
                 new ButtonInfo { buttonText = "Trigger Platforms", toolTip = "Use Platforms By Pressing Your Triggers."},
             },
 
-            new ButtonInfo[] { // Enabled Mods
+            new ButtonInfo[] { // Misc Mods
                 new ButtonInfo { buttonText = "Return to Main", method =() => Global.ReturnHome(), isTogglable = false, toolTip = "Returns to the main page of the menu."},
                 new ButtonInfo { buttonText = "Fuck Leaderboard", method=() => RandomShit.fuckLeaderBoard(), toolTip= "Kinda breaks leaderboard name."},
                 new ButtonInfo { buttonText = "Ban Self", method=() => RandomShit.BanSelf(), toolTip= "Why did i add this?"},
@@ -88,6 +90,7 @@ namespace StupidTemplate.Menu
                 new ButtonInfo { buttonText = "Return to Main", method =() => Global.ReturnHome(), isTogglable = false, toolTip = "Returns to the main page of the menu."},
                 new ButtonInfo { buttonText = "Tag Gun [<color=#ffcc00>D?/EX</color>]", method =() => AdvantageShit.TagGun(), toolTip = "Aim And Tag."},
                 new ButtonInfo { buttonText = "Tag All", method=() => AdvantageShit.tagAll(), toolTip= "Tag Everyone."},
+                new ButtonInfo { buttonText = "Chams", enableMethod=() => AdvantageShit.Chams(), disableMethod=() => AdvantageShit.KillChams(), toolTip= "See people through shit."},
             },
         };
     }

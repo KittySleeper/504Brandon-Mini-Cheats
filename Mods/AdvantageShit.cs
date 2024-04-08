@@ -91,5 +91,31 @@ namespace StupidTemplate.Mods
                 GorillaTagger.Instance.offlineVRRig.enabled = true;
             }
         }
+
+        public static void Chams()
+        {
+            foreach (VRRig vrrig in GorillaParent.instance.vrrigs)
+            {
+                if (vrrig != GorillaTagger.Instance.offlineVRRig)
+                {
+                    vrrig.mainSkin.material.shader = Shader.Find("GUI/Text Shader");
+                    vrrig.mainSkin.material.color = Color.green;
+
+                    if (PhotonNetwork.CurrentRoom.CustomProperties.ToString().Contains("INFECTION") && vrrig.mainSkin.material.name.Contains("fected"))
+                    {
+                        vrrig.mainSkin.material.color = Color.red;
+                    }
+                }
+            }
+        }
+
+        public static void KillChams()
+        {
+            foreach (VRRig vrrig in GorillaParent.instance.vrrigs)
+            {
+                vrrig.mainSkin.material.shader = Shader.Find("GorillaTag/UberShader");
+                vrrig.mainSkin.material.color = vrrig.playerColor;
+            }
+        }
     }
 }

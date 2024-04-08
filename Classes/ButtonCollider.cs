@@ -18,19 +18,22 @@ namespace StupidTemplate.Classes
 			{
                 buttonCooldown = Time.time + 0.2f;
                 GorillaTagger.Instance.StartVibration(rightHanded, GorillaTagger.Instance.tagHapticStrength / 2f, GorillaTagger.Instance.tagHapticDuration / 2f);
-                GorillaTagger.Instance.offlineVRRig.PlayHandTapLocal(8, rightHanded, 0.4f);
 
                 if (PhotonNetwork.InRoom)
                 {
-                    GorillaTagger.Instance.myVRRig.RPC("PlayHandTap", RpcTarget.Others, new object[]{
-                        8,
-                        false,
+                    GorillaTagger.Instance.myVRRig.RPC("PlayHandTap", RpcTarget.All, new object[]{
+                        hitSoundValues[hitSoundValue],
+                        rightHanded,
                         0.4f
                     });
                     SafetyShit.RpcFlush();
                 }
+                else
+                {
+                    GorillaTagger.Instance.offlineVRRig.PlayHandTapLocal(hitSoundValues[hitSoundValue], rightHanded, 0.4f);
+                }
 
-                Toggle(this.relatedText);
+                Toggle(relatedText);
             }
 		}
 	}
