@@ -10,59 +10,114 @@ using StupidTemplate.Notifications;
 using System;
 using System.Runtime.InteropServices;
 using StupidTemplate.Menu;
-
 namespace StupidTemplate.Mods
 {
-    internal class ProjectileShit
+    internal class ProjectileShit //MOST CODE HERE BY ryzr3
     {
-        static float projDebounce = 0f;
-
-        static float projDebounceType = 0.1f;
-        public static void SlingshotSpam()
+        public static int projectileSpeedCycle = 0;
+        public static float projectileSpeed = 0f;
+        public static int projColorCycle = 0;
+        public static float projDelay = 0f;
+        public static float projShootDelay = 0.1f;
+        public static int projShootDelayCycle = 0;
+        public static Color32 projColor = Color.white;
+        public static int projCycle = 0;
+        public static void Projectile(string projectileName, Vector3 position, Vector3 velocity, Color color, bool noDelay = false)
         {
-            bool rightGrab = ControllerInputPoller.instance.rightGrab;
-            if (rightGrab)
+            ControllerInputPoller.instance.leftControllerGripFloat = 1f;
+            GameObject gameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            UnityEngine.Object.Destroy(gameObject, 0.1f);
+            gameObject.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+            gameObject.transform.position = GorillaTagger.Instance.leftHandTransform.position;
+            gameObject.transform.rotation = GorillaTagger.Instance.leftHandTransform.rotation;
+            int[] array = new int[] {
+                32,
+                204,
+                231,
+                240,
+                249,
+                252
+            };
+            gameObject.AddComponent<GorillaSurfaceOverride>().overrideIndex = array[Array.IndexOf(fullProjectileNames, projectileName)];
+            gameObject.GetComponent<Renderer>().enabled = false;
+            if (Time.time > projDelay)
             {
-                Vector3 position = Player.Instance.rightControllerTransform.transform.position;
-                Vector3 currentVelocity = Player.Instance.currentVelocity;
-                Vector3 forward = Player.Instance.rightControllerTransform.transform.forward;
-                BetaFireProjectile("SlingshotProjectile", position, forward, new Color32(250, 250, 250, byte.MaxValue), false);
-            }
-            bool leftGrab = ControllerInputPoller.instance.leftGrab;
-            if (leftGrab)
-            {
-                Vector3 position2 = Player.Instance.leftControllerTransform.transform.position;
-                Vector3 currentVelocity2 = Player.Instance.currentVelocity;
-                Vector3 forward2 = Player.Instance.leftControllerTransform.transform.forward;
-                BetaFireProjectile("SlingshotProjectile", position2, forward2, new Color32(250, 250, 250, byte.MaxValue), false);
+                try
+                {
+                    Vector3 velocity2 = GorillaTagger.Instance.GetComponent<Rigidbody>().velocity;
+                    string[] array2 = new string[] {
+                        "LMACE.",
+                        "LMAEX.",
+                        "LMAGD.",
+                        "LMAHQ.",
+                        "LMAIE.",
+                        "LMAIO."
+                    };
+                    SnowballThrowable component = GameObject.Find("Player Objects/Local VRRig/Local Gorilla Player/rig/body/shoulder.L/upper_arm.L/forearm.L/hand.L/palm.01.L/TransferrableItemLeftHand/" + fullProjectileNames[Array.IndexOf(fullProjectileNames, projectileName)] + "LeftAnchor").transform.Find(array2[Array.IndexOf(fullProjectileNames, projectileName)]).GetComponent<SnowballThrowable>();
+                    Vector3 position2 = component.transform.position;
+                    component.randomizeColor = true;
+                    component.transform.position = position;
+                    GorillaTagger.Instance.GetComponent<Rigidbody>().velocity = velocity;
+                    GorillaTagger.Instance.offlineVRRig.SetThrowableProjectileColor(true, color);
+                    GameObject.Find("Player Objects/Player VR Controller/GorillaPlayer/EquipmentInteractor").GetComponent<EquipmentInteractor>().ReleaseLeftHand();
+                    GorillaTagger.Instance.GetComponent<Rigidbody>().velocity = velocity2;
+                    component.transform.position = position2;
+                    component.randomizeColor = false;
+
+                    SafetyShit.RpcFlush();
+                }
+                catch { }
+                if (projShootDelay > 0f && !noDelay) {
+                    projDelay = Time.time + projShootDelay;
+                }
             }
         }
-
-        // Token: 0x0600006C RID: 108 RVA: 0x00004718 File Offset: 0x00002918
-        public static void BetaFireProjectile(string projectileName, Vector3 position, Vector3 velocity, Color color, bool noDelay = false)
+        public static string[] fullProjectileNames = new string[] {
+            "Snowball",
+            "WaterBalloon",
+            "LavaRock",
+            "ThrowableGift",
+            "ScienceCandy",
+            "FishFood"
+        };
+        public static void ProjectileSpammer(string projectile = "Snowball", bool randomColor = false)
         {
-            bool flag = Time.time > projDebounce;
-            if (flag)
+            if (ControllerInputPoller.instance.rightGrab)
             {
-                Vector3 velocity2 = GorillaTagger.Instance.GetComponent<Rigidbody>().velocity;
-                GorillaTagger.Instance.GetComponent<Rigidbody>().velocity = velocity;
-                SnowballThrowable component = GameObject.Find("Player Objects/Local VRRig/Local Gorilla Player/rig/body/shoulder.R/upper_arm.R/forearm.R/hand.R/palm.01.R/TransferrableItemRightHand/SnowballRightAnchor").transform.Find("LMACF.").GetComponent<SnowballThrowable>();
-                Vector3 position2 = component.transform.position;
-                component.randomizeColor = true;
-                GorillaTagger.Instance.offlineVRRig.SetThrowableProjectileColor(false, color);
-                component.transform.position = position;
-                component.projectilePrefab.tag = projectileName;
-                component.OnRelease(null, null);
-                SafetyShit.RpcFlush();
-                component.transform.position = position2;
-                GorillaTagger.Instance.GetComponent<Rigidbody>().velocity = velocity2;
-                component.randomizeColor = false;
-                component.projectilePrefab.tag = "SnowballProjectile";
-                bool flag2 = projDebounceType > 0f && !noDelay;
-                if (flag2)
-                {
-                    projDebounce = Time.time + projDebounceType;
-                }
+                int randomAhhInt = UnityEngine.Random.Range(0, colorChangeablesAmmount);
+
+                if (randomColor)
+                    Projectile(projectile, Player.Instance.rightControllerTransform.position, Player.Instance.rightControllerTransform.forward - Player.Instance.rightControllerTransform.up * projectileSpeed, colorChangeables[randomAhhInt], false);
+                else
+                    Projectile(projectile, Player.Instance.rightControllerTransform.position, Player.Instance.rightControllerTransform.forward - Player.Instance.rightControllerTransform.up * projectileSpeed, projColor, false);
+            }
+        }
+        public static void Urine()
+        {
+            if (ControllerInputPoller.instance.rightGrab)
+            {
+                Projectile("Snowball", GorillaTagger.Instance.bodyCollider.transform.position + new Vector3(0f, -0.15f, 0f), GorillaTagger.Instance.bodyCollider.transform.forward * 8.33f, new Color32(255, 255, 0, 255), false);
+            }
+        }
+        public static void Feces()
+        {
+            if (ControllerInputPoller.instance.rightGrab)
+            {
+                Projectile("Snowball", GorillaTagger.Instance.bodyCollider.transform.position + new Vector3(0f, -0.3f, 0f), new Vector3(0f, -1f, 0f), new Color32(99, 43, 0, 255), false);
+            }
+        }
+        public static void Semen()
+        {
+            if (ControllerInputPoller.instance.rightGrab)
+            {
+                Projectile("Snowball", GorillaTagger.Instance.bodyCollider.transform.position + new Vector3(0f, -0.15f, 0f), GorillaTagger.Instance.bodyCollider.transform.forward * 8.33f, new Color32(255, 255, 255, 255), false);
+            }
+        }
+        public static void Vomit()
+        {
+            if (ControllerInputPoller.instance.rightGrab)
+            {
+                Projectile("Snowball", GorillaTagger.Instance.headCollider.transform.position + GorillaTagger.Instance.headCollider.transform.forward * 0.1f + GorillaTagger.Instance.headCollider.transform.up * -0.15f, GorillaTagger.Instance.headCollider.transform.forward * 8.33f, new Color32(0, 255, 0, 255), false);
             }
         }
     }

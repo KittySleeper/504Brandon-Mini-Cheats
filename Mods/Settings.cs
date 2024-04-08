@@ -44,14 +44,24 @@ namespace StupidTemplate.Mods
             buttonsType = 7;
         }
 
-        public static void Safety()
+        public static void Cheats()
         {
             buttonsType = 8;
         }
 
-        public static void Cheats()
+        public static void Glider()
         {
             buttonsType = 9;
+        }
+
+        public static void Projectile()
+        {
+            buttonsType = 10;
+        }
+
+        public static void Safety()
+        {
+            buttonsType = 11;
         }
 
         public static void RightHand()
@@ -124,7 +134,7 @@ namespace StupidTemplate.Mods
 
         public static void ChangeHandTapValue()
         {
-            ButtonInfo button = Buttons.buttons[2][9];
+            ButtonInfo button = GetIndex("Sound When You Tap The Menu");
 
             hitSoundValue++;
             if (hitSoundValue > 4)
@@ -169,7 +179,77 @@ namespace StupidTemplate.Mods
             PlayerPrefs.Save();
         }
 
-        public static void setTheme(bool change = true)
+        public static void setTheme(string changeing = "")
+        {
+            if (changeing == "firstColor")
+            {
+                mainColor++;
+                if (mainColor > colorChangeablesAmmount)
+                    mainColor = 0;
+            } else if (changeing == "secondColor")
+            {
+                secondColor++;
+                if (secondColor > colorChangeablesAmmount)
+                    secondColor = 0;
+            } else if (changeing == "buttonColor")
+            {
+                buttonColor++;
+                if (buttonColor > colorChangeablesAmmount)
+                    buttonColor = 0;
+            } else if (changeing == "buttonEnabledColor")
+            {
+                buttonEnabledColor++;
+                if (buttonEnabledColor > colorChangeablesAmmount)
+                    buttonEnabledColor = 0;
+            } else if (changeing == "buttonTextColor")
+            {
+                buttonTextColor++;
+                if (buttonTextColor > colorChangeablesAmmount)
+                    buttonTextColor = 0;
+            } else if (changeing == "buttonTextEnabledColor")
+            {
+                buttonTextEnabledColor++;
+                if (buttonTextEnabledColor > colorChangeablesAmmount)
+                    buttonTextEnabledColor = 0;
+            }
+
+
+            newBackroundColor = new ExtGradient
+            {
+                colors = new GradientColorKey[]
+                {
+                    new GradientColorKey(colorChangeables[mainColor], 0.25f),
+                    new GradientColorKey(colorChangeables[secondColor], 1f),
+                }
+            };
+
+            textColors = new Color[]
+            {
+                colorChangeables[buttonTextColor],
+                colorChangeables[buttonTextEnabledColor]
+            };
+
+            newButtonColors = new Color[]
+            {
+                colorChangeables[buttonColor],
+                colorChangeables[buttonEnabledColor]
+            };
+
+            if (changeing != "")
+            {
+                PlayerPrefs.SetInt("mainThemeColor", mainColor);
+                PlayerPrefs.SetInt("secondThemeColor", secondColor);
+                PlayerPrefs.SetInt("buttonColor", buttonColor);
+                PlayerPrefs.SetInt("buttonEnabledColor", buttonEnabledColor);
+                PlayerPrefs.SetInt("buttonTextColor", buttonTextColor);
+                PlayerPrefs.SetInt("buttonTextEnabledColor", buttonTextEnabledColor);
+                PlayerPrefs.Save();
+            }
+
+            RecreateMenu();
+        }
+
+        /*public static void setTheme(bool change = true) old set theme that wasnt customizeable
         {
             if (change)
             {
@@ -178,7 +258,7 @@ namespace StupidTemplate.Mods
                     theme = 1;
             }
 
-            PlayerPrefs.SetInt("themeInt", theme);
+            /*PlayerPrefs.SetInt("themeInt", theme);
             PlayerPrefs.Save();
 
             if (theme == 1) //Default Theme
@@ -241,7 +321,7 @@ namespace StupidTemplate.Mods
                 };
             }
 
-            RecreateMenu(); //so the theme sets
-        }
+        RecreateMenu(); //so the theme sets
+        }*/
     }
 }

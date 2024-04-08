@@ -47,9 +47,21 @@ namespace StupidTemplate.Menu
                     buttonsPerPage = 8;
                 }
 
-                if (PlayerPrefs.GetInt("themeInt") >= 0)
-                    theme = PlayerPrefs.GetInt("themeInt");
-                SettingsMods.setTheme(false);
+                //if (PlayerPrefs.GetInt("themeInt") >= 0)
+                //theme = PlayerPrefs.GetInt("themeInt");
+                //SettingsMods.setTheme(false);
+
+                if (PlayerPrefs.GetInt("mainThemeColor") >= 0)
+                {
+                    mainColor = PlayerPrefs.GetInt("mainThemeColor");
+                    secondColor = PlayerPrefs.GetInt("secondThemeColor");
+                    buttonColor = PlayerPrefs.GetInt("buttonColor");
+                    buttonEnabledColor = PlayerPrefs.GetInt("buttonEnabledColor");
+                    buttonTextColor = PlayerPrefs.GetInt("buttonTextColor");
+                    buttonTextEnabledColor = PlayerPrefs.GetInt("buttonTextEnabledColor");
+
+                    SettingsMods.setTheme();
+                }
 
                 if (PlayerPrefs.GetInt("platformShapeInt") >= 0)
                 {
@@ -457,10 +469,12 @@ namespace StupidTemplate.Menu
             if (method.enabled)
             {
                 text.color = textColors[1];
+                gameObject.GetComponent<Renderer>().material.color = newButtonColors[1];
             }
             else
             {
                 text.color = textColors[0];
+                gameObject.GetComponent<Renderer>().material.color = newButtonColors[0];
             }
             text.alignment = TextAnchor.MiddleCenter;
             text.fontStyle = FontStyle.Italic;
