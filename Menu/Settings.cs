@@ -42,6 +42,7 @@ namespace StupidTemplate
         public static bool disconnectButton = true;
         public static bool rightHanded = true;
         public static bool disableNotifications = false;
+        public static bool isRainbowMenu = false;
         public static bool longMenu = false;
         public static bool shouldSaveMods = false;
 
@@ -64,7 +65,7 @@ namespace StupidTemplate
         public static int[] hitSoundValues = {8, 203, 213, 244, UnityEngine.Random.Range(8, 244)};
         public static int hitSoundValue = 0;
 
-        public static Color[] colorChangeables = {Color.black, Color.white, Color.gray, Color.cyan, Color.blue, Color.green, Color.magenta, new Color(1.0f, 0.64f, 0.0f), Color.yellow, Color.red};
-        public static int colorChangeablesAmmount = 9;
+        public static Color[] colorChangeables = {Color.black, Color.white, Color.gray, Color.cyan, Color.blue, Color.green, Color.magenta, new Color(1.0f, 0.64f, 0.0f), Color.yellow, Color.red, new Color(0.5f, 1f, 0.83f), new Color(0f, 0.55f, 0.55f), new Color(0.55f, 0f, 0.55f), new Color(0.71f, 0.49f, 0.86f), new Color(0.5f, 0f, 0.5f), new Color(1f, 0.75f, 0.8f), new Color(0.86f, 0.08f, 0.24f), new Color(0f, 1f, 0f)};
+        public static int colorChangeablesAmmount = 17;
     }
 }

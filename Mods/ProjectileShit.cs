@@ -22,6 +22,8 @@ namespace StupidTemplate.Mods
         public static int projShootDelayCycle = 0;
         public static Color32 projColor = Color.white;
         public static int projCycle = 0;
+        public static VRRig player;
+        public static GameObject GunThingie;
         public static void Projectile(string projectileName, Vector3 position, Vector3 velocity, Color color, bool noDelay = false)
         {
             ControllerInputPoller.instance.leftControllerGripFloat = 1f;
@@ -90,6 +92,51 @@ namespace StupidTemplate.Mods
                     Projectile(projectile, Player.Instance.rightControllerTransform.position, Player.Instance.rightControllerTransform.forward - Player.Instance.rightControllerTransform.up * projectileSpeed, colorChangeables[randomAhhInt], false);
                 else
                     Projectile(projectile, Player.Instance.rightControllerTransform.position, Player.Instance.rightControllerTransform.forward - Player.Instance.rightControllerTransform.up * projectileSpeed, projColor, false);
+            }
+        }
+        public static void ProjectileSpammerGun(string projectile = "Snowball")
+        {
+            if (ControllerInputPoller.instance.rightGrab)
+            {
+                RaycastHit raycastHit;
+                if (Physics.Raycast(GorillaLocomotion.Player.Instance.rightControllerTransform.position - GorillaLocomotion.Player.Instance.rightControllerTransform.up, -GorillaLocomotion.Player.Instance.rightControllerTransform.up, out raycastHit) && GunThingie == null)
+                {
+                    GunThingie = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                    UnityEngine.Object.Destroy(GunThingie.GetComponent<Rigidbody>());
+                    UnityEngine.Object.Destroy(GunThingie.GetComponent<SphereCollider>());
+                    GunThingie.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+
+                    ColorChanger colorChanger = GunThingie.AddComponent<ColorChanger>();
+                    colorChanger.colorInfo = newBackroundColor;
+                    colorChanger.Start();
+                }
+                GunThingie.transform.position = raycastHit.point;
+
+                if (ControllerInputPoller.instance.rightControllerIndexFloat > 0f)
+                {
+                    VRRig possibly = raycastHit.collider.GetComponentInParent<VRRig>();
+                    if (possibly && possibly != GorillaTagger.Instance.offlineVRRig)
+                    {
+                        player = possibly;
+                    }
+                    GunThingie.GetComponent<ColorChanger>().colorInfo = new ExtGradient
+                    {
+                        colors = new GradientColorKey[] { new GradientColorKey(Color.green, 1f) }
+                    };
+                }
+                else
+                {
+                    GunThingie.GetComponent<ColorChanger>().colorInfo = newBackroundColor;
+                }
+            }
+            else
+            {
+                UnityEngine.Object.Destroy(GunThingie);
+            }
+
+            if (player != null)
+            {
+                Projectile(projectile, player.rightHandTransform.position, player.rightHandTransform.forward - player.rightHandTransform.up * projectileSpeed, projColor, false);
             }
         }
         public static void Urine()

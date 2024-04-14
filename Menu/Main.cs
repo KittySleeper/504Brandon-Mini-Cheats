@@ -1,4 +1,5 @@
 using BepInEx;
+using GorillaLocomotion;
 using HarmonyLib;
 using Photon.Pun;
 using StupidTemplate.Classes;
@@ -25,13 +26,46 @@ namespace StupidTemplate.Menu
         // Constant
         public static void Prefix()
         {
-            try
+            if (GetIndex("PC EMULATION").enabled)
             {
-                if (reportBoards == null)
-                    reportBoards = FindObjectsOfType<GorillaScoreBoard>(); //for antireport and maybe more if i wanna
-            }
-            catch
-            {
+                if (Mouse.current.leftButton.isPressed)
+                {
+                    ControllerInputPoller.instance.leftGrab = true;
+                    ControllerInputPoller.instance.leftControllerIndexFloat = 1f;
+                }
+
+                if (Mouse.current.rightButton.isPressed)
+                {
+                    ControllerInputPoller.instance.rightGrab = true;
+                    ControllerInputPoller.instance.rightControllerIndexFloat = 1f;
+                }
+
+                if (UnityInput.Current.GetKey(KeyCode.W))
+                {
+                    Player.Instance.transform.position += Player.Instance.headCollider.transform.forward * Time.deltaTime * 15f;
+                    Player.Instance.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                }
+
+                if (UnityInput.Current.GetKey(KeyCode.S))
+                {
+                    Player.Instance.transform.position -= Player.Instance.headCollider.transform.forward * Time.deltaTime * 15f;
+                    Player.Instance.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                }
+
+                if (UnityInput.Current.GetKey(KeyCode.A))
+                {
+                    Player.Instance.Turn(-1.45f);
+                }
+
+                if (UnityInput.Current.GetKey(KeyCode.D))
+                {
+                    Player.Instance.Turn(1.45f);
+                }
+
+                if (UnityInput.Current.GetKey(KeyCode.Space))
+                {
+                    Player.Instance.transform.position += new Vector3(0f, 0.10f, 0f);
+                }
             }
 
             GameObject.Find("motdtext").GetComponent<Text>().text = "HEY THANKS FOR USING <color=#ff9400>" + PluginInfo.Name + " V:" + PluginInfo.Version + "</color> THIS MENU IS VERY SIMPLE BUT THANKS FOR USING IT!\n\nALSO THIS MENU IS PRIMARLY FOR GHOST TROLLING DONT USE IT IF YOU WANT A WHOLE BUNCH OF OP SHIT YOU WILL BE DISSAPOINTED";
@@ -46,10 +80,6 @@ namespace StupidTemplate.Menu
                     menuSize = new Vector3(0.1f, 1f, 1f);
                     buttonsPerPage = 8;
                 }
-
-                //if (PlayerPrefs.GetInt("themeInt") >= 0)
-                //theme = PlayerPrefs.GetInt("themeInt");
-                //SettingsMods.setTheme(false);
 
                 if (PlayerPrefs.GetInt("mainThemeColor") >= 0)
                 {
@@ -73,10 +103,10 @@ namespace StupidTemplate.Menu
                     hitSoundValue = PlayerPrefs.GetInt("hitSoundValue");
                 }
 
-                if (PlayerPrefs.GetInt("buttonLayout") >= 0)
+                /*if (PlayerPrefs.GetInt("buttonLayout") >= 0)
                 {
                     buttonLayout = PlayerPrefs.GetInt("buttonLayout");
-                }
+                }*/
 
                 GetIndex("Should Save Mods").enabled = PlayerPrefs.GetInt("shouldSaveMods") == 1;
                 shouldSaveMods = GetIndex("Should Save Mods").enabled;
@@ -85,8 +115,14 @@ namespace StupidTemplate.Menu
                 {
                     foreach (string key in PlayerPrefs.GetString("modsEnabled").Split("|"))
                     {
-                        if (key != "Should Save Mods")
-                            Toggle(key, false);
+                        try
+                        {
+                            if (key != "Should Save Mods")
+                                Toggle(key, false);
+                        } catch
+                        {
+
+                        }
                     }
                 }
 
@@ -94,6 +130,13 @@ namespace StupidTemplate.Menu
             }
 
             hasLoaded = true;
+
+            if (PlayerPrefs.GetInt("isRainbowMenu") >= 0) {
+                isRainbowMenu = PlayerPrefs.GetInt("isRainbowMenu") == 1;
+
+                if (isRainbowMenu)
+                    newBackroundColor = new ExtGradient { isRainbow = true };
+            }
 
             if (PlayerPrefs.GetInt("hasLoaded504minimenureal") != 1) { // theme fix ig?
                 PlayerPrefs.SetInt("mainThemeColor", 7);
@@ -106,7 +149,7 @@ namespace StupidTemplate.Menu
 
             PlayerPrefs.SetInt("hasLoaded504minimenureal", 1);
 
-            if (buttonLayout == 2 && Time.time > timeTilYouCanClickAgain && menu != null)
+            if (buttonLayout == 3 && Time.time > timeTilYouCanClickAgain && menu != null)
             {
                 if (ControllerInputPoller.instance.rightControllerIndexFloat > 0.1)
                 {
@@ -355,8 +398,6 @@ namespace StupidTemplate.Menu
             if (!longMenu)
                 rectt2.localPosition += new Vector3(0f, 0f, 0.092f);
 
-            if (buttonLayout != 2)
-            {
                 // Page Buttons
                 GameObject gameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 if (!UnityInput.Current.GetKey(KeyCode.Q))
@@ -431,7 +472,6 @@ namespace StupidTemplate.Menu
                 component.sizeDelta = new Vector2(0.2f, 0.03f);
                 component.localPosition = new Vector3(0.064f, -0.195f, 0f);
                 component.rotation = Quaternion.Euler(new Vector3(180f, 90f, 90f));
-            }
 
             // Mod Buttons
             ButtonInfo[] activeButtons = buttons[buttonsType].Skip(pageNumber * buttonsPerPage).Take(buttonsPerPage).ToArray();
@@ -442,6 +482,7 @@ namespace StupidTemplate.Menu
                 else
                     CreateButton(i * 0.1f + 0.20f, activeButtons[i]);
             }
+            
             //if (isOutdated)
             //NotifiLib.SendNotification("<color=#570000>MENU IS OUTDATED UPDATE TO </color> [<color=#ff9400>" + GetHttp("") + "</color>] IF YOU DO NOT WANT TO RISK GETTING <color=#570000>BANNED</color>");
         }
@@ -461,6 +502,12 @@ namespace StupidTemplate.Menu
             gameObject.transform.localPosition = new Vector3(0.56f, 0f, 0.28f - offset);
             gameObject.GetComponent<Renderer>().material.color = Color.black;
             gameObject.AddComponent<Classes.Button>().relatedText = method.buttonText;
+            if (isRainbowMenu)
+            {
+                ColorChanger colorChanger = gameObject.AddComponent<ColorChanger>();
+                colorChanger.colorInfo = newBackroundColor;
+                colorChanger.Start();
+            }
 
             Text text = new GameObject
             {
@@ -481,6 +528,9 @@ namespace StupidTemplate.Menu
             {
                 text.color = textColors[1];
                 gameObject.GetComponent<Renderer>().material.color = newButtonColors[1];
+
+                if (isRainbowMenu)
+                    gameObject.GetComponent<ColorChanger>().colorInfo = new ExtGradient {colors = GetSolidGradient(newButtonColors[1])};
             }
             else
             {
@@ -712,7 +762,6 @@ namespace StupidTemplate.Menu
 
         // Variables
         // Important
-        public static GorillaScoreBoard[] reportBoards = null;
         // Objects
         public static GameObject menu;
         public static GameObject menuBackground;

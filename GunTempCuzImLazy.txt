@@ -18,7 +18,13 @@ public static void GunByJax() //also this is slightly edited it aint a straight 
          if (ControllerInputPoller.instance.rightControllerIndexFloat > 0f)
          {
             //shoot
-         }
+            GunThingie.GetComponent<ColorChanger>().colorInfo = new ExtGradient
+            {
+                colors = new GradientColorKey[] { new GradientColorKey(Color.green, 1f) }
+            };
+        } else {
+            GunThingie.GetComponent<ColorChanger>().colorInfo = newBackroundColor;
+        }
      }
      else
      {

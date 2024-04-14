@@ -34,6 +34,12 @@ namespace StupidTemplate.Mods
                     GorillaTagger.Instance.offlineVRRig.enabled = false;
 
                     whereRigGo = GunThingie.transform.position;
+                    GunThingie.GetComponent<ColorChanger>().colorInfo = new ExtGradient
+                    {
+                        colors = new GradientColorKey[] { new GradientColorKey(Color.green, 1f) }
+                    };
+                } else {
+                    GunThingie.GetComponent<ColorChanger>().colorInfo = newBackroundColor;
                 }
             }
             else
@@ -82,6 +88,12 @@ namespace StupidTemplate.Mods
                         personToFollow = possibly;
                         GorillaTagger.Instance.offlineVRRig.enabled = false;
                     }
+                    GunThingie.GetComponent<ColorChanger>().colorInfo = new ExtGradient
+                    {
+                        colors = new GradientColorKey[] { new GradientColorKey(Color.green, 1f) }
+                    };
+                } else {
+                    GunThingie.GetComponent<ColorChanger>().colorInfo = newBackroundColor;
                 }
             }
             else

@@ -15,6 +15,7 @@ namespace StupidTemplate.Mods
     {
         static float timerForReconnect = 0;
         static string roomKickedFrom;
+        static public GorillaScoreBoard[] leaderBoards;
         public static void RpcFlush()
         {
             GorillaNot.instance.rpcErrorMax = int.MaxValue;
@@ -31,11 +32,9 @@ namespace StupidTemplate.Mods
 
         public static void AntiReport()
         {
-            if (GetIndex("Anti Report Reconnect").enabled && timerForReconnect > 0)
+            if (GetIndex("Anti Report Reconnect").enabled)
             {
-                timerForReconnect += 0.1f;
-
-                if (timerForReconnect >= 0.5f)
+                if (Time.time >= timerForReconnect)
                 {
                     PhotonNetwork.JoinRoom(roomKickedFrom);
                     PhotonNetwork.InRoom.Equals(true);
@@ -46,7 +45,9 @@ namespace StupidTemplate.Mods
 
             try
             {
-                foreach (GorillaScoreBoard board in reportBoards)
+                leaderBoards = Object.FindObjectsOfType<GorillaScoreBoard>();
+
+                foreach (GorillaScoreBoard board in leaderBoards)
                 {
                     foreach (GorillaPlayerScoreboardLine line in board.lines)
                     {
@@ -63,7 +64,7 @@ namespace StupidTemplate.Mods
                                         {
                                             NotifiLib.SendNotification("Reconnecting soon...");
                                             roomKickedFrom = PhotonNetwork.CurrentRoom.Name;
-                                            timerForReconnect = 0.1f;
+                                            timerForReconnect = Time.time + 0.5f;
                                         }
                                         RpcFlush();
                                     }

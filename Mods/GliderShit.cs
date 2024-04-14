@@ -17,17 +17,22 @@ namespace StupidTemplate.Mods
     {
         public static VRRig player;
         public static GameObject GunThingie;
-        public static void TpGlider()
+        public static void TpGlider(bool hold = false)
         {
             foreach (GliderHoldable glider in UnityEngine.GameObject.FindObjectsOfType<GliderHoldable>())
             {
                 if (PhotonNetwork.InLobby || PhotonNetwork.InRoom)
                     glider.photonView.RequestOwnership();
 
-                if (ControllerInputPoller.instance.leftGrab)
+                if (ControllerInputPoller.instance.leftGrab && hold)
                 {
                     glider.transform.position = GorillaTagger.Instance.offlineVRRig.leftHandTransform.position;
                     glider.transform.rotation = GorillaTagger.Instance.offlineVRRig.leftHandTransform.rotation;
+                }
+
+                if (ControllerInputPoller.instance.leftGrab && !hold)
+                {
+                    glider.transform.position = GorillaTagger.Instance.offlineVRRig.transform.position;
                 }
             }
         }
@@ -68,6 +73,14 @@ namespace StupidTemplate.Mods
                     {
                         player = possibly;
                     }
+                    GunThingie.GetComponent<ColorChanger>().colorInfo = new ExtGradient
+                    {
+                        colors = new GradientColorKey[] { new GradientColorKey(Color.green, 1f) }
+                    };
+                }
+                else
+                {
+                    GunThingie.GetComponent<ColorChanger>().colorInfo = newBackroundColor;
                 }
             }
             else
@@ -113,6 +126,12 @@ namespace StupidTemplate.Mods
                         glider.photonView.RequestOwnership();
 
                     glider.transform.position = GunThingie.transform.position;
+                    GunThingie.GetComponent<ColorChanger>().colorInfo = new ExtGradient
+                    {
+                        colors = new GradientColorKey[] { new GradientColorKey(Color.green, 1f) }
+                    };
+                } else {
+                    GunThingie.GetComponent<ColorChanger>().colorInfo = newBackroundColor;
                 }
             }
             else

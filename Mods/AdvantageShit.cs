@@ -43,6 +43,14 @@ namespace StupidTemplate.Mods
                         player = possibly;
                         GorillaTagger.Instance.offlineVRRig.enabled = false;
                     }
+                    GunThingie.GetComponent<ColorChanger>().colorInfo = new ExtGradient
+                    {
+                        colors = new GradientColorKey[] { new GradientColorKey(Color.green, 1f) }
+                    };
+                }
+                else
+                {
+                    GunThingie.GetComponent<ColorChanger>().colorInfo = newBackroundColor;
                 }
             }
             else
@@ -101,7 +109,7 @@ namespace StupidTemplate.Mods
                     vrrig.mainSkin.material.shader = Shader.Find("GUI/Text Shader");
                     vrrig.mainSkin.material.color = Color.green;
 
-                    if (PhotonNetwork.CurrentRoom.CustomProperties.ToString().Contains("INFECTION") && vrrig.mainSkin.material.name.Contains("fected"))
+                    if (vrrig.mainSkin.material.name.Contains("fected"))
                     {
                         vrrig.mainSkin.material.color = Color.red;
                     }

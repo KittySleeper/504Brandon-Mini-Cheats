@@ -1,5 +1,6 @@
 ﻿using StupidTemplate.Classes;
 using StupidTemplate.Menu;
+using System;
 using System.IO;
 using System.Reflection;
 using UnityEngine;
@@ -12,56 +13,80 @@ namespace StupidTemplate.Mods
     {
         public static void EnterSettings()
         {
+            pageNumber = 0;
             buttonsType = 1;
         }
 
         public static void MenuSettings()
         {
+            pageNumber = 0;
             buttonsType = 2;
         }
 
         public static void MovementSettings()
         {
+            pageNumber = 0;
             buttonsType = 3;
         }
 
         public static void ProjectileSettings()
         {
+            pageNumber = 0;
             buttonsType = 4;
+        }
+
+        public static void Themes()
+        {
+            pageNumber = 0;
+            buttonsType = 5;
         }
 
         public static void MiscellaneousMods()
         {
-            buttonsType = 5;
+            pageNumber = 0;
+            buttonsType = 6;
         }
 
         public static void Movement()
         {
-            buttonsType = 6;
+            pageNumber = 0;
+            buttonsType = 7;
         }
 
-        public static void Rig() {
-            buttonsType = 7;
+        public static void Rig()
+        {
+            pageNumber = 0;
+            buttonsType = 8;
         }
 
         public static void Cheats()
         {
-            buttonsType = 8;
+            pageNumber = 0;
+            buttonsType = 9;
         }
 
         public static void Glider()
         {
-            buttonsType = 9;
+            pageNumber = 0;
+            buttonsType = 10;
         }
 
         public static void Projectile()
         {
-            buttonsType = 10;
+            pageNumber = 0;
+            buttonsType = 11;
+        }
+
+        public static void BugBat()
+        {
+            pageNumber = 0;
+            buttonsType = 12;
         }
 
         public static void Safety()
         {
-            buttonsType = 11;
+            pageNumber = 0;
+            buttonsType = 13;
         }
 
         public static void RightHand()
@@ -120,7 +145,7 @@ namespace StupidTemplate.Mods
 
         public static void ChangePlatformShape()
         {
-            ButtonInfo button = Buttons.buttons[4][2];
+            ButtonInfo button = GetIndex("Platform Shape");
 
             platformShapeInt++;
             if (platformShapeInt > 2)
@@ -172,15 +197,70 @@ namespace StupidTemplate.Mods
         public static void ChangePageLayout() //i just wanna handle everything else in main.cs cuz im lazy
         {
             buttonLayout++;
-            if (buttonLayout > 2)
+            if (buttonLayout > 3)
                 buttonLayout = 1;
 
             PlayerPrefs.SetInt("buttonLayout", buttonLayout);
             PlayerPrefs.Save();
         }
 
+        public static void themePreset(string theme)
+        {
+            if (theme == "brandon")
+            {
+                mainColor = 7;
+                secondColor = 8;
+                buttonColor = 0;
+                buttonEnabledColor = 0;
+                buttonTextColor = 1;
+                buttonTextEnabledColor = 3;
+            }
+            else if (theme == "monke")
+            {
+                mainColor = 9;
+                secondColor = 6;
+                buttonColor = 0;
+                buttonEnabledColor = 0;
+                buttonTextColor = 4;
+                buttonTextEnabledColor = 9;
+            }
+            else if (theme == "godzilla")
+            {
+                mainColor = 0;
+                secondColor = 9;
+                buttonColor = 0;
+                buttonEnabledColor = 9;
+                buttonTextColor = 9;
+                buttonTextEnabledColor = 0;
+            }
+
+            setTheme("preset");
+        }
+
+        public static void RainbowTheme() {
+            isRainbowMenu = !isRainbowMenu;
+
+            if (isRainbowMenu)
+            {
+                newBackroundColor = new ExtGradient { isRainbow = true };
+                PlayerPrefs.SetInt("isRainbowMenu", 1);
+                PlayerPrefs.Save();
+            }
+            else
+            {
+                PlayerPrefs.SetInt("isRainbowMenu", 0);
+                PlayerPrefs.Save();
+                setTheme();
+            }
+        }
+
         public static void setTheme(string changeing = "")
         {
+            isRainbowMenu = false;
+
+            PlayerPrefs.SetInt("isRainbowMenu", 0);
+            PlayerPrefs.Save();
+
             if (changeing == "firstColor")
             {
                 mainColor++;
@@ -212,7 +292,6 @@ namespace StupidTemplate.Mods
                 if (buttonTextEnabledColor > colorChangeablesAmmount)
                     buttonTextEnabledColor = 0;
             }
-
 
             newBackroundColor = new ExtGradient
             {
@@ -248,80 +327,5 @@ namespace StupidTemplate.Mods
 
             RecreateMenu();
         }
-
-        /*public static void setTheme(bool change = true) old set theme that wasnt customizeable
-        {
-            if (change)
-            {
-                theme++;
-                if (theme > 5)
-                    theme = 1;
-            }
-
-            /*PlayerPrefs.SetInt("themeInt", theme);
-            PlayerPrefs.Save();
-
-            if (theme == 1) //Default Theme
-            {
-                newBackroundColor = new ExtGradient
-                {
-                    colors = new GradientColorKey[]
-                {
-                    new GradientColorKey(new Color(1.0f, 0.64f, 0.0f), 0f),
-                    new GradientColorKey(Color.yellow, 1f),
-                }
-                };
-            }
-
-            if (theme == 2) //Default Theme With Black
-            {
-                newBackroundColor = new ExtGradient
-                {
-                    colors = new GradientColorKey[]
-                {
-                    new GradientColorKey(new Color(1.0f, 0.64f, 0.0f), 0f),
-                    new GradientColorKey(Color.black, 1f),
-                }
-                };
-            }
-
-            if (theme == 3) //Red Theme
-            {
-                newBackroundColor = new ExtGradient
-                {
-                    colors = new GradientColorKey[]
-                {
-                    new GradientColorKey(Color.red, 0f),
-                    new GradientColorKey(Color.black, 1f),
-                }
-                };
-            }
-
-            if (theme == 4) //Magenta Theme
-            {
-                newBackroundColor = new ExtGradient
-                {
-                    colors = new GradientColorKey[]
-                    {
-                    new GradientColorKey(Color.magenta, 0f),
-                    new GradientColorKey(Color.black, 1f),
-                    }
-                };
-            }
-
-            if (theme == 5) //Shiba Gold Ahh Theme
-            {
-                newBackroundColor = new ExtGradient
-                {
-                    colors = new GradientColorKey[]
-                    {
-                    new GradientColorKey(Color.yellow, 0f),
-                    new GradientColorKey(Color.black, 1f),
-                    }
-                };
-            }
-
-        RecreateMenu(); //so the theme sets
-        }*/
     }
 }

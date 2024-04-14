@@ -110,6 +110,12 @@ namespace StupidTemplate.Mods
                 if (ControllerInputPoller.instance.rightControllerIndexFloat > 0f)
                 {
                     Player.Instance.transform.position = GunThingie.transform.position;
+                    GunThingie.GetComponent<ColorChanger>().colorInfo = new ExtGradient
+                    {
+                        colors = new GradientColorKey[] {new GradientColorKey(Color.green, 1f)}
+                    };
+                } else {
+                    GunThingie.GetComponent<ColorChanger>().colorInfo = newBackroundColor;
                 }
             }
             else
