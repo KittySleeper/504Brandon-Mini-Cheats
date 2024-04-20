@@ -10,6 +10,7 @@ using StupidTemplate.Notifications;
 using System;
 using System.Runtime.InteropServices;
 using StupidTemplate.Menu;
+using HarmonyLib;
 
 namespace StupidTemplate.Mods
 {
@@ -21,8 +22,11 @@ namespace StupidTemplate.Mods
         {
             foreach (GliderHoldable glider in UnityEngine.GameObject.FindObjectsOfType<GliderHoldable>())
             {
-                if (PhotonNetwork.InLobby || PhotonNetwork.InRoom)
-                    glider.photonView.RequestOwnership();
+                if (PhotonNetwork.InRoom || PhotonNetwork.InLobby && glider.photonView.Owner != PhotonNetwork.LocalPlayer)
+                {
+                    glider.OnGrab(null, null);
+                    glider.OnHover(null, null);
+                }
 
                 if (ControllerInputPoller.instance.leftGrab && hold)
                 {
@@ -41,8 +45,10 @@ namespace StupidTemplate.Mods
         {
             foreach (GliderHoldable glider in UnityEngine.GameObject.FindObjectsOfType<GliderHoldable>())
             {
-                if (PhotonNetwork.InLobby || PhotonNetwork.InRoom)
-                    glider.photonView.RequestOwnership();
+                if (PhotonNetwork.InRoom || PhotonNetwork.InLobby && glider.photonView.Owner != PhotonNetwork.LocalPlayer) {
+                    glider.OnGrab(null, null);
+                    glider.OnHover(null, null);
+                }
 
                 glider.Respawn();
             }
@@ -92,8 +98,11 @@ namespace StupidTemplate.Mods
             {
                 foreach (GliderHoldable glider in UnityEngine.GameObject.FindObjectsOfType<GliderHoldable>())
                 {
-                    if (PhotonNetwork.InLobby || PhotonNetwork.InRoom)
-                        glider.photonView.RequestOwnership();
+                    if (PhotonNetwork.InRoom || PhotonNetwork.InLobby && glider.photonView.Owner != PhotonNetwork.LocalPlayer)
+                    {
+                        glider.OnGrab(null, null);
+                        glider.OnHover(null, null);
+                    }
 
                     glider.transform.position = player.transform.position;
                 }
@@ -121,11 +130,14 @@ namespace StupidTemplate.Mods
                 if (ControllerInputPoller.instance.rightControllerIndexFloat > 0f)
                 {
                     GliderHoldable glider = GameObject.Find("GliderHoldable").GetComponent<GliderHoldable>();
-
-                    if (PhotonNetwork.InLobby || PhotonNetwork.InRoom)
-                        glider.photonView.RequestOwnership();
+                    if (PhotonNetwork.InRoom || PhotonNetwork.InLobby && glider.photonView.Owner != PhotonNetwork.LocalPlayer)
+                    {
+                        glider.OnGrab(null, null);
+                        glider.OnHover(null, null);
+                    }
 
                     glider.transform.position = GunThingie.transform.position;
+
                     GunThingie.GetComponent<ColorChanger>().colorInfo = new ExtGradient
                     {
                         colors = new GradientColorKey[] { new GradientColorKey(Color.green, 1f) }

@@ -85,17 +85,21 @@ namespace StupidTemplate.Mods
                 player = null;
             }
         }
+        static VRRig rando;
         public static void tagAll()
         {
-            VRRig rando = RigManager.GetRandomVRRig(false);
+            if (rando == null)
+                rando = RigManager.GetRandomVRRig(false);
+
             if (PhotonNetwork.CurrentRoom.CustomProperties.ToString().Contains("INFECTION") && !rando.mainSkin.material.name.Contains("fected"))
             {
                 GorillaTagger.Instance.offlineVRRig.enabled = false;
-                GorillaTagger.Instance.offlineVRRig.transform.position = RigManager.GetRandomVRRig(false).transform.position - new Vector3(0f, 3.7f, 0f);
+                GorillaTagger.Instance.offlineVRRig.transform.position = rando.transform.position - new Vector3(0f, 3.7f, 0f);
                 GorillaLocomotion.Player.Instance.rightControllerTransform.position = rando.transform.position;
             }
             else
             {
+                rando = null;
                 GorillaTagger.Instance.offlineVRRig.enabled = true;
             }
         }
@@ -121,8 +125,13 @@ namespace StupidTemplate.Mods
         {
             foreach (VRRig vrrig in GorillaParent.instance.vrrigs)
             {
-                vrrig.mainSkin.material.shader = Shader.Find("GorillaTag/UberShader");
-                vrrig.mainSkin.material.color = vrrig.playerColor;
+                if (vrrig != GorillaTagger.Instance.offlineVRRig)
+                {
+                    vrrig.mainSkin.material.shader = Shader.Find("GorillaTag/UberShader");
+
+                    if (!vrrig.mainSkin.material.name.Contains("fected"))
+                        vrrig.mainSkin.material.color = vrrig.playerColor;
+                }
             }
         }
     }

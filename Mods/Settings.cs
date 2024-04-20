@@ -65,28 +65,34 @@ namespace StupidTemplate.Mods
             buttonsType = 9;
         }
 
-        public static void Glider()
+        public static void OP()
         {
             pageNumber = 0;
             buttonsType = 10;
         }
 
-        public static void Projectile()
+        public static void Glider()
         {
             pageNumber = 0;
             buttonsType = 11;
         }
 
-        public static void BugBat()
+        public static void Projectile()
         {
             pageNumber = 0;
             buttonsType = 12;
         }
 
-        public static void Safety()
+        public static void BugBat()
         {
             pageNumber = 0;
             buttonsType = 13;
+        }
+
+        public static void Safety()
+        {
+            pageNumber = 0;
+            buttonsType = 14;
         }
 
         public static void RightHand()
@@ -244,14 +250,14 @@ namespace StupidTemplate.Mods
             {
                 newBackroundColor = new ExtGradient { isRainbow = true };
                 PlayerPrefs.SetInt("isRainbowMenu", 1);
-                PlayerPrefs.Save();
             }
             else
             {
                 PlayerPrefs.SetInt("isRainbowMenu", 0);
-                PlayerPrefs.Save();
                 setTheme();
             }
+
+            PlayerPrefs.Save();
         }
 
         public static void setTheme(string changeing = "")

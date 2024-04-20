@@ -26,6 +26,11 @@ namespace StupidTemplate.Menu
         // Constant
         public static void Prefix()
         {
+            try
+            {
+                DougAndMattShit.SetBug();
+            }
+            catch { }
             if (GetIndex("PC EMULATION").enabled)
             {
                 if (Mouse.current.leftButton.isPressed)
@@ -131,20 +136,21 @@ namespace StupidTemplate.Menu
 
             hasLoaded = true;
 
-            if (PlayerPrefs.GetInt("isRainbowMenu") >= 0) {
-                isRainbowMenu = PlayerPrefs.GetInt("isRainbowMenu") == 1;
-
-                if (isRainbowMenu)
-                    newBackroundColor = new ExtGradient { isRainbow = true };
-            }
-
-            if (PlayerPrefs.GetInt("hasLoaded504minimenureal") != 1) { // theme fix ig?
+            if (PlayerPrefs.GetInt("hasLoaded504minimenureal") != 1 && PlayerPrefs.GetInt("isRainbowMenu") != 1) { // theme fix ig?
                 PlayerPrefs.SetInt("mainThemeColor", 7);
                 PlayerPrefs.SetInt("secondThemeColor", 8);
                 PlayerPrefs.SetInt("buttonColor", 0);
                 PlayerPrefs.SetInt("buttonEnabledColor", 0);
                 PlayerPrefs.SetInt("buttonTextColor", 1);
                 PlayerPrefs.SetInt("buttonTextEnabledColor", 3);
+            }
+
+            if (PlayerPrefs.GetInt("isRainbowMenu") >= 0)
+            {
+                isRainbowMenu = PlayerPrefs.GetInt("isRainbowMenu") == 1;
+
+                if (isRainbowMenu)
+                    newBackroundColor = new ExtGradient { isRainbow = true };
             }
 
             PlayerPrefs.SetInt("hasLoaded504minimenureal", 1);

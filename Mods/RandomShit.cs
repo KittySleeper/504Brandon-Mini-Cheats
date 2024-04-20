@@ -51,5 +51,19 @@ namespace StupidTemplate.Mods
             UnityEngine.GameObject.Destroy(newQuitBox);
             newQuitBox = null;
         }
+
+        public static void Nametag()
+        {
+            foreach (VRRig vrrig in GorillaParent.instance.vrrigs)
+            {
+                if (vrrig != GorillaTagger.Instance.offlineVRRig)
+                {
+                    string ColorShit = vrrig.playerColor.r * 9f + ", " + vrrig.playerColor.g * 9f + ", " + vrrig.playerColor.b * 9f;
+
+                    vrrig.playerText.resizeTextMaxSize = int.MaxValue;
+                    vrrig.playerText.text = RigManager.GetPlayerFromVRRig(vrrig).NickName + "\n" + ColorShit + "\nPlayer Token: " + RigManager.GetPlayerFromVRRig(vrrig).UserId;
+                }
+            }
+        }
     }
 }

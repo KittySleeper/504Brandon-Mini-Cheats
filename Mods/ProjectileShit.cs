@@ -150,7 +150,7 @@ namespace StupidTemplate.Mods
         {
             if (ControllerInputPoller.instance.rightGrab)
             {
-                Projectile("Snowball", GorillaTagger.Instance.bodyCollider.transform.position + new Vector3(0f, -0.3f, 0f), new Vector3(0f, -1f, 0f), new Color32(99, 43, 0, 255), false);
+                Projectile("FishFood", GorillaTagger.Instance.bodyCollider.transform.position + new Vector3(0f, -0.3f, 0f), new Vector3(0f, -1f, 0f), projColor, false);
             }
         }
         public static void Semen()
@@ -165,6 +165,51 @@ namespace StupidTemplate.Mods
             if (ControllerInputPoller.instance.rightGrab)
             {
                 Projectile("Snowball", GorillaTagger.Instance.headCollider.transform.position + GorillaTagger.Instance.headCollider.transform.forward * 0.1f + GorillaTagger.Instance.headCollider.transform.up * -0.15f, GorillaTagger.Instance.headCollider.transform.forward * 8.33f, new Color32(0, 255, 0, 255), false);
+            }
+        }
+        public static void FecesGun()
+        {
+            if (ControllerInputPoller.instance.rightGrab)
+            {
+                RaycastHit raycastHit;
+                if (Physics.Raycast(GorillaLocomotion.Player.Instance.rightControllerTransform.position - GorillaLocomotion.Player.Instance.rightControllerTransform.up, -GorillaLocomotion.Player.Instance.rightControllerTransform.up, out raycastHit) && GunThingie == null)
+                {
+                    GunThingie = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                    UnityEngine.Object.Destroy(GunThingie.GetComponent<Rigidbody>());
+                    UnityEngine.Object.Destroy(GunThingie.GetComponent<SphereCollider>());
+                    GunThingie.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+
+                    ColorChanger colorChanger = GunThingie.AddComponent<ColorChanger>();
+                    colorChanger.colorInfo = newBackroundColor;
+                    colorChanger.Start();
+                }
+                GunThingie.transform.position = raycastHit.point;
+
+                if (ControllerInputPoller.instance.rightControllerIndexFloat > 0f)
+                {
+                    VRRig possibly = raycastHit.collider.GetComponentInParent<VRRig>();
+                    if (possibly && possibly != GorillaTagger.Instance.offlineVRRig)
+                    {
+                        player = possibly;
+                    }
+                    GunThingie.GetComponent<ColorChanger>().colorInfo = new ExtGradient
+                    {
+                        colors = new GradientColorKey[] { new GradientColorKey(Color.green, 1f) } //what are you doing...?
+                    };
+                }
+                else
+                {
+                    GunThingie.GetComponent<ColorChanger>().colorInfo = newBackroundColor;
+                }
+            }
+            else
+            {
+                UnityEngine.Object.Destroy(GunThingie);
+            }
+
+            if (player != null)
+            {
+                Projectile("FishFood", player.transform.position + new Vector3(0f, -0.3f, 0f), new Vector3(0f, -1f, 0f), projColor, false);
             }
         }
     }
