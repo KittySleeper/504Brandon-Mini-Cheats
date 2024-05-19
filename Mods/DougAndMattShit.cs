@@ -28,8 +28,14 @@ namespace StupidTemplate.Mods
                 Bug = UnityEngine.GameObject.FindFirstObjectByType<ThrowableBug>();
             }
 
-            if (PhotonNetwork.InRoom || PhotonNetwork.InRoom && PhotonNetwork.LocalPlayer.IsMasterClient && Bug.photonView.Owner != PhotonNetwork.LocalPlayer)
-                Bug.WorldShareableRequestOwnership();
+            try
+            {
+                if (Bug.photonView.Owner != PhotonNetwork.LocalPlayer)
+                    Bug.OnOwnershipTransferred(PhotonNetwork.LocalPlayer, RigManager.GetPlayerFromVRRig(Bug.ownerRig));
+            } catch
+            {
+
+            }
         }
         public static void BreakBug()
         {

@@ -77,22 +77,28 @@ namespace StupidTemplate.Mods
             buttonsType = 11;
         }
 
-        public static void Projectile()
+        public static void Water()
         {
             pageNumber = 0;
             buttonsType = 12;
         }
 
-        public static void BugBat()
+        public static void Projectile()
         {
             pageNumber = 0;
             buttonsType = 13;
         }
 
-        public static void Safety()
+        public static void BugBat()
         {
             pageNumber = 0;
             buttonsType = 14;
+        }
+
+        public static void Safety()
+        {
+            pageNumber = 0;
+            buttonsType = 15;
         }
 
         public static void RightHand()

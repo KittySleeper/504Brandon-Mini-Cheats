@@ -95,9 +95,9 @@ namespace StupidTemplate.Mods
 
             if (player != null) //nah
             {
-                Hashtable hashtable = new Hashtable();
-                hashtable[(byte)0] = RigManager.GetPlayerFromVRRig(player).ActorNumber;
-                PhotonNetwork.NetworkingClient.OpRaiseEvent(207, hashtable, null, SendOptions.SendReliable);
+                UnityEngine.GameObject.FindFirstObjectByType<MonkeyeAI>().transform.position = player.transform.position;
+                UnityEngine.GameObject.FindFirstObjectByType<MonkeyeAI>().SetChasePlayer(player);
+                UnityEngine.GameObject.FindFirstObjectByType<MonkeyeAI>().attackDistance = float.MaxValue;
                 SafetyShit.RpcFlush();
             }
         }

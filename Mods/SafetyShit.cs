@@ -13,7 +13,7 @@ namespace StupidTemplate.Mods
 {
     internal class SafetyShit
     {
-        static float timerForReconnect = 0;
+        static bool reconnect = false;
         static string roomKickedFrom;
         static public GorillaScoreBoard[] leaderBoards;
         public static void RpcFlush()
@@ -32,17 +32,6 @@ namespace StupidTemplate.Mods
 
         public static void AntiReport()
         {
-            if (GetIndex("Anti Report Reconnect").enabled)
-            {
-                if (Time.time >= timerForReconnect)
-                {
-                    PhotonNetwork.JoinRoom(roomKickedFrom);
-                    PhotonNetwork.InRoom.Equals(true);
-                    roomKickedFrom = null;
-                    timerForReconnect = 0;
-                }
-            }
-
             try
             {
                 leaderBoards = Object.FindObjectsOfType<GorillaScoreBoard>();
@@ -58,14 +47,10 @@ namespace StupidTemplate.Mods
                                 {
                                     if (Vector3.Distance(vrrig.rightHandTransform.position, line.reportButton.gameObject.transform.position) < 0.35f || Vector3.Distance(vrrig.leftHandTransform.position, line.reportButton.gameObject.transform.position) < 0.35f)
                                     {
+                                        UI.lastRoom = PhotonNetwork.CurrentRoom.Name;
                                         PhotonNetwork.Disconnect();
-                                        NotifiLib.SendNotification(vrrig.playerText.text + " tried to report you in " + PhotonNetwork.CurrentRoom.Name);
-                                        if (GetIndex("Anti Report Reconnect").enabled)
-                                        {
-                                            NotifiLib.SendNotification("Reconnecting soon...");
-                                            roomKickedFrom = PhotonNetwork.CurrentRoom.Name;
-                                            timerForReconnect = Time.time + 0.5f;
-                                        }
+                                        NotifiLib.SendNotification(RigManager.GetPlayerFromVRRig(vrrig).NickName + " tried to report you in " + PhotonNetwork.CurrentRoom.Name);
+                                        Menu.UI.whoReported = RigManager.GetPlayerFromVRRig(vrrig).NickName + " REPORTED YOU AND THEIR ID IS " + RigManager.GetPlayerFromVRRig(vrrig).UserId;
                                         RpcFlush();
                                     }
                                 }

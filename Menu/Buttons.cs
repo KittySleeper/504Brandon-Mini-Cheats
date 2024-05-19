@@ -1,4 +1,5 @@
-﻿using StupidTemplate.Classes;
+﻿using Photon.Pun;
+using StupidTemplate.Classes;
 using StupidTemplate.Mods;
 using static StupidTemplate.Settings;
 
@@ -17,7 +18,8 @@ namespace StupidTemplate.Menu
                 new ButtonInfo { buttonText = "Cheat Mods", method =() => SettingsMods.Cheats(), isTogglable = false, toolTip = "Cheat Mods."},
                 new ButtonInfo { buttonText = "OP Mods [<color=#ffcc00>EX</color>]", method =() => SettingsMods.OP(), isTogglable = false, toolTip = "Overpowered Mods."},
                 new ButtonInfo { buttonText = "Glider Mods", method =() => SettingsMods.Glider(), isTogglable = false, toolTip = "Glider Mods."},
-                //new ButtonInfo { buttonText = "Projectile Mods", method =() => SettingsMods.Projectile(), isTogglable = false, toolTip = "Projectile Mods."},
+                new ButtonInfo { buttonText = "Water Mods", method =() => SettingsMods.Water(), isTogglable = false, toolTip = "Water Mods."},
+                new ButtonInfo { buttonText = "Projectile Mods", method =() => SettingsMods.Projectile(), isTogglable = false, toolTip = "Projectile Mods."},
                 new ButtonInfo { buttonText = "Bug Mods", method =() => SettingsMods.BugBat(), isTogglable = false, toolTip = "Doug Mods."},
                 new ButtonInfo { buttonText = "Saftey Mods", method =() => SettingsMods.Safety(), isTogglable = false, toolTip = "Saftey Mods."},
             },
@@ -42,7 +44,7 @@ namespace StupidTemplate.Menu
                 new ButtonInfo { buttonText = "Right Hand", enableMethod =() => SettingsMods.RightHand(), disableMethod =() => SettingsMods.LeftHand(), toolTip = "Puts the menu on your right hand.", enabled = true},
                 new ButtonInfo { buttonText = "Notifications", enableMethod =() => SettingsMods.EnableNotifications(), disableMethod =() => SettingsMods.DisableNotifications(), enabled = !disableNotifications, toolTip = "Toggles the notifications."},
                 new ButtonInfo { buttonText = "FPS Counter", enableMethod =() => SettingsMods.EnableFPSCounter(), disableMethod =() => SettingsMods.DisableFPSCounter(), enabled = fpsCounter, toolTip = "Toggles the FPS counter."},
-                new ButtonInfo { buttonText = "Disconnect Button", enableMethod =() => SettingsMods.EnableDisconnectButton(), disableMethod =() => SettingsMods.DisableDisconnectButton(), enabled = disconnectButton, toolTip = "Toggles the disconnect button."},                new ButtonInfo { buttonText = "Anti Report Reconnect", toolTip = "Makes It So You Reconnect After Geting Kicked Out From Anti Report."},
+                new ButtonInfo { buttonText = "Disconnect Button", enableMethod =() => SettingsMods.EnableDisconnectButton(), disableMethod =() => SettingsMods.DisableDisconnectButton(), enabled = disconnectButton, toolTip = "Toggles the disconnect button."},
                 new ButtonInfo { buttonText = "Sound When You Tap The Menu", overlapText = "Sound When You Tap The Menu [" + hitSoundNames[hitSoundValue] + "]", method =() => SettingsMods.ChangeHandTapValue(), isTogglable = false},
                 new ButtonInfo { buttonText = "Should Save Mods", enableMethod =() => SettingsMods.enableModSaving(), disableMethod =() => SettingsMods.disableModSaving(), toolTip = "Do you like mod saving or nah."},
             },
@@ -108,10 +110,10 @@ namespace StupidTemplate.Menu
 
            new ButtonInfo[] { // OP Mods lol
                 new ButtonInfo { buttonText = "Return to Main", method =() => Global.ReturnHome(), isTogglable = false, toolTip = "Returns to the main page of the menu."},
-                new ButtonInfo { buttonText = "Make Gamemode Casual [<color=#ffcc00>D?</color>]", method =() => OPShit.ChangeGamemode(), toolTip = "Casual."},
-                new ButtonInfo { buttonText = "Make Gamemode Infection [<color=#ffcc00>D?</color>]", method =() => OPShit.ChangeGamemode("infection"), toolTip = "Infection."},
-                new ButtonInfo { buttonText = "Make Gamemode Hunt [<color=#ffcc00>D?</color>]", method =() => OPShit.ChangeGamemode("hunt"), toolTip = "Hunt."},
-                //new ButtonInfo { buttonText = "Lag Gun [<color=#570000>D</color>]", method =() => OPShit.LagGun(), toolTip = "Lag someone (dont spam this and dont hold it for too long)."},
+                new ButtonInfo { buttonText = "Make Gamemode Casual [<color=#570000>D</color>]", method =() => OPShit.ChangeGamemode(), toolTip = "Casual."},
+                new ButtonInfo { buttonText = "Make Gamemode Infection [<color=#570000>D</color>]", method =() => OPShit.ChangeGamemode("infection"), toolTip = "Infection."},
+                new ButtonInfo { buttonText = "Make Gamemode Hunt [<color=#570000>D</color>]", method =() => OPShit.ChangeGamemode("hunt"), toolTip = "Hunt."},
+                //new ButtonInfo { buttonText = "Lag Gun [<color=#ffcc00>EX</color>]", method =() => OPShit.LagGun(), toolTip = "Lag someone (dont spam this and dont hold it for too long)."},
                 //new ButtonInfo { buttonText = "Lag All [<color=#570000>D</color>]", method =() => OPShit.Lag(), toolTip = "Lag everyone (dont spam this and dont hold it for too long)."}, //nothin im abt to try fixing doug and matt mods cuz they aperently broke
             },
 
@@ -121,8 +123,15 @@ namespace StupidTemplate.Menu
                 new ButtonInfo { buttonText = "Break Gliders", method=() => GliderShit.BreakGliders(), toolTip= "Break Gliders."},
                 new ButtonInfo { buttonText = "Gliders Aura [<color=#ff9400>LG</color>]", method =() => GliderShit.TpGlider(), toolTip = "Teleports all gliders to you."},
                 new ButtonInfo { buttonText = "Hold Gliders [<color=#ff9400>LG</color>]", method =() => GliderShit.TpGlider(true), toolTip = "Hold all gliders."},
+                new ButtonInfo { buttonText = "Hold Gliders", method =() => GliderShit.OrbitGliders(), toolTip = "Orbit UwU."},
                 new ButtonInfo { buttonText = "Glider Gun", method =() => GliderShit.GliderGun(), toolTip = "Teleports all gliders to the gun."},
                 new ButtonInfo { buttonText = "Blind Gun", method=() => GliderShit.BlindGun(), toolTip= "Blind People."},
+            },
+
+            new ButtonInfo[] { // Water Mods
+                new ButtonInfo { buttonText = "Return to Main", method =() => Global.ReturnHome(), isTogglable = false, toolTip = "Returns to the main page of the menu."},
+                new ButtonInfo { buttonText = "Water Spam [<color=#ff9400>G</color>]", method=() => WaterShit.WaterSpam(), toolTip= "Spam Water."},
+                new ButtonInfo { buttonText = "Heavy Water Spam", method=() => WaterShit.HellaWater(), toolTip= "Drink."},
             },
 
            new ButtonInfo[] { // Projectile Mods
@@ -137,6 +146,13 @@ namespace StupidTemplate.Menu
                 new ButtonInfo { buttonText = "Cum [<color=#ff9400>RG</color>]", method=() => ProjectileShit.Semen(), toolTip= "Cum on children (yea i cant say that-)."},
                 new ButtonInfo { buttonText = "Vomit [<color=#ff9400>RG</color>]", method=() => ProjectileShit.Vomit(), toolTip= "Vomit on children."},
                 new ButtonInfo { buttonText = "Shit [<color=#ff9400>RG</color>]", method=() => ProjectileShit.Feces(), toolTip= "Shit on children."},
+                new ButtonInfo { buttonText = "Projectile Gun", method=() => ProjectileShit.ProjectileGun(), toolTip= "Spams a random projectile at who you shoot."},
+                new ButtonInfo { buttonText = "Shit Gun", method=() => ProjectileShit.FecesGun(), toolTip= "Make children shit."},
+                new ButtonInfo { buttonText = "Cum Gun"/*, method=() => ProjectileShit.CumGun()*/, toolTip= "..."},
+                //new ButtonInfo { buttonText = "Ungrabable Projectiles", method=() => ProjectileShit.UngrabableProjectiles(), toolTip= "Makes it so you cant grab projectiles."},
+                new ButtonInfo { buttonText = "Slow Projectiles", method=() => ProjectileShit.SlowProjectiles(), toolTip= "Slow ass projectiles."},
+                new ButtonInfo { buttonText = "Fast Projectiles", method=() => ProjectileShit.FastProjectiles(), toolTip= "Throw projectiles way to fucking fast."},
+                new ButtonInfo { buttonText = "Fix Projectiles", method=() => ProjectileShit.FixProjectiles()},
             },
 
            new ButtonInfo[] { // Bug Mods
@@ -151,7 +167,7 @@ namespace StupidTemplate.Menu
             new ButtonInfo[] { // Safety Mods
                 new ButtonInfo { buttonText = "Return to Main", method =() => Global.ReturnHome(), isTogglable = false, toolTip = "Returns to the main page of the menu."},
                 new ButtonInfo { buttonText = "Flush Rpc", method =() => SafetyShit.RpcFlush(), isTogglable = false, toolTip = "Fake anti ban goes hard (/hj)."},
-                new ButtonInfo { buttonText = "Anti Report", method =() => SafetyShit.AntiReport(), toolTip = "Kids cant report you anymore."},
+                new ButtonInfo { buttonText = "Anti Report", method =() => SafetyShit.AntiReport(), toolTip = "Kids cant report you anymore.", enabled = true},
             },
         };
     }

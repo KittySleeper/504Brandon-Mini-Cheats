@@ -19,19 +19,7 @@ namespace StupidTemplate.Classes
                 buttonCooldown = Time.time + 0.2f;
                 GorillaTagger.Instance.StartVibration(rightHanded, GorillaTagger.Instance.tagHapticStrength / 2f, GorillaTagger.Instance.tagHapticDuration / 2f);
 
-                if (PhotonNetwork.InRoom)
-                {
-                    GorillaTagger.Instance.myVRRig.RPC("PlayHandTap", RpcTarget.All, new object[]{
-                        hitSoundValues[hitSoundValue],
-                        rightHanded,
-                        0.4f
-                    });
-                    SafetyShit.RpcFlush();
-                }
-                else
-                {
-                    GorillaTagger.Instance.offlineVRRig.PlayHandTapLocal(hitSoundValues[hitSoundValue], rightHanded, 0.4f);
-                }
+				Global.playSound(hitSoundValues[hitSoundValue], rightHanded, 0.4f);
 
                 Toggle(relatedText);
             }

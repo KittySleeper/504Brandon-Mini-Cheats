@@ -41,6 +41,20 @@ namespace StupidTemplate.Mods
             }
         }
 
+        public static void OrbitGliders()
+        {
+            foreach (GliderHoldable glider in UnityEngine.GameObject.FindObjectsOfType<GliderHoldable>())
+            {
+                if (PhotonNetwork.InRoom || PhotonNetwork.InLobby && glider.photonView.Owner != PhotonNetwork.LocalPlayer)
+                {
+                    glider.OnGrab(null, null);
+                    glider.OnHover(null, null);
+                }
+
+                glider.transform.RotateAround(GorillaTagger.Instance.offlineVRRig.transform.position, 0);
+            }
+        }
+
         public static void BreakGliders()
         {
             foreach (GliderHoldable glider in UnityEngine.GameObject.FindObjectsOfType<GliderHoldable>())
