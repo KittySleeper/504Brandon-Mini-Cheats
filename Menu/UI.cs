@@ -5,6 +5,16 @@ using System.Linq;
 using StupidTemplate.Mods;
 using static StupidTemplate.Settings;
 using static StupidTemplate.Menu.Main;
+using Photon.Pun;
+using Photon.Realtime;
+using System.IO;
+using System.Diagnostics;
+using ExitGames.Client.Photon;
+using GorillaNetworking;
+using static UnityEngine.UI.GridLayoutGroup;
+using System.EnterpriseServices;
+using ExitGames.Client.Photon.StructWrapping;
+using Photon.Voice.Unity;
 
 namespace StupidTemplate.Menu
 {
@@ -15,6 +25,9 @@ namespace StupidTemplate.Menu
         public static bool showGUI = true;
         public static string whoReported = "NOBODY HAS REPORTED YO GOOFY ASS";
         public static string lastRoom = "HASNT BEEN IN ROOM";
+        public static int UIPage = 0;
+        public static float leftCooldown = 0;
+        public static float rightCooldown = 0;
         public void OnGUI()
         {
             if (showGUI)
@@ -23,29 +36,98 @@ namespace StupidTemplate.Menu
                 GUI.backgroundColor = newButtonColors[0];
 
                 if (rightHanded)
-                    GUI.Box(new Rect(2005, 40, 500, 360), PluginInfo.Name + " <color=grey>[</color><color=white>" + (pageNumber + 1).ToString() + "</color><color=grey>]</color>" + "\n" + "FPS: " + Mathf.Ceil(1f / Time.unscaledDeltaTime).ToString());
+                    GUI.Box(new Rect(2005, 40, 500, 230), PluginInfo.Name + " <color=grey>[</color><color=white>" + (UIPage + 1).ToString() + "</color><color=grey>]</color>" + "\n" + "FPS: " + Mathf.Ceil(1f / Time.unscaledDeltaTime).ToString());
                 else
-                    GUI.Box(new Rect(40, 40, 500, 360), PluginInfo.Name + " <color=grey>[</color><color=white>" + (pageNumber + 1).ToString() + "</color><color=grey>]</color>" + "\n" + "FPS: " + Mathf.Ceil(1f / Time.unscaledDeltaTime).ToString());
+                    GUI.Box(new Rect(40, 40, 500, 230), PluginInfo.Name + " <color=grey>[</color><color=white>" + (UIPage + 1).ToString() + "</color><color=grey>]</color>" + "\n" + "FPS: " + Mathf.Ceil(1f / Time.unscaledDeltaTime).ToString());
 
                 if (rightHanded)
-                    GUI.Label(new Rect(new Rect(2005, 380, 500, 360)), descriptionText);
+                    GUI.Label(new Rect(new Rect(2005, 240, 500, 360)), descriptionText);
                 else
-                    GUI.Label(new Rect(new Rect(40, 380, 500, 360)), descriptionText);
+                    GUI.Label(new Rect(new Rect(40, 240, 500, 360)), descriptionText);
+
+                if (PhotonNetwork.InRoom || PhotonNetwork.InLobby)
+                {
+                    if (rightHanded)
+                    {
+                        GUI.Box(new Rect(2005, 275, 500, 4.5f + (35 * PhotonNetwork.PlayerList.Length)), "Player List");
+                        int playerList = -1;
+                        foreach (Player player in PhotonNetwork.PlayerList)
+                        {
+                            playerList++;
+                            if (player.IsMasterClient)
+                                GUI.contentColor = Color.cyan;
+                            else
+                                GUI.contentColor = textColors[0];
+
+                            GUI.Label(new Rect(new Rect(2005, 300 + (28 * playerList), 500, 360)), player.NickName);
+
+                            GUI.contentColor = textColors[0];
+
+                            if (player != PhotonNetwork.LocalPlayer)
+                            {
+                                if (GUI.Button(new Rect(2075 + (8 * player.NickName.Length), 300 + (28 * playerList), 40, 25), "Mute"))
+                                {
+                                    foreach (GorillaScoreBoard scoreBoard in SafetyShit.leaderBoards)
+                                    {
+                                        foreach (GorillaPlayerScoreboardLine line in scoreBoard.lines)
+                                        {
+                                            if (line.playerActorNumber == player.ActorNumber)
+                                                line.PressButton(false, GorillaPlayerLineButton.ButtonType.Mute);
+                                        }
+                                    }
+                                }
+
+                                if (GUI.Button(new Rect(2120 + (8 * player.NickName.Length), 300 + (28 * playerList), 40, 25), "ID"))
+                                {
+                                    TXTHandler.MakeTXTFile(player.NickName + " INFO", player.NickName.ToUpper() + " - " + player.UserId.ToUpper() + "\nCAUGHT IN: " + PhotonNetwork.CurrentRoom.Name.ToUpper(), true);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        GUI.Box(new Rect(40, 275, 500, 4.5f + (35 * PhotonNetwork.PlayerList.Length)), "Player List");
+                        int playerList = -1;
+                        foreach (Player player in PhotonNetwork.PlayerList)
+                        {
+                            playerList++;
+                            if (player.IsMasterClient)
+                                GUI.contentColor = Color.cyan;
+                            else
+                                GUI.contentColor = textColors[0];
+                            GUI.Label(new Rect(new Rect(40, 300 + (28 * playerList), 500, 360)), player.NickName);
+
+                            GUI.contentColor = textColors[0];
+
+                            if (GUI.Button(new Rect(120 + (8 * player.NickName.Length), 300 + (28 * playerList), 40, 25), "Mute"))
+                            {
+                                foreach (GorillaScoreBoard scoreBoard in SafetyShit.leaderBoards)
+                                {
+                                    foreach (GorillaPlayerScoreboardLine line in scoreBoard.lines)
+                                    {
+                                        if (line.playerActorNumber == player.ActorNumber)
+                                            line.PressButton(false, GorillaPlayerLineButton.ButtonType.Mute);
+                                    }
+                                }
+                            }
+
+                            if (GUI.Button(new Rect(170 + (8 * player.NickName.Length), 300 + (28 * playerList), 40, 25), "ID"))
+                            {
+                                TXTHandler.MakeTXTFile(player.NickName + " INFO", player.NickName.ToUpper() + " - " + player.UserId.ToUpper() + "\nCAUGHT IN: " + PhotonNetwork.CurrentRoom.Name.ToUpper(), true);
+                            }
+                        }
+                    }
+                }
 
                 GUI.Label(new Rect(new Rect(10, 1410, 500, 360)), lastRoom + " " + whoReported);
 
                 // buttons
-                /*if (GUI.Button(new Rect(50, 90, 100, 20), "Disconnect")) //cool lol
+                if (GUI.Button(new Rect(2210, 2, 80, 34), "Disconnect")) //cool lol
                 {
                     PhotonNetwork.Disconnect();
                 }
 
-                if (GUI.Button(new Rect(50, 110, 100, 20), "JoinPublic"))
-                {
-                    PhotonNetwork.JoinRandomRoom();
-                }*/
-
-                ButtonInfo[] activeButtons = Buttons.buttons[buttonsType].Skip(pageNumber * 15).Take(15).ToArray();
+                ButtonInfo[] activeButtons = Buttons.buttons[buttonsType].Skip(UIPage * 8).Take(8).ToArray();
 
                 for (int i = 0; i < activeButtons.Length; i++)
                 {
@@ -78,15 +160,25 @@ namespace StupidTemplate.Menu
                     }
                 }
 
-                /*if (UnityInput.Current.GetKey(KeyCode.E))
+                int lastPage = ((Buttons.buttons[buttonsType].Length + 8 - 1) / 8) - 1;
+
+                if (UnityInput.Current.GetKey(KeyCode.Q) && Time.time > leftCooldown)
                 {
-                    Main.pageNumber++;
+                    UIPage--;
+                    leftCooldown = Time.time + 0.2f;
+
+                    if (UIPage == -1)
+                        UIPage = lastPage;
                 }
 
-                if (UnityInput.Current.GetKey(KeyCode.Q))
+                if (UnityInput.Current.GetKey(KeyCode.E) && Time.time > rightCooldown)
                 {
-                    Main.pageNumber--;
-                }*/
+                    UIPage++;
+                    rightCooldown = Time.time + 0.2f;
+
+                    if (UIPage > lastPage)
+                        UIPage = 0;
+                }
             }
         }
     }

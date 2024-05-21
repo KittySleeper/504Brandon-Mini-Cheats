@@ -1,5 +1,6 @@
 using BepInEx;
 using GorillaLocomotion;
+using GorillaNetworking;
 using HarmonyLib;
 using Photon.Pun;
 using PlayFab;
@@ -82,57 +83,30 @@ namespace StupidTemplate.Menu
             }
             catch { }
 
-            if (!hasLoaded && PlayerPrefs.GetInt("hasLoaded504minimenureal") == 1)
+            if (!hasLoaded)
             {
-                longMenu = PlayerPrefs.GetInt("longMenu") == 1;
-                if (longMenu)
-                {
-                    menuSize = new Vector3(0.1f, 1f, 1f);
-                    buttonsPerPage = 8;
-                }
-
-                if (PlayerPrefs.GetInt("mainThemeColor") >= 0)
-                {
-                    mainColor = PlayerPrefs.GetInt("mainThemeColor");
-                    secondColor = PlayerPrefs.GetInt("secondThemeColor");
-                    buttonColor = PlayerPrefs.GetInt("buttonColor");
-                    buttonEnabledColor = PlayerPrefs.GetInt("buttonEnabledColor");
-                    buttonTextColor = PlayerPrefs.GetInt("buttonTextColor");
-                    buttonTextEnabledColor = PlayerPrefs.GetInt("buttonTextEnabledColor");
-
-                    SettingsMods.setTheme();
-                }
-
                 if (PlayerPrefs.GetInt("platformShapeInt") >= 0)
                 {
                     platformShapeInt = PlayerPrefs.GetInt("platformShapeInt");
                 }
 
-                if (PlayerPrefs.GetInt("hitSoundValue") >= 0)
-                {
-                    hitSoundValue = PlayerPrefs.GetInt("hitSoundValue");
-                }
 
                 /*if (PlayerPrefs.GetInt("buttonLayout") >= 0)
                 {
                     buttonLayout = PlayerPrefs.GetInt("buttonLayout");
                 }*/
 
-                GetIndex("Should Save Mods").enabled = PlayerPrefs.GetInt("shouldSaveMods") == 1;
-                shouldSaveMods = GetIndex("Should Save Mods").enabled;
+                Global.DoSettingsShit();
 
-                if (PlayerPrefs.GetInt("shouldSaveMods") == 1 && PlayerPrefs.GetString("modsEnabled") != null && PlayerPrefs.GetString("modsEnabled") != "")
+                if (TXTHandler.ReadTXTFile("MODS").Contains("Should Save Mods"))
                 {
-                    foreach (string key in PlayerPrefs.GetString("modsEnabled").Split("|"))
+                    foreach (string mod in TXTHandler.ReadTXTFile("MODS").Split("\n"))
                     {
                         try
                         {
-                            if (key != "Should Save Mods")
-                                Toggle(key, false);
-                        } catch
-                        {
-
+                            Toggle(mod);
                         }
+                        catch { }
                     }
                 }
 
@@ -140,25 +114,6 @@ namespace StupidTemplate.Menu
             }
 
             hasLoaded = true;
-
-            if (PlayerPrefs.GetInt("hasLoaded504minimenureal") != 1 && PlayerPrefs.GetInt("isRainbowMenu") != 1) { // theme fix ig?
-                PlayerPrefs.SetInt("mainThemeColor", 7);
-                PlayerPrefs.SetInt("secondThemeColor", 8);
-                PlayerPrefs.SetInt("buttonColor", 0);
-                PlayerPrefs.SetInt("buttonEnabledColor", 0);
-                PlayerPrefs.SetInt("buttonTextColor", 1);
-                PlayerPrefs.SetInt("buttonTextEnabledColor", 3);
-            }
-
-            if (PlayerPrefs.GetInt("isRainbowMenu") >= 0)
-            {
-                isRainbowMenu = PlayerPrefs.GetInt("isRainbowMenu") == 1;
-
-                if (isRainbowMenu)
-                    newBackroundColor = new ExtGradient { isRainbow = true };
-            }
-
-            PlayerPrefs.SetInt("hasLoaded504minimenureal", 1);
 
             if (buttonLayout == 3 && Time.time > timeTilYouCanClickAgain && menu != null)
             {
@@ -253,6 +208,8 @@ namespace StupidTemplate.Menu
             {
                 UnityEngine.Debug.LogError(string.Format("{0} // Error with executing mods at {1}: {2}", PluginInfo.Name, exc.StackTrace, exc.Message));
             }
+
+            GorillaComputer.instance.pressedMaterial.color = newButtonColors[1];
         }
 
         // Functions
@@ -712,24 +669,7 @@ namespace StupidTemplate.Menu
             if (buttonText != "NextPage" && buttonText != "PreviousPage" && buttonText != "Disconnect")
             {
                 if (target.isTogglable && shouldSave && shouldSaveMods)
-                {
-                    if (target.enabled)
-                    {
-                        if (PlayerPrefs.GetString("modsEnabled") == null || PlayerPrefs.GetString("modsEnabled") == "")
-                            PlayerPrefs.SetString("modsEnabled", target.buttonText);
-                        else
-                            PlayerPrefs.SetString("modsEnabled", PlayerPrefs.GetString("modsEnabled") + "|" + target.buttonText);
-                    }
-                    else
-                    {
-                        if (PlayerPrefs.GetString("modsEnabled") != null || PlayerPrefs.GetString("modsEnabled") != "") {
-                            if (PlayerPrefs.GetString("modsEnabled").Contains("|" + buttonText))
-                                PlayerPrefs.SetString("modsEnabled", PlayerPrefs.GetString("modsEnabled").Replace("|" + buttonText, ""));
-                            else if (PlayerPrefs.GetString("modsEnabled").Contains(buttonText))
-                                PlayerPrefs.SetString("modsEnabled", PlayerPrefs.GetString("modsEnabled").Replace(buttonText, ""));
-                        }
-                    }
-                }
+                    Global.SaveMods();
 
                 descriptionText = target.buttonText + ": " + target.toolTip;
             }

@@ -10,6 +10,7 @@ using StupidTemplate.Notifications;
 using System;
 using System.Runtime.InteropServices;
 using StupidTemplate.Menu;
+using HarmonyLib;
 namespace StupidTemplate.Mods
 {
     internal class ProjectileShit
@@ -28,8 +29,8 @@ namespace StupidTemplate.Mods
         {
             ControllerInputPoller.instance.leftControllerGripFloat = 1f;
             GameObject gameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            gameObject.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
             UnityEngine.Object.Destroy(gameObject, 0.1f);
+            gameObject.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
             gameObject.transform.position = GorillaTagger.Instance.leftHandTransform.position;
             gameObject.transform.rotation = GorillaTagger.Instance.leftHandTransform.rotation;
             int[] array = new int[] {
@@ -69,7 +70,8 @@ namespace StupidTemplate.Mods
                     SafetyShit.RpcFlush();
                 }
                 catch { }
-                if (projShootDelay > 0f && !noDelay) {
+                if (projShootDelay > 0f && !noDelay)
+                {
                     projDelay = Time.time + projShootDelay;
                 }
             }
@@ -84,16 +86,6 @@ namespace StupidTemplate.Mods
         };
         public static void ProjectileSpammer(string projectile = "Snowball", bool randomColor = false)
         {
-            /*if (ControllerInputPoller.instance.leftGrab)
-            {
-                int randomAhhInt = UnityEngine.Random.Range(0, colorChangeablesAmmount);
-
-                if (randomColor)
-                    Projectile(projectile, Player.Instance.leftControllerTransform.position + new Vector3(0, 0.5f, 0), Player.Instance.rightControllerTransform.forward - Player.Instance.rightControllerTransform.up * projectileSpeed, colorChangeables[randomAhhInt], false);
-                else
-                    Projectile(projectile, Player.Instance.leftControllerTransform.position + new Vector3(0, 0.5f, 0), Player.Instance.rightControllerTransform.forward - Player.Instance.rightControllerTransform.up * projectileSpeed, projColor, false);
-            }*/
-
             if (ControllerInputPoller.instance.rightGrab)
             {
                 int randomAhhInt = UnityEngine.Random.Range(0, colorChangeablesAmmount);
@@ -103,6 +95,11 @@ namespace StupidTemplate.Mods
                 else
                     Projectile(projectile, Player.Instance.rightControllerTransform.position, Player.Instance.rightControllerTransform.forward - Player.Instance.rightControllerTransform.up * projectileSpeed, projColor, false);
             }
+        }
+        public static void RandomProjectileSpammer()
+        {
+            if (ControllerInputPoller.instance.rightGrab)
+                Projectile(fullProjectileNames[UnityEngine.Random.Range(0, 5)], Player.Instance.rightControllerTransform.position, Player.Instance.rightControllerTransform.forward - (Player.Instance.rightControllerTransform.up * projectileSpeed), projColor, false);
         }
         public static void Urine()
         {
@@ -257,7 +254,16 @@ namespace StupidTemplate.Mods
                 }
             }
         }
+        public static void UpProjectiles()
+        {
+            foreach (SnowballThrowable snowball in UnityEngine.Object.FindObjectsOfType<SnowballThrowable>())
+            {
+                if (snowball.IsMine())
+                    snowball.linSpeedMultiplier = float.PositiveInfinity;
 
+                snowball.maxWristSpeed = 75f;
+            }
+        }
         public static void FixProjectiles() // ngl i just assumed these numbers
         {
             foreach (SnowballThrowable snowball in UnityEngine.Object.FindObjectsOfType<SnowballThrowable>())
@@ -265,7 +271,39 @@ namespace StupidTemplate.Mods
                 snowball.maxLinSpeed = 10f;
                 snowball.maxWristSpeed = 10f;
                 snowball.linSpeedMultiplier = 10f;
+                snowball.GetComponent<Rigidbody>().velocity = snowball.GetComponent<Rigidbody>().velocity.normalized;
             }
+        }
+
+        public static void SnowFloor()
+        {
+            try
+            {
+                GameObject.Find("pit ground").GetComponent<GorillaSurfaceOverride>().overrideIndex = 32;
+            }
+            catch
+            {
+                NotifiLib.SendNotification("<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> <color=white> SNOW FLOOR FAILED TO WORK ARE YOU IN FOREST?</color>");
+                GetIndex("Snow Floor [FOREST]").enabled = false;
+            }
+        }
+
+        public static void MetalFloor()
+        {
+            try
+            {
+                GameObject.Find("pit ground").GetComponent<GorillaSurfaceOverride>().overrideIndex = 18;
+            }
+            catch
+            {
+                NotifiLib.SendNotification("<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> <color=white> SNOW FLOOR FAILED TO WORK ARE YOU IN FOREST?</color>");
+                GetIndex("Snow Floor [FOREST]").enabled = false;
+            }
+        }
+
+        public static void DisableSnowFloor()
+        {
+            GameObject.Find("pit ground").GetComponent<GorillaSurfaceOverride>().overrideIndex = 7;
         }
     }
 }

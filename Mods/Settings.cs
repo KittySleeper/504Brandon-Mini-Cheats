@@ -71,25 +71,25 @@ namespace StupidTemplate.Mods
             buttonsType = 10;
         }
 
-        public static void Glider()
+        public static void Forest()
         {
             pageNumber = 0;
             buttonsType = 11;
         }
 
-        public static void Water()
+        public static void Clouds()
         {
             pageNumber = 0;
             buttonsType = 12;
         }
 
-        public static void Projectile()
+        public static void Water()
         {
             pageNumber = 0;
             buttonsType = 13;
         }
 
-        public static void BugBat()
+        public static void Projectile()
         {
             pageNumber = 0;
             buttonsType = 14;
@@ -177,35 +177,27 @@ namespace StupidTemplate.Mods
             if (hitSoundValue > 4)
                 hitSoundValue = 0;
 
-            PlayerPrefs.SetInt("hitSoundValue", hitSoundValue);
-            PlayerPrefs.Save();
+            TXTHandler.MakeTXTFile("HITSOUND", hitSoundValue.ToString());
 
             button.overlapText = "Sound When You Tap The Menu [" + hitSoundNames[hitSoundValue] + "]";
         }
-
         public static void LongMenu()
         {
-            //it is no longer mini wtf
-            longMenu = !longMenu;
+            longMenu = true;
 
-            if (longMenu)
-            {
-                buttonsPerPage = 8;
-                menuSize = new Vector3(0.1f, 1f, 1f);
-                PlayerPrefs.SetInt("longMenu", 1);
-            }
-            else
-            {
-                menuSize = new Vector3(0.1f, 1f, 0.5f); // Depth, Width, Height
-                buttonsPerPage = 3;
-                PlayerPrefs.SetInt("longMenu", 0);
-            }
-
-            PlayerPrefs.Save();
+            buttonsPerPage = 8;
+            menuSize = new Vector3(0.1f, 1f, 1f);
 
             RecreateMenu();
         }
+        public static void DisableLongMenu() {
+            longMenu = false;
 
+            menuSize = new Vector3(0.1f, 1f, 0.5f); // Depth, Width, Height
+            buttonsPerPage = 3;
+
+            RecreateMenu();
+        }
         public static void ChangePageLayout() //i just wanna handle everything else in main.cs cuz im lazy
         {
             buttonLayout++;
@@ -328,13 +320,7 @@ namespace StupidTemplate.Mods
 
             if (changeing != "")
             {
-                PlayerPrefs.SetInt("mainThemeColor", mainColor);
-                PlayerPrefs.SetInt("secondThemeColor", secondColor);
-                PlayerPrefs.SetInt("buttonColor", buttonColor);
-                PlayerPrefs.SetInt("buttonEnabledColor", buttonEnabledColor);
-                PlayerPrefs.SetInt("buttonTextColor", buttonTextColor);
-                PlayerPrefs.SetInt("buttonTextEnabledColor", buttonTextEnabledColor);
-                PlayerPrefs.Save();
+                TXTHandler.MakeTXTFile("MENU_COLORS", mainColor + "\n" + secondColor + "\n" + buttonColor + "\n" + buttonEnabledColor + "\n" + buttonTextColor + "\n" + buttonTextEnabledColor);
             }
 
             RecreateMenu();
