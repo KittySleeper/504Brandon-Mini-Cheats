@@ -94,17 +94,15 @@ namespace StupidTemplate.Mods
             flySpeed = int.Parse(FileUtils.ReadTXTFile("MOVEMENT").Split("\n")[1]);
             veolocityMultiplyer = int.Parse(FileUtils.ReadTXTFile("MOVEMENT").Split("\n")[2]);
 
+            if (FileUtils.ReadTXTFile("themes/BORDERTHEME") == null)
+                FileUtils.MakeTXTFile("themes/BORDERTHEME", "0");
+
             BorderPNGTheme = int.Parse(FileUtils.ReadTXTFile("themes/BORDERTHEME"));
 
             if (FileUtils.ReadTXTFile("themes/THEME") == null)
                 FileUtils.MakeTXTFile("themes/THEME", "0");
 
             PNGTheme = int.Parse(FileUtils.ReadTXTFile("themes/THEME"));
-
-            if (FileUtils.ReadTXTFile("themes/BORDERTHEME") == null)
-                FileUtils.MakeTXTFile("themes/BORDERTHEME", "0");
-
-            BorderPNGTheme = int.Parse(FileUtils.ReadTXTFile("themes/BORDERTHEME"));
 
             if (FileUtils.ReadTXTFile("themes/THEMES") == null)
                 FileUtils.MakeTXTFile("themes/THEMES", "Normal");
