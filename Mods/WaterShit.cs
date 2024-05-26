@@ -29,6 +29,17 @@ namespace StupidTemplate.Mods
             WaterSplash(GorillaTagger.Instance.rightHandTransform.position, GorillaTagger.Instance.rightHandTransform.rotation, 999999f);
             WaterSplash(GorillaTagger.Instance.offlineVRRig.headMesh.transform.position, GorillaTagger.Instance.offlineVRRig.headMesh.transform.rotation, 999999f);
         }
+        public static void WaterAll()
+        {
+            if (ControllerInputPoller.instance.leftGrab)
+            {
+                foreach (VRRig vrrig in GorillaParent.instance.vrrigs)
+                {
+                    WaterSplash(vrrig.leftHandTransform.position, vrrig.leftHandTransform.localRotation, 10f);
+                    WaterSplash(vrrig.rightHandTransform.position, vrrig.rightHandTransform.localRotation, 10f);
+                }
+            }
+        }
         public static void WaterSplash(Vector3 position, Quaternion rotation, float size)
         {
             GorillaTagger.Instance.myVRRig.RPC("PlaySplashEffect", RpcTarget.All, new object[]

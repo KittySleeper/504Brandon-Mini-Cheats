@@ -7,6 +7,7 @@ using UnityEngine.UIElements;
 using ExitGames.Client.Photon.StructWrapping;
 using StupidTemplate.Menu;
 using UnityEngine.Assertions.Must;
+using StupidTemplate.Notifications;
 
 namespace StupidTemplate.Mods
 {
@@ -73,9 +74,11 @@ namespace StupidTemplate.Mods
 
         public static void FlyMonke()
         {
+            float[] flySpeeds = {2f, 15f, 50f};
+            
             if (ControllerInputPoller.instance.rightControllerPrimaryButton)
             {
-                Player.Instance.transform.position += Player.Instance.headCollider.transform.forward * Time.deltaTime * 15f;
+                Player.Instance.transform.position += Player.Instance.headCollider.transform.forward * Time.deltaTime * flySpeeds[flySpeed];
                 Player.Instance.GetComponent<Rigidbody>().velocity = Vector3.zero;
             }
         }
@@ -149,6 +152,38 @@ namespace StupidTemplate.Mods
                 Physics.gravity = new Vector3(0f, GravEffect, 0f);
             else
                 Physics.gravity = normGrav;
+        }
+        static float timeTilVeoClick = 0;
+        static int veoMode = 0;
+        public static void VeoMonk()
+        {
+            string[] veoModes = {"left", "up", "down", "right"};
+            if (Time.time > timeTilVeoClick && ControllerInputPoller.instance.leftControllerIndexFloat > 0.1f)
+            {
+                veoMode++;
+
+                if (veoMode > 3)
+                    veoMode = 0;
+
+                timeTilVeoClick = Time.time + 0.2f;
+
+                NotifiLib.SendNotification("<color=grey>[</color><color=#ff9400>MOD</color><color=grey>]</color> <color=white> VEOLOCITY IS NOW " + veoModes[veoMode].ToUpper() + "</color>");
+            }
+
+            if (ControllerInputPoller.instance.rightControllerIndexFloat > 0.1f)
+            {
+                if (veoMode == 0)
+                    Player.Instance.GetComponent<Rigidbody>().transform.position += Vector3.left * veolocityMultiplyer;
+
+                if (veoMode == 1)
+                    Player.Instance.GetComponent<Rigidbody>().transform.position += Vector3.up * veolocityMultiplyer;
+
+                if (veoMode == 2)
+                    Player.Instance.GetComponent<Rigidbody>().transform.position += Vector3.down * veolocityMultiplyer;
+
+                if (veoMode == 3)
+                    Player.Instance.GetComponent<Rigidbody>().transform.position += Vector3.right * veolocityMultiplyer;
+            }
         }
     }
 }

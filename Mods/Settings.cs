@@ -163,10 +163,48 @@ namespace StupidTemplate.Mods
             if (platformShapeInt > 2)
                 platformShapeInt = 0;
 
-            PlayerPrefs.SetInt("platformShapeInt", platformShapeInt);
-            PlayerPrefs.Save();
+            FileUtils.MakeTXTFile("MOVEMENT", platformShapeInt + "\n" + flySpeed + "\n" + speedBoostType + "\n" + veolocityMultiplyer);
 
             button.overlapText = "Platform Shape [" + platformShapes[platformShapeInt] + "]";
+        }
+
+        public static void ChangeSpeedBoostSpeed()
+        {
+            ButtonInfo button = GetIndex("SpeedBoost Speed");
+
+            speedBoostType++;
+            if (speedBoostType > 3)
+                speedBoostType = 0;
+
+            FileUtils.MakeTXTFile("MOVEMENT", platformShapeInt + "\n" + flySpeed + "\n" + speedBoostType + "\n" + veolocityMultiplyer);
+
+            button.overlapText = "SpeedBoost Speed [" + movementTypes[speedBoostType] + "]";
+        }
+
+        public static void ChangeFlightSpeed()
+        {
+            ButtonInfo button = GetIndex("Fly Speed");
+
+            flySpeed++;
+            if (flySpeed > 2)
+                flySpeed = 0;
+
+            FileUtils.MakeTXTFile("MOVEMENT", platformShapeInt + "\n" + flySpeed + "\n" + speedBoostType + "\n" + veolocityMultiplyer);
+
+            button.overlapText = "Fly Speed [" + movementTypes[flySpeed] + "]";
+        }
+
+        public static void ChangeVeolocityMultiplyer()
+        {
+            ButtonInfo button = GetIndex("Veolocity Monke Multiplyer");
+
+            veolocityMultiplyer++;
+            if (veolocityMultiplyer > 4)
+                veolocityMultiplyer = 1;
+
+            FileUtils.MakeTXTFile("MOVEMENT", platformShapeInt + "\n" + flySpeed + "\n" + speedBoostType + "\n" + veolocityMultiplyer);
+
+            button.overlapText = "Veolocity Monke Multiplyer [" + veolocityMultiplyer + "]";
         }
 
         public static void ChangeHandTapValue()
@@ -177,7 +215,7 @@ namespace StupidTemplate.Mods
             if (hitSoundValue > 4)
                 hitSoundValue = 0;
 
-            TXTHandler.MakeTXTFile("HITSOUND", hitSoundValue.ToString());
+            FileUtils.MakeTXTFile("HITSOUND", hitSoundValue.ToString());
 
             button.overlapText = "Sound When You Tap The Menu [" + hitSoundNames[hitSoundValue] + "]";
         }
@@ -214,6 +252,8 @@ namespace StupidTemplate.Mods
             {
                 mainColor = 7;
                 secondColor = 8;
+                mainBorderColor = 8;
+                secondBorderColor = 7;
                 buttonColor = 0;
                 buttonEnabledColor = 0;
                 buttonTextColor = 1;
@@ -223,6 +263,8 @@ namespace StupidTemplate.Mods
             {
                 mainColor = 9;
                 secondColor = 6;
+                mainBorderColor = 6;
+                secondBorderColor = 9;
                 buttonColor = 0;
                 buttonEnabledColor = 0;
                 buttonTextColor = 4;
@@ -232,10 +274,22 @@ namespace StupidTemplate.Mods
             {
                 mainColor = 0;
                 secondColor = 9;
+                mainBorderColor = 9;
+                secondBorderColor = 0;
                 buttonColor = 0;
                 buttonEnabledColor = 9;
                 buttonTextColor = 9;
                 buttonTextEnabledColor = 0;
+            } else if (theme == "dark")
+            {
+                mainColor = 0;
+                secondColor = 0;
+                mainBorderColor = 18;
+                secondBorderColor = 18;
+                buttonColor = 0;
+                buttonEnabledColor = 18;
+                buttonTextColor = 1;
+                buttonTextEnabledColor = 1;
             }
 
             setTheme("preset");
@@ -258,6 +312,35 @@ namespace StupidTemplate.Mods
             PlayerPrefs.Save();
         }
 
+        public static void SetPNGTheme()
+        {
+            PNGTheme++;
+            if (PNGTheme > FileUtils.ReadTXTFile("themes/THEMES").Split("\n").Length - 1)
+                PNGTheme = 0;
+
+            FileUtils.MakeTXTFile("themes/THEME", PNGTheme.ToString());
+        }
+
+        public static void SetBorderPNGTheme()
+        {
+            BorderPNGTheme++;
+            if (BorderPNGTheme > FileUtils.ReadTXTFile("themes/THEMES").Split("\n").Length - 1)
+                BorderPNGTheme = 0;
+
+            FileUtils.MakeTXTFile("themes/BORDERTHEME", BorderPNGTheme.ToString());
+        }
+
+        public static void ChangeFont()
+        {
+            currentFontNum++;
+            if (currentFontNum > fonts.Length - 1)
+                currentFontNum = 0;
+
+            currentFont = fonts[currentFontNum];
+
+            FileUtils.MakeTXTFile("FONT", currentFontNum.ToString());
+        }
+
         public static void setTheme(string changeing = "")
         {
             isRainbowMenu = false;
@@ -275,7 +358,18 @@ namespace StupidTemplate.Mods
                 secondColor++;
                 if (secondColor > colorChangeablesAmmount)
                     secondColor = 0;
-            } else if (changeing == "buttonColor")
+            } else if (changeing == "firstBorderColor")
+            {
+                mainBorderColor++;
+                if (mainBorderColor > colorChangeablesAmmount)
+                    mainBorderColor = 0;
+            } else if (changeing == "secondBorderColor")
+            {
+                secondBorderColor++;
+                if (secondBorderColor > colorChangeablesAmmount)
+                    secondBorderColor = 0;
+            }
+            else if (changeing == "buttonColor")
             {
                 buttonColor++;
                 if (buttonColor > colorChangeablesAmmount)
@@ -306,6 +400,15 @@ namespace StupidTemplate.Mods
                 }
             };
 
+            BackroundBorderColor = new ExtGradient
+            {
+                colors = new GradientColorKey[]
+                {
+                    new GradientColorKey(colorChangeables[mainBorderColor], 0.25f),
+                    new GradientColorKey(colorChangeables[secondBorderColor], 1f),
+                }
+            };
+
             textColors = new Color[]
             {
                 colorChangeables[buttonTextColor],
@@ -320,7 +423,7 @@ namespace StupidTemplate.Mods
 
             if (changeing != "")
             {
-                TXTHandler.MakeTXTFile("MENU_COLORS", mainColor + "\n" + secondColor + "\n" + buttonColor + "\n" + buttonEnabledColor + "\n" + buttonTextColor + "\n" + buttonTextEnabledColor);
+                FileUtils.MakeTXTFile("MENU_COLORS", mainColor + "\n" + secondColor + "\n" + mainBorderColor + "\n" + secondBorderColor + "\n" + buttonColor + "\n" + buttonEnabledColor + "\n" + buttonTextColor + "\n" + buttonTextEnabledColor);
             }
 
             RecreateMenu();

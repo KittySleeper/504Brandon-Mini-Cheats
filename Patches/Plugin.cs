@@ -1,7 +1,9 @@
 ﻿using BepInEx;
+using StupidTemplate.Menu;
 using System.ComponentModel;
+using UnityEngine;
 
-namespace StupidTemplate.Patches
+namespace StupidTemplate.q_
 {
     [Description(StupidTemplate.PluginInfo.Description)]
     [BepInPlugin(StupidTemplate.PluginInfo.GUID, StupidTemplate.PluginInfo.Name, StupidTemplate.PluginInfo.Version)]
@@ -15,6 +17,14 @@ namespace StupidTemplate.Patches
         private void OnDisable()
         {
             Menu.RemoveHarmonyPatches();
+        }
+
+        private void Start()
+        {
+            Debug.Log("started 504");
+            GameObject UIHandler = new GameObject();
+            UIHandler.AddComponent<UI>();
+            UnityEngine.Object.DontDestroyOnLoad(UIHandler);
         }
     }
 }

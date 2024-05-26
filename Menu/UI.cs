@@ -18,54 +18,121 @@ using Photon.Voice.Unity;
 
 namespace StupidTemplate.Menu
 {
-    [BepInPlugin("504brandon", "504mcgui", "1.0.0")]
-    public class UI : BaseUnityPlugin
+    public class UI : MonoBehaviour
     {
-        // Random
-        public static bool showGUI = true;
         public static string whoReported = "NOBODY HAS REPORTED YO GOOFY ASS";
         public static string lastRoom = "HASNT BEEN IN ROOM";
         public static int UIPage = 0;
         public static float leftCooldown = 0;
         public static float rightCooldown = 0;
+        private bool showGUI = true;
+
         public void OnGUI()
         {
             if (showGUI)
             {
                 GUI.contentColor = textColors[0];
+                GUI.backgroundColor = BackroundBorderColor.colors[0].color;
+                GUI.skin.font = currentFont;
+
+                string GUIText = PluginInfo.Name + " <color=grey>[</color><color=white>" + (UIPage + 1) + "</color><color=grey>]</color>" + "\n" + "FPS: " + Mathf.Ceil(1f / Time.unscaledDeltaTime);
+                float GUILength = 230;
+
+                GUIStyle currentStyle = new GUIStyle(GUI.skin.box);
+                currentStyle.normal.background = MenuBGThing(2, 2);
+                if (GetIndex("OG GUI UI").enabled)
+                {
+                    GUIText = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFPS: " + Mathf.Ceil(1f / Time.unscaledDeltaTime).ToString() + " | [Page:" + (UIPage + 1) + "]";
+                    GUILength = 360;
+                }
+
+                if (GetIndex("Menu Border").enabled && !GetIndex("OG GUI UI").enabled) {
+                    if (rightHanded)
+                        GUI.Box(new Rect(2000, 35, 510, GUILength + 10), "", currentStyle);
+                    else
+                        GUI.Box(new Rect(40, 35, 510, GUILength + 10), "", currentStyle); 
+                }
+
+                GUI.backgroundColor = newBackroundColor.colors[0].color;
+                currentStyle.normal.background = MenuBGThing(2, 2);
+
+                if (rightHanded)
+                    GUI.Box(new Rect(2005, 40, 500, GUILength), GUIText, currentStyle);
+                else
+                    GUI.Box(new Rect(40, 40, 500, GUILength), GUIText, currentStyle);
+
                 GUI.backgroundColor = newButtonColors[0];
 
-                if (rightHanded)
-                    GUI.Box(new Rect(2005, 40, 500, 230), PluginInfo.Name + " <color=grey>[</color><color=white>" + (UIPage + 1).ToString() + "</color><color=grey>]</color>" + "\n" + "FPS: " + Mathf.Ceil(1f / Time.unscaledDeltaTime).ToString());
-                else
-                    GUI.Box(new Rect(40, 40, 500, 230), PluginInfo.Name + " <color=grey>[</color><color=white>" + (UIPage + 1).ToString() + "</color><color=grey>]</color>" + "\n" + "FPS: " + Mathf.Ceil(1f / Time.unscaledDeltaTime).ToString());
-
-                if (rightHanded)
-                    GUI.Label(new Rect(new Rect(2005, 240, 500, 360)), descriptionText);
-                else
-                    GUI.Label(new Rect(new Rect(40, 240, 500, 360)), descriptionText);
-
-                if (PhotonNetwork.InRoom || PhotonNetwork.InLobby)
+                if (GetIndex("OG GUI UI").enabled)
                 {
                     if (rightHanded)
+                        GUI.Label(new Rect(2010, 40, 500, 40), PluginInfo.Name + " V:" + PluginInfo.Version);
+                    else
+                        GUI.Label(new Rect(45, 40, 500, 40), PluginInfo.Name + " V:" + PluginInfo.Version);
+                }
+
+                if (!GetIndex("OG GUI UI").enabled)
+                {
+                    if (rightHanded)
+                        GUI.Label(new Rect(new Rect(2005, 240, 500, 360)), descriptionText);
+                    else
+                        GUI.Label(new Rect(new Rect(40, 240, 500, 360)), descriptionText);
+
+                    if (PhotonNetwork.InRoom || PhotonNetwork.InLobby)
                     {
-                        GUI.Box(new Rect(2005, 275, 500, 4.5f + (35 * PhotonNetwork.PlayerList.Length)), "Player List");
-                        int playerList = -1;
-                        foreach (Player player in PhotonNetwork.PlayerList)
+                        if (rightHanded)
                         {
-                            playerList++;
-                            if (player.IsMasterClient)
-                                GUI.contentColor = Color.cyan;
-                            else
+                            GUI.Box(new Rect(2005, 275, 500, 4.5f + (35 * PhotonNetwork.PlayerList.Length)), "Player List");
+                            int playerList = -1;
+                            foreach (Player player in PhotonNetwork.PlayerList)
+                            {
+                                playerList++;
+                                if (player.IsMasterClient)
+                                    GUI.contentColor = Color.cyan;
+                                else
+                                    GUI.contentColor = textColors[0];
+
+                                GUI.Label(new Rect(new Rect(2005, 300 + (28 * playerList), 500, 360)), player.NickName);
+
                                 GUI.contentColor = textColors[0];
 
-                            GUI.Label(new Rect(new Rect(2005, 300 + (28 * playerList), 500, 360)), player.NickName);
+                                if (player != PhotonNetwork.LocalPlayer)
+                                {
+                                    if (GUI.Button(new Rect(2075 + (8 * player.NickName.Length), 300 + (28 * playerList), 40, 25), "Mute"))
+                                    {
+                                        foreach (GorillaScoreBoard scoreBoard in SafetyShit.leaderBoards)
+                                        {
+                                            foreach (GorillaPlayerScoreboardLine line in scoreBoard.lines)
+                                            {
+                                                if (line.playerActorNumber == player.ActorNumber)
+                                                    line.PressButton(false, GorillaPlayerLineButton.ButtonType.Mute);
+                                            }
+                                        }
+                                    }
 
-                            GUI.contentColor = textColors[0];
-
-                            if (player != PhotonNetwork.LocalPlayer)
+                                    if (GUI.Button(new Rect(2120 + (8 * player.NickName.Length), 300 + (28 * playerList), 40, 25), "ID"))
+                                    {
+                                        FileUtils.MakeTXTFile(player.NickName + " INFO", player.NickName.ToUpper() + " - " + player.UserId.ToUpper() + "\nCAUGHT IN: " + PhotonNetwork.CurrentRoom.Name.ToUpper(), true);
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            GUI.Box(new Rect(40, 275, 500, 4.5f + (35 * PhotonNetwork.PlayerList.Length)), "Player List");
+                            int playerList = -1;
+                            foreach (Player player in PhotonNetwork.PlayerList)
                             {
-                                if (GUI.Button(new Rect(2075 + (8 * player.NickName.Length), 300 + (28 * playerList), 40, 25), "Mute"))
+                                playerList++;
+                                if (player.IsMasterClient)
+                                    GUI.contentColor = Color.cyan;
+                                else
+                                    GUI.contentColor = textColors[0];
+                                GUI.Label(new Rect(new Rect(40, 300 + (28 * playerList), 500, 360)), player.NickName);
+
+                                GUI.contentColor = textColors[0];
+
+                                if (GUI.Button(new Rect(120 + (8 * player.NickName.Length), 300 + (28 * playerList), 40, 25), "Mute"))
                                 {
                                     foreach (GorillaScoreBoard scoreBoard in SafetyShit.leaderBoards)
                                     {
@@ -77,109 +144,123 @@ namespace StupidTemplate.Menu
                                     }
                                 }
 
-                                if (GUI.Button(new Rect(2120 + (8 * player.NickName.Length), 300 + (28 * playerList), 40, 25), "ID"))
+                                if (GUI.Button(new Rect(170 + (8 * player.NickName.Length), 300 + (28 * playerList), 40, 25), "ID"))
                                 {
-                                    TXTHandler.MakeTXTFile(player.NickName + " INFO", player.NickName.ToUpper() + " - " + player.UserId.ToUpper() + "\nCAUGHT IN: " + PhotonNetwork.CurrentRoom.Name.ToUpper(), true);
+                                    FileUtils.MakeTXTFile(player.NickName + " INFO", player.NickName.ToUpper() + " - " + player.UserId.ToUpper() + "\nCAUGHT IN: " + PhotonNetwork.CurrentRoom.Name.ToUpper(), true);
                                 }
                             }
                         }
                     }
-                    else
-                    {
-                        GUI.Box(new Rect(40, 275, 500, 4.5f + (35 * PhotonNetwork.PlayerList.Length)), "Player List");
-                        int playerList = -1;
-                        foreach (Player player in PhotonNetwork.PlayerList)
+
+                        GUI.Label(new Rect(new Rect(10, 1410, 500, 360)), lastRoom + " " + whoReported);
+
+                        // buttons
+                        if (GUI.Button(new Rect(2210, 2, 80, 34), "Disconnect")) //cool lol
                         {
-                            playerList++;
-                            if (player.IsMasterClient)
-                                GUI.contentColor = Color.cyan;
-                            else
-                                GUI.contentColor = textColors[0];
-                            GUI.Label(new Rect(new Rect(40, 300 + (28 * playerList), 500, 360)), player.NickName);
+                            PhotonNetwork.Disconnect();
+                        }
+                    }
 
+                    ButtonInfo[] activeButtons = Buttons.buttons[buttonsType].Skip(UIPage * 8).Take(8).ToArray();
+
+                    for (int i = 0; i < activeButtons.Length; i++)
+                    {
+                        if (activeButtons[i].enabled)
+                        {
+                            GUI.backgroundColor = newButtonColors[1];
+                            GUI.contentColor = textColors[1];
+                        }
+                        else
+                        {
+                            GUI.backgroundColor = newButtonColors[0];
                             GUI.contentColor = textColors[0];
+                        }
 
-                            if (GUI.Button(new Rect(120 + (8 * player.NickName.Length), 300 + (28 * playerList), 40, 25), "Mute"))
+                        string buttonText;
+
+                        if (activeButtons[i].overlapText != null && activeButtons[i].overlapText != "")
+                            buttonText = activeButtons[i].overlapText;
+                        else
+                            buttonText = activeButtons[i].buttonText;
+
+                        if (rightHanded)
+                        {
+                            if (GUI.Button(new Rect(2015, 85 + i * 20, 480, 20), buttonText)) //cool lol
                             {
-                                foreach (GorillaScoreBoard scoreBoard in SafetyShit.leaderBoards)
-                                {
-                                    foreach (GorillaPlayerScoreboardLine line in scoreBoard.lines)
-                                    {
-                                        if (line.playerActorNumber == player.ActorNumber)
-                                            line.PressButton(false, GorillaPlayerLineButton.ButtonType.Mute);
-                                    }
-                                }
+                                Toggle(activeButtons[i].buttonText);
+                                Global.playSound(hitSoundValues[hitSoundValue], true, 1);
                             }
-
-                            if (GUI.Button(new Rect(170 + (8 * player.NickName.Length), 300 + (28 * playerList), 40, 25), "ID"))
+                        }
+                        else
+                        {
+                            if (GUI.Button(new Rect(50, 85 + i * 20, 480, 20), buttonText)) //cool lol
                             {
-                                TXTHandler.MakeTXTFile(player.NickName + " INFO", player.NickName.ToUpper() + " - " + player.UserId.ToUpper() + "\nCAUGHT IN: " + PhotonNetwork.CurrentRoom.Name.ToUpper(), true);
+                                Toggle(activeButtons[i].buttonText);
+                                Global.playSound(hitSoundValues[hitSoundValue], true, 1);
                             }
                         }
                     }
-                }
 
-                GUI.Label(new Rect(new Rect(10, 1410, 500, 360)), lastRoom + " " + whoReported);
+                    int lastPage = ((Buttons.buttons[buttonsType].Length + 8 - 1) / 8) - 1;
 
-                // buttons
-                if (GUI.Button(new Rect(2210, 2, 80, 34), "Disconnect")) //cool lol
-                {
-                    PhotonNetwork.Disconnect();
-                }
-
-                ButtonInfo[] activeButtons = Buttons.buttons[buttonsType].Skip(UIPage * 8).Take(8).ToArray();
-
-                for (int i = 0; i < activeButtons.Length; i++)
-                {
-                    if (activeButtons[i].enabled)
+                    if (UnityInput.Current.GetKey(KeyCode.Q) && Time.time > leftCooldown)
                     {
-                        GUI.backgroundColor = newButtonColors[1];
-                        GUI.contentColor = textColors[1];
-                    }
-                    else
-                    {
-                        GUI.backgroundColor = newButtonColors[0];
-                        GUI.contentColor = textColors[0];
+                        UIPage--;
+                        leftCooldown = Time.time + 0.2f;
+
+                        if (UIPage == -1)
+                            UIPage = lastPage;
                     }
 
+                    if (UnityInput.Current.GetKey(KeyCode.E) && Time.time > rightCooldown)
+                    {
+                        UIPage++;
+                        rightCooldown = Time.time + 0.2f;
+
+                        if (UIPage > lastPage)
+                            UIPage = 0;
+                    }
+
+                    if (GetIndex("OG GUI UI").enabled)
+                    {
+                        GUI.backgroundColor = Color.clear;
+                        GUI.contentColor = Color.red;
                     if (rightHanded)
                     {
-                        if (GUI.Button(new Rect(2015, 85 + i * 20, 480, 20), activeButtons[i].buttonText)) //cool lol
+                        if (GUI.Button(new Rect(2470, 40, 30, 30), "X"))
                         {
-                            Toggle(activeButtons[i].buttonText);
-                            Global.playSound(hitSoundValues[hitSoundValue], true, 1);
+                            showGUI = false;
                         }
-                    }
-                    else
+                    } else
                     {
-                        if (GUI.Button(new Rect(50, 85 + i * 20, 480, 20), activeButtons[i].buttonText)) //cool lol
+                        if (GUI.Button(new Rect(510, 40, 30, 30), "X"))
                         {
-                            Toggle(activeButtons[i].buttonText);
-                            Global.playSound(hitSoundValues[hitSoundValue], true, 1);
+                            showGUI = false;
                         }
                     }
                 }
+            } else
+            {
+                GUI.backgroundColor = Color.black;
+                GUI.contentColor = Color.red;
 
-                int lastPage = ((Buttons.buttons[buttonsType].Length + 8 - 1) / 8) - 1;
-
-                if (UnityInput.Current.GetKey(KeyCode.Q) && Time.time > leftCooldown)
+                if (GUI.Button(new Rect(10, 10, 50, 50), "Open"))
                 {
-                    UIPage--;
-                    leftCooldown = Time.time + 0.2f;
-
-                    if (UIPage == -1)
-                        UIPage = lastPage;
-                }
-
-                if (UnityInput.Current.GetKey(KeyCode.E) && Time.time > rightCooldown)
-                {
-                    UIPage++;
-                    rightCooldown = Time.time + 0.2f;
-
-                    if (UIPage > lastPage)
-                        UIPage = 0;
+                    showGUI = true;
                 }
             }
+        }
+        Texture2D MenuBGThing(int width, int height)
+        {
+            Color[] pix = new Color[width * height];
+            for (int i = 0; i < pix.Length; ++i)
+            {
+                pix[i] = GUI.backgroundColor;
+            }
+            Texture2D result = new Texture2D(width, height);
+            result.SetPixels(pix);
+            result.Apply();
+            return result;
         }
     }
 }

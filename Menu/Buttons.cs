@@ -11,6 +11,7 @@ namespace StupidTemplate.Menu
         {
             new ButtonInfo[] { // Main Mods
                 new ButtonInfo { buttonText = "PC EMULATION", toolTip = "Here Monke."},
+                new ButtonInfo { buttonText = "Join Discord (pls)", toolTip = "Joins the discord.", isTogglable = false, method =() => Global.JoinDiscord()},
                 new ButtonInfo { buttonText = "Settings", method =() => SettingsMods.EnterSettings(), isTogglable = false, toolTip = "Opens the main settings page for the menu."},
                 new ButtonInfo { buttonText = "Miscellaneous Mods", method =() => SettingsMods.MiscellaneousMods(), isTogglable = false, toolTip = "Miscellaneous Mods."},
                 new ButtonInfo { buttonText = "Movement Mods", method =() => SettingsMods.Movement(), isTogglable = false, toolTip = "Movement Mods."},
@@ -35,11 +36,18 @@ namespace StupidTemplate.Menu
                 new ButtonInfo { buttonText = "Menu Theme Presets", method =() => SettingsMods.Themes(), isTogglable = false, toolTip = "Presets For All Of The Themes."},
                 new ButtonInfo { buttonText = "Change First Menu Color", method =() => SettingsMods.setTheme("firstColor"), isTogglable = false, toolTip = "Changes The First Color Of The Menu."},
                 new ButtonInfo { buttonText = "Change Second Menu Color", method =() => SettingsMods.setTheme("secondColor"), isTogglable = false, toolTip = "Changes The Second Color Of The Menu."},
+                new ButtonInfo { buttonText = "Change First Menu Border Color", method =() => SettingsMods.setTheme("firstBorderColor"), isTogglable = false, toolTip = "Changes The First Color Of The Menu Border."},
+                new ButtonInfo { buttonText = "Change Second Menu Border Color", method =() => SettingsMods.setTheme("secondBorderColor"), isTogglable = false, toolTip = "Changes The Second Color Of The Menu Border."},
                 new ButtonInfo { buttonText = "Change Button Color", method =() => SettingsMods.setTheme("buttonColor"), isTogglable = false, toolTip = "Changes The Button Color."},
                 new ButtonInfo { buttonText = "Change Enabled Button Color", method =() => SettingsMods.setTheme("buttonEnabledColor"), isTogglable = false, toolTip = "Changes The Enabled Button Color."},
                 new ButtonInfo { buttonText = "Change Text Color", method =() => SettingsMods.setTheme("buttonTextColor"), isTogglable = false, toolTip = "Changes The Text Color."},
                 new ButtonInfo { buttonText = "Change Enabled Text Color", method =() => SettingsMods.setTheme("buttonTextEnabledColor"), isTogglable = false, toolTip = "Changes The Enabled Text Color."},
+                new ButtonInfo { buttonText = "Change Menu Picture", method =() => SettingsMods.SetPNGTheme(), isTogglable = false, toolTip = "Changes the menus picture."},
+                new ButtonInfo { buttonText = "Change Menu Border Picture", method =() => SettingsMods.SetBorderPNGTheme(), isTogglable = false, toolTip = "Changes the borders picture."},
+                new ButtonInfo { buttonText = "Change Font", method =() => SettingsMods.ChangeFont(), isTogglable = false, toolTip = "Changes the text fonts."},
                 //new ButtonInfo { buttonText = "Change Page Layout", method =() => SettingsMods.ChangePageLayout(), isTogglable = false, toolTip = "Changes How You Change The Pages."},
+                new ButtonInfo { buttonText = "Menu Border", toolTip = "Cool lil border :3."},
+                new ButtonInfo { buttonText = "OG GUI UI", toolTip = "Makes the GUI look like the classic one."},
                 new ButtonInfo { buttonText = "Long Menu", enableMethod =() => SettingsMods.LongMenu(), disableMethod =() => SettingsMods.DisableLongMenu(), toolTip = "You Ruined The Silly."},
                 new ButtonInfo { buttonText = "Right Hand", enableMethod =() => SettingsMods.RightHand(), disableMethod =() => SettingsMods.LeftHand(), toolTip = "Puts the menu on your right hand."},
                 new ButtonInfo { buttonText = "Notifications", enableMethod =() => SettingsMods.EnableNotifications(), disableMethod =() => SettingsMods.DisableNotifications()},
@@ -52,11 +60,14 @@ namespace StupidTemplate.Menu
             new ButtonInfo[] { // Movement Settings
                 new ButtonInfo { buttonText = "Return to Settings", method =() => SettingsMods.EnterSettings(), isTogglable = false, toolTip = "Returns to the main settings page for the menu."},
                 new ButtonInfo { buttonText = "Platform Settings", method =() => SettingsMods.ProjectileSettings(), isTogglable = false, toolTip = "Opens the platfrorm settings for the menu."},
+                new ButtonInfo { buttonText = "Fly Speed", method =() => SettingsMods.ChangeFlightSpeed(), isTogglable = false, toolTip = "Change the fly speed."},
+                new ButtonInfo { buttonText = "SpeedBoost Speed", method =() => SettingsMods.ChangeSpeedBoostSpeed(), isTogglable = false, toolTip = "Change the speedboost speed."},
+                new ButtonInfo { buttonText = "Veolocity Monke Multiplyer", isTogglable = false, method=() => SettingsMods.ChangeVeolocityMultiplyer(), toolTip= "Makes you get thrown arround Faster."},
             },
 
             new ButtonInfo[] { // Platform Settings
                 new ButtonInfo { buttonText = "Return to Settings", method =() => SettingsMods.MovementSettings(), isTogglable = false, toolTip = "Opens the movement settings for the menu."},
-                new ButtonInfo { buttonText = "Invis Platforms", toolTip = "Invisible Platforms."},
+                new ButtonInfo { buttonText = "Invis Platforms", overlapText = "Platform Shape [" + platformShapes[platformShapeInt] + "]", toolTip = "Invisible Platforms."},
                 new ButtonInfo { buttonText = "Platform Shape", overlapText = "Platform Shape [" + platformShapes[platformShapeInt] + "]", method =() => SettingsMods.ChangePlatformShape(), isTogglable = false, toolTip = "Change your platform shape."},
                 new ButtonInfo { buttonText = "Trigger Platforms", toolTip = "Use Platforms By Pressing Your Triggers."},
             },
@@ -66,6 +77,7 @@ namespace StupidTemplate.Menu
                 new ButtonInfo { buttonText = "504Brandon Theme", method =() => SettingsMods.themePreset("brandon"), isTogglable = false},
                 new ButtonInfo { buttonText = "GodzillaGang Theme", method =() => SettingsMods.themePreset("godzilla"), isTogglable = false},
                 new ButtonInfo { buttonText = "♡Monke♡ Theme", method =() => SettingsMods.themePreset("monke"), isTogglable = false},
+                new ButtonInfo { buttonText = "Dark Theme", method =() => SettingsMods.themePreset("dark"), isTogglable = false},
                 new ButtonInfo { buttonText = "Rainbow Menu", method =() => SettingsMods.RainbowTheme(), isTogglable = false, toolTip = "Makes the menu gay."},
             },
 
@@ -74,6 +86,7 @@ namespace StupidTemplate.Menu
                 new ButtonInfo { buttonText = "Fuck Leaderboard", method=() => RandomShit.fuckLeaderBoard(), toolTip= "Kinda breaks leaderboard name."},
                 new ButtonInfo { buttonText = "Make QuitBox Platform", enableMethod=() => RandomShit.MakeQuitBoxPlatform(), disableMethod=() => RandomShit.DeleteQuitBoxPlatform(), toolTip= "Makes it so the quitbox is just a bit platform you can sit on."},
                 new ButtonInfo { buttonText = "NameTag+", method=() => RandomShit.Nametag(), toolTip= "Makes it so you can see the players info on their nametag eg: color and player token."},
+                new ButtonInfo { buttonText = "Player Tracker", toolTip= "Makes it so people can track yo ass.", enabled = true}, //yea i made it enabled by default cry about it
                 new ButtonInfo { buttonText = "Ban Self", method=() => RandomShit.BanSelf(), toolTip= "Why did i add this?"},
             },
             new ButtonInfo[] { // Movement Mods
@@ -84,8 +97,8 @@ namespace StupidTemplate.Menu
                 new ButtonInfo { buttonText = "TP Gun", method=() => MovementShit.TPGun(), toolTip= "Aim And Teleport."},
                 new ButtonInfo { buttonText = "TP To Random [<color=#ff9400>X</color>]", method=() => MovementShit.TeleportToRandom(), toolTip= "Teleports You To Somone Random."},
                 new ButtonInfo { buttonText = "Low Gravity [<color=#ff9400>LG</color>]", method=() => MovementShit.GravityMod(-0.5f), toolTip= "Makes The Gravity Low."},
-                new ButtonInfo { buttonText = "Mosa Speed Boost", method=() => MovementShit.SpeedBoost(7.5f), disableMethod=() => MovementShit.SpeedBoost(6.5f), toolTip= "Mosa Speed Boost."},
-                new ButtonInfo { buttonText = "Mega Speed Boost", method=() => MovementShit.SpeedBoost(11f), disableMethod=() => MovementShit.SpeedBoost(6.5f), toolTip= "Mosa Speed Boost."},
+                new ButtonInfo { buttonText = "Veolocity Monke [<color=#ff9400>T</color>]", method=() => MovementShit.VeoMonk(), toolTip= "Makes you get thrown arround."},
+                new ButtonInfo { buttonText = "Speed Boost", method=() => MovementShit.SpeedBoost(speedBoost[speedBoostType]), disableMethod=() => MovementShit.SpeedBoost(6.5f), toolTip= "Speed Boost."},
             },
 
             new ButtonInfo[] { // Rig Mods
@@ -141,6 +154,7 @@ namespace StupidTemplate.Menu
                 new ButtonInfo { buttonText = "Return to Main", method =() => Global.ReturnHome(), isTogglable = false, toolTip = "Returns to the main page of the menu."},
                 new ButtonInfo { buttonText = "Water Spam [<color=#ff9400>G</color>]", method=() => WaterShit.WaterSpam(), toolTip= "Spam Water."},
                 new ButtonInfo { buttonText = "Heavy Water Spam", method=() => WaterShit.HellaWater(), toolTip= "Drink."},
+                new ButtonInfo { buttonText = "Water Spam All [<color=#ff9400>LG</color>]", method=() => WaterShit.WaterAll(), toolTip= "Why do we all have water."},
             },
 
            new ButtonInfo[] { // Projectile Mods

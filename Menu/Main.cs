@@ -1,10 +1,13 @@
 using BepInEx;
+using BepInEx.Configuration;
 using GorillaLocomotion;
 using GorillaNetworking;
+using GorillaTag;
 using HarmonyLib;
 using Photon.Pun;
 using PlayFab;
 using StupidTemplate.Classes;
+using StupidTemplate.Menu;
 using StupidTemplate.Mods;
 using StupidTemplate.Notifications;
 using System;
@@ -85,12 +88,6 @@ namespace StupidTemplate.Menu
 
             if (!hasLoaded)
             {
-                if (PlayerPrefs.GetInt("platformShapeInt") >= 0)
-                {
-                    platformShapeInt = PlayerPrefs.GetInt("platformShapeInt");
-                }
-
-
                 /*if (PlayerPrefs.GetInt("buttonLayout") >= 0)
                 {
                     buttonLayout = PlayerPrefs.GetInt("buttonLayout");
@@ -98,9 +95,9 @@ namespace StupidTemplate.Menu
 
                 Global.DoSettingsShit();
 
-                if (TXTHandler.ReadTXTFile("MODS").Contains("Should Save Mods"))
+                if (FileUtils.ReadTXTFile("MODS").Contains("Should Save Mods"))
                 {
-                    foreach (string mod in TXTHandler.ReadTXTFile("MODS").Split("\n"))
+                    foreach (string mod in FileUtils.ReadTXTFile("MODS").Split("\n"))
                     {
                         try
                         {
@@ -231,9 +228,42 @@ namespace StupidTemplate.Menu
             menuBackground.transform.localScale = menuSize;
             menuBackground.transform.position = new Vector3(0.05f, 0f, 0f);
 
-            ColorChanger colorChanger = menuBackground.AddComponent<ColorChanger>();
-            colorChanger.colorInfo = newBackroundColor;
-            colorChanger.Start();
+            if (PNGTheme == 0)
+            {
+                ColorChanger colorChanger = menuBackground.AddComponent<ColorChanger>();
+                colorChanger.colorInfo = newBackroundColor;
+                colorChanger.Start();
+            }
+
+            if (PNGTheme > 0)
+            {
+                menuBackground.GetComponent<Renderer>().material.shader = Shader.Find("Universal Render Pipeline/Lit");
+                menuBackground.GetComponent<Renderer>().material.color = Color.white;
+                menuBackground.GetComponent<Renderer>().material.mainTexture = FileUtils.LoadTheme(FileUtils.ReadTXTFile("themes/THEMES").Split("\n")[PNGTheme], "menubg" + PNGTheme + ".png");
+            }
+
+            GameObject MenuBorder = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            UnityEngine.Object.Destroy(MenuBorder.GetComponent<Rigidbody>());
+            UnityEngine.Object.Destroy(MenuBorder.GetComponent<BoxCollider>());
+            MenuBorder.transform.parent = menu.transform;
+            MenuBorder.transform.position = new Vector3(0.05f, 0f, 0f);
+            MenuBorder.transform.rotation = Quaternion.identity;
+            MenuBorder.transform.localScale = new Vector3(0.09f, 1.05f, menuSize.z + 0.05f);
+            MenuBorder.GetComponent<Renderer>().forceRenderingOff = !GetIndex("Menu Border").enabled;
+
+            if (BorderPNGTheme == 0)
+            {
+                ColorChanger colorChangerBorder = MenuBorder.AddComponent<ColorChanger>();
+                colorChangerBorder.colorInfo = BackroundBorderColor;
+                colorChangerBorder.Start();
+            }
+
+            if (BorderPNGTheme > 0)
+            {
+                MenuBorder.GetComponent<Renderer>().material.shader = Shader.Find("Universal Render Pipeline/Lit");
+                MenuBorder.GetComponent<Renderer>().material.color = Color.white;
+                MenuBorder.GetComponent<Renderer>().material.mainTexture = FileUtils.LoadTheme(FileUtils.ReadTXTFile("themes/THEMES").Split("\n")[BorderPNGTheme], "menuborder" + BorderPNGTheme + ".png");
+            }
 
             // Canvas
             canvasObject = new GameObject();

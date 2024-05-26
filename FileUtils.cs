@@ -13,16 +13,25 @@ using ExitGames.Client.Photon;
 using GorillaNetworking;
 using static UnityEngine.UI.GridLayoutGroup;
 using GorillaLocomotion;
+using System.Reflection;
+using System.Net;
+using System;
 
 namespace StupidTemplate
 {
-    internal class TXTHandler
+    internal class FileUtils
     {
         static void VerifyThing()
         {
             if (!Directory.Exists("504Brandon"))
             {
+                Global.JoinDiscord();
                 Directory.CreateDirectory("504Brandon");
+            }
+
+            if (!Directory.Exists("504Brandon/themes"))
+            {
+                Directory.CreateDirectory("504Brandon/themes");
             }
         }
 
@@ -64,6 +73,25 @@ namespace StupidTemplate
             {
                 UnityEngine.Debug.Log("Could not open process " + filePath);
             }
+        }
+
+        public static Texture2D LoadTheme(string resourcePath, string fileName)
+        {
+            Texture2D texture = new Texture2D(2, 2);
+
+            VerifyThing();
+
+            if (!File.Exists("504brandon/themes/" + fileName))
+            {
+                UnityEngine.Debug.Log("Downloading " + fileName);
+                WebClient stream = new WebClient();
+                stream.DownloadFile(resourcePath, "504brandon/themes/" + fileName);
+            }
+
+            byte[] bytes = File.ReadAllBytes("504brandon/themes/" + fileName);
+            texture.LoadImage(bytes);
+
+            return texture;
         }
     }
 }

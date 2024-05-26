@@ -6,6 +6,7 @@ using Photon.Pun;
 using PlayFab;
 using GorillaNetworking;
 using StupidTemplate.Menu;
+using System.Diagnostics;
 
 namespace StupidTemplate.Mods
 {
@@ -14,6 +15,11 @@ namespace StupidTemplate.Mods
         public static void ReturnHome()
         {
             buttonsType = 0;
+        }
+
+        public static void JoinDiscord()
+        {
+            Process.Start("https://discord.gg/Qfmz6kjhqN");
         }
 
         public static void playSound(int ID = 0, bool left = false, float volume = 0.5f)
@@ -58,31 +64,60 @@ namespace StupidTemplate.Mods
                 }
             }
 
-            TXTHandler.MakeTXTFile("MODS", ModList);
+            FileUtils.MakeTXTFile("MODS", ModList);
         }
 
         public static void DoSettingsShit()
         {
-            if (TXTHandler.ReadTXTFile("MENU_COLORS") == null)
-                TXTHandler.MakeTXTFile("MENU_COLORS", mainColor + "\n" + secondColor + "\n" + buttonColor + "\n" + buttonEnabledColor + "\n" + buttonTextColor + "\n" + buttonTextEnabledColor);
+            if (FileUtils.ReadTXTFile("MENU_COLORS") == null)
+                FileUtils.MakeTXTFile("MENU_COLORS", mainColor + "\n" + secondColor + "\n" + mainBorderColor + "\n" + secondBorderColor + "\n" + buttonColor + "\n" + buttonEnabledColor + "\n" + buttonTextColor + "\n" + buttonTextEnabledColor);
 
-            mainColor = int.Parse(TXTHandler.ReadTXTFile("MENU_COLORS").Split("\n")[0]);
-            secondColor = int.Parse(TXTHandler.ReadTXTFile("MENU_COLORS").Split("\n")[1]);
-            buttonColor = int.Parse(TXTHandler.ReadTXTFile("MENU_COLORS").Split("\n")[2]);
-            buttonEnabledColor = int.Parse(TXTHandler.ReadTXTFile("MENU_COLORS").Split("\n")[3]);
-            buttonTextColor = int.Parse(TXTHandler.ReadTXTFile("MENU_COLORS").Split("\n")[4]);
-            buttonTextEnabledColor = int.Parse(TXTHandler.ReadTXTFile("MENU_COLORS").Split("\n")[5]);
+            mainColor = int.Parse(FileUtils.ReadTXTFile("MENU_COLORS").Split("\n")[0]);
+            secondColor = int.Parse(FileUtils.ReadTXTFile("MENU_COLORS").Split("\n")[1]);
+            mainBorderColor = int.Parse(FileUtils.ReadTXTFile("MENU_COLORS").Split("\n")[2]);
+            secondBorderColor = int.Parse(FileUtils.ReadTXTFile("MENU_COLORS").Split("\n")[3]);
+            buttonColor = int.Parse(FileUtils.ReadTXTFile("MENU_COLORS").Split("\n")[4]);
+            buttonEnabledColor = int.Parse(FileUtils.ReadTXTFile("MENU_COLORS").Split("\n")[5]);
+            buttonTextColor = int.Parse(FileUtils.ReadTXTFile("MENU_COLORS").Split("\n")[6]);
+            buttonTextEnabledColor = int.Parse(FileUtils.ReadTXTFile("MENU_COLORS").Split("\n")[7]);
             SettingsMods.setTheme();
 
-            if (TXTHandler.ReadTXTFile("HITSOUND") == null)
-                TXTHandler.MakeTXTFile("HITSOUND", "0");
+            if (FileUtils.ReadTXTFile("HITSOUND") == null)
+                FileUtils.MakeTXTFile("HITSOUND", "0");
 
-            hitSoundValue = int.Parse(TXTHandler.ReadTXTFile("HITSOUND"));
+            hitSoundValue = int.Parse(FileUtils.ReadTXTFile("HITSOUND"));
 
-            if (TXTHandler.ReadTXTFile("MODS") == null)
-                TXTHandler.MakeTXTFile("MODS", "Should Save Mods\nFPS Counter\nDisconnect Button\nNotifications\nRight Hand\nAnti Report");
+            if (FileUtils.ReadTXTFile("MOVEMENT") == null)
+                FileUtils.MakeTXTFile("MOVEMENT", "2\n1\n1\n1");
 
-            rightHanded = TXTHandler.ReadTXTFile("MODS").Contains("Right Handed");
+            platformShapeInt = int.Parse(FileUtils.ReadTXTFile("MOVEMENT").Split("\n")[0]);
+            flySpeed = int.Parse(FileUtils.ReadTXTFile("MOVEMENT").Split("\n")[1]);
+            veolocityMultiplyer = int.Parse(FileUtils.ReadTXTFile("MOVEMENT").Split("\n")[2]);
+
+            BorderPNGTheme = int.Parse(FileUtils.ReadTXTFile("themes/BORDERTHEME"));
+
+            if (FileUtils.ReadTXTFile("themes/THEME") == null)
+                FileUtils.MakeTXTFile("themes/THEME", "0");
+
+            PNGTheme = int.Parse(FileUtils.ReadTXTFile("themes/THEME"));
+
+            if (FileUtils.ReadTXTFile("themes/BORDERTHEME") == null)
+                FileUtils.MakeTXTFile("themes/BORDERTHEME", "0");
+
+            BorderPNGTheme = int.Parse(FileUtils.ReadTXTFile("themes/BORDERTHEME"));
+
+            if (FileUtils.ReadTXTFile("themes/THEMES") == null)
+                FileUtils.MakeTXTFile("themes/THEMES", "Normal");
+
+            if (FileUtils.ReadTXTFile("FONT") == null)
+                FileUtils.MakeTXTFile("FONT", "0");
+
+            currentFontNum = int.Parse(FileUtils.ReadTXTFile("FONT"));
+
+            if (FileUtils.ReadTXTFile("MODS") == null)
+                FileUtils.MakeTXTFile("MODS", "Should Save Mods\nFPS Counter\nDisconnect Button\nNotifications\nRight Hand\nMenu Border\nAnti Report");
+
+            rightHanded = FileUtils.ReadTXTFile("MODS").Contains("Right Handed");
         }
     }
 }

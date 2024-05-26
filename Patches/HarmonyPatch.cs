@@ -2,7 +2,7 @@
 using HarmonyLib;
 using UnityEngine;
 
-namespace StupidTemplate.Patches
+namespace StupidTemplate.q_
 {
     public class Menu : MonoBehaviour
     {

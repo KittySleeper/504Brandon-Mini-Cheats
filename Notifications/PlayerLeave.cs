@@ -6,7 +6,7 @@ using System.IO;
 using UnityEngine;
 using static StupidTemplate.Menu.Main;
 
-namespace StupidTemplate.Patches
+namespace StupidTemplate.q_
 {
     [HarmonyPatch(typeof(MonoBehaviourPunCallbacks), "OnPlayerLeftRoom")]
     internal class LeavePatch : MonoBehaviour
