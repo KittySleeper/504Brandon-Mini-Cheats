@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 
 /Menu/PlayerTracker.cs
+/Menu/ButtonClass.cs
