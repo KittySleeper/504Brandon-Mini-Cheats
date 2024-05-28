@@ -19,7 +19,7 @@ namespace StupidTemplate.Mods
         public static float projectileSpeed = 0f;
         public static int projColorCycle = 0;
         public static float projDelay = 0f;
-        public static float projShootDelay = 0.1f;
+        public static float projShootDelay = 0.15f;
         public static int projShootDelayCycle = 0;
         public static Color32 projColor = Color.white;
         public static int projCycle = 0;
@@ -83,22 +83,45 @@ namespace StupidTemplate.Mods
             "ScienceCandy",
             "FishFood"
         };
-        public static void ProjectileSpammer(string projectile = "Snowball", bool randomColor = false)
+        public static void ProjectileSpammer()
         {
             if (ControllerInputPoller.instance.rightGrab)
             {
-                int randomAhhInt = UnityEngine.Random.Range(0, colorChangeablesAmmount);
+                Color color;
 
-                if (randomColor)
-                    Projectile(projectile, Player.Instance.rightControllerTransform.position, Player.Instance.rightControllerTransform.forward - Player.Instance.rightControllerTransform.up * projectileSpeed, colorChangeables[randomAhhInt], false);
+                if (fullProjectileNames[ProjectileType] == "WaterBalloon")
+                    color = colorChangeables[UnityEngine.Random.Range(0, colorChangeablesAmmount)];
                 else
-                    Projectile(projectile, Player.Instance.rightControllerTransform.position, Player.Instance.rightControllerTransform.forward - Player.Instance.rightControllerTransform.up * projectileSpeed, projColor, false);
+                    color = projColor;
+
+                Projectile(fullProjectileNames[ProjectileType], Player.Instance.rightControllerTransform.position, Vector3.down, color, false);
             }
         }
-        public static void RandomProjectileSpammer()
+        public static void MiniGun()
         {
             if (ControllerInputPoller.instance.rightGrab)
-                Projectile(fullProjectileNames[UnityEngine.Random.Range(0, 5)], Player.Instance.rightControllerTransform.position, Player.Instance.rightControllerTransform.forward - (Player.Instance.rightControllerTransform.up * projectileSpeed), projColor, false);
+            {
+                Color color;
+
+                if (fullProjectileNames[ProjectileType] == "WaterBalloon")
+                    color = colorChangeables[UnityEngine.Random.Range(0, colorChangeablesAmmount)];
+                else
+                    color = projColor;
+
+                Projectile(fullProjectileNames[ProjectileType], Player.Instance.rightControllerTransform.position, Player.Instance.rightControllerTransform.forward - Player.Instance.rightControllerTransform.up * 7.5f, color, false);
+            }
+        }
+        public static void ProjectileRain()
+        {
+            if (ControllerInputPoller.instance.rightGrab)
+            {
+                Vector3 RandomRainPos = Vector3.zero;
+
+                if (GetIndex("Random Rain Position").enabled)
+                    RandomRainPos = UnityEngine.Random.insideUnitSphere * RainRangeMultiplyer;
+
+                Projectile(fullProjectileNames[ProjectileType], GorillaTagger.Instance.offlineVRRig.headMesh.transform.position + (Vector3.up * 2) + RandomRainPos, Vector3.down, Color.blue, false);
+            }
         }
         public static void Urine()
         {

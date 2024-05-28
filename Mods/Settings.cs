@@ -1,4 +1,5 @@
-﻿using StupidTemplate.Classes;
+﻿using BepInEx;
+using StupidTemplate.Classes;
 using StupidTemplate.Menu;
 using System;
 using System.IO;
@@ -14,91 +15,119 @@ namespace StupidTemplate.Mods
         public static void EnterSettings()
         {
             pageNumber = 0;
+            curWatchMod = 0;
             buttonsType = 1;
         }
 
         public static void MenuSettings()
         {
             pageNumber = 0;
+            curWatchMod = 0;
             buttonsType = 2;
         }
 
         public static void MovementSettings()
         {
             pageNumber = 0;
+            curWatchMod = 0;
             buttonsType = 3;
+        }
+
+        public static void PlatformSettings()
+        {
+            pageNumber = 0;
+            curWatchMod = 0;
+            buttonsType = 4;
         }
 
         public static void ProjectileSettings()
         {
             pageNumber = 0;
-            buttonsType = 4;
+            curWatchMod = 0;
+            buttonsType = 5;
         }
 
         public static void Themes()
         {
             pageNumber = 0;
-            buttonsType = 5;
+            curWatchMod = 0;
+            buttonsType = 6;
         }
 
         public static void MiscellaneousMods()
         {
             pageNumber = 0;
-            buttonsType = 6;
+            curWatchMod = 0;
+            buttonsType = 7;
         }
 
         public static void Movement()
         {
             pageNumber = 0;
-            buttonsType = 7;
+            curWatchMod = 0;
+            buttonsType = 8;
         }
 
         public static void Rig()
         {
             pageNumber = 0;
-            buttonsType = 8;
+            curWatchMod = 0;
+            buttonsType = 9;
         }
 
         public static void Cheats()
         {
             pageNumber = 0;
-            buttonsType = 9;
+            curWatchMod = 0;
+            buttonsType = 10;
         }
 
         public static void OP()
         {
             pageNumber = 0;
-            buttonsType = 10;
+            curWatchMod = 0;
+            buttonsType = 11;
         }
 
         public static void Forest()
         {
             pageNumber = 0;
-            buttonsType = 11;
+            curWatchMod = 0;
+            buttonsType = 12;
         }
 
         public static void Clouds()
         {
             pageNumber = 0;
-            buttonsType = 12;
+            curWatchMod = 0;
+            buttonsType = 13;
         }
 
         public static void Water()
         {
             pageNumber = 0;
-            buttonsType = 13;
+            curWatchMod = 0;
+            buttonsType = 14;
         }
 
         public static void Projectile()
         {
             pageNumber = 0;
-            buttonsType = 14;
+            curWatchMod = 0;
+            buttonsType = 15;
         }
 
         public static void Safety()
         {
             pageNumber = 0;
-            buttonsType = 15;
+            curWatchMod = 0;
+            buttonsType = 16;
+        }
+        public static void AdminShit()
+        {
+            pageNumber = 0;
+            curWatchMod = 0;
+            buttonsType = 17;
         }
 
         public static void RightHand()
@@ -219,6 +248,30 @@ namespace StupidTemplate.Mods
 
             button.overlapText = "Sound When You Tap The Menu [" + hitSoundNames[hitSoundValue] + "]";
         }
+        public static void ChangeProjectileType()
+        {
+            ButtonInfo button = GetIndex("Change Projectile Type");
+
+            ProjectileType++;
+            if (ProjectileType > 5)
+                ProjectileType = 0;
+
+            FileUtils.MakeTXTFile("PROJECTILE", ProjectileType + "\n" + RainRangeMultiplyer);
+
+            button.overlapText = "Change Projectile Type [" + ProjectileShit.fullProjectileNames[ProjectileType] + "]";
+        }
+        public static void ChangeRainMulti()
+        {
+            ButtonInfo button = GetIndex("Change Rain Range");
+
+            RainRangeMultiplyer++;
+            if (RainRangeMultiplyer > 5)
+                RainRangeMultiplyer = 1;
+
+            FileUtils.MakeTXTFile("PROJECTILE", ProjectileType + "\n" + RainRangeMultiplyer);
+
+            button.overlapText = "Change Rain Range [" + RainRangeMultiplyer + "]";
+        }
         public static void LongMenu()
         {
             longMenu = true;
@@ -296,20 +349,7 @@ namespace StupidTemplate.Mods
         }
 
         public static void RainbowTheme() {
-            isRainbowMenu = !isRainbowMenu;
-
-            if (isRainbowMenu)
-            {
-                newBackroundColor = new ExtGradient { isRainbow = true };
-                PlayerPrefs.SetInt("isRainbowMenu", 1);
-            }
-            else
-            {
-                PlayerPrefs.SetInt("isRainbowMenu", 0);
-                setTheme();
-            }
-
-            PlayerPrefs.Save();
+            newBackroundColor = new ExtGradient { isRainbow = true };
         }
 
         public static void SetPNGTheme()
@@ -341,13 +381,81 @@ namespace StupidTemplate.Mods
             FileUtils.MakeTXTFile("FONT", currentFontNum.ToString());
         }
 
+        static bool hasDoneHuntWatchShit = false;
+        public static int curWatchMod = 0;
+        static float timeTilPageSwitchWatch = 0;
+        static float timeTilModClickWatch = 0;
+        public static void WatchMenu()
+        {
+            GorillaTagger.Instance.offlineVRRig.EnableHuntWatch(true);
+
+            GorillaHuntComputer watch = UnityEngine.Object.FindFirstObjectByType<GorillaHuntComputer>();
+
+            string currentMod = Buttons.buttons[buttonsType][curWatchMod].buttonText;
+
+            if (ControllerInputPoller.instance.leftControllerIndexFloat > 0.1 && Time.time > timeTilPageSwitchWatch)
+            {
+                curWatchMod--;
+
+                if (curWatchMod < 0)
+                    curWatchMod = Buttons.buttons[buttonsType].Length - 1;
+
+                timeTilPageSwitchWatch = Time.time + 0.2f;
+            }
+
+            if (ControllerInputPoller.instance.rightControllerIndexFloat > 0.1 && Time.time > timeTilPageSwitchWatch)
+            {
+                curWatchMod++;
+
+                if (curWatchMod > Buttons.buttons[buttonsType].Length - 1)
+                    curWatchMod = 0;
+
+                timeTilPageSwitchWatch = Time.time + 0.2f;
+            }
+
+            if (ControllerInputPoller.instance.rightControllerPrimaryButton && Time.time > timeTilModClickWatch)
+            {
+                Toggle(currentMod);
+
+                timeTilModClickWatch = Time.time + 0.2f;
+            }
+
+            if (Buttons.buttons[buttonsType][curWatchMod].overlapText != null && Buttons.buttons[buttonsType][curWatchMod].overlapText != "")
+                currentMod = Buttons.buttons[buttonsType][curWatchMod].overlapText;
+
+            string defaultText = "504 [<color=#ff9400>" + DateTime.Now.Hour + "<color=white>:</color>" + DateTime.Now.Minute + "</color>]\n" + currentMod;
+
+            if (Buttons.buttons[buttonsType][curWatchMod].enabled)
+            {
+                if (watch.text.text !=  defaultText + "\n[<color=green>ENABLED</color>]")
+                    watch.text.text = defaultText + "\n[<color=green>ENABLED</color>]";
+            } else
+            {
+                if (watch.text.text != defaultText + "\n[<color=red>DISABLED</color>]")
+                    watch.text.text = defaultText + "\n[<color=red>DISABLED</color>]";
+            }
+
+            if (!Buttons.buttons[buttonsType][curWatchMod].isTogglable)
+            {
+                if (watch.text.text != defaultText)
+                    watch.text.text = defaultText;
+            }
+
+            if (!hasDoneHuntWatchShit)
+            {
+                watch.hat.gameObject.SetActive(false);
+                watch.badge.gameObject.SetActive(false);
+                watch.face.gameObject.SetActive(false);
+                watch.material.gameObject.SetActive(false);
+                watch.leftHand.gameObject.SetActive(false);
+                watch.rightHand.gameObject.SetActive(false);
+
+                hasDoneHuntWatchShit = true;
+            }
+        }
+
         public static void setTheme(string changeing = "")
         {
-            isRainbowMenu = false;
-
-            PlayerPrefs.SetInt("isRainbowMenu", 0);
-            PlayerPrefs.Save();
-
             if (changeing == "firstColor")
             {
                 mainColor++;
@@ -390,6 +498,9 @@ namespace StupidTemplate.Mods
                 if (buttonTextEnabledColor > colorChangeablesAmmount)
                     buttonTextEnabledColor = 0;
             }
+
+            if (GetIndex("Rainbow Menu").enabled)
+                Toggle("Rainbow Menu");
 
             newBackroundColor = new ExtGradient
             {

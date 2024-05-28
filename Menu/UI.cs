@@ -87,18 +87,20 @@ namespace StupidTemplate.Menu
                             foreach (Player player in PhotonNetwork.PlayerList)
                             {
                                 playerList++;
-                                if (player.IsMasterClient)
-                                    GUI.contentColor = Color.cyan;
-                                else
-                                    GUI.contentColor = textColors[0];
+                                GUI.contentColor = RigManager.GetVRRigFromPlayer(player).playerColor;
 
-                                GUI.Label(new Rect(new Rect(2005, 300 + (28 * playerList), 500, 360)), player.NickName);
+                                string trueName = player.NickName;
+
+                                if (player.IsMasterClient)
+                                    trueName += "-M";
+
+                                GUI.Label(new Rect(2005, 300 + (28 * playerList), 500, 360), trueName);
 
                                 GUI.contentColor = textColors[0];
 
                                 if (player != PhotonNetwork.LocalPlayer)
                                 {
-                                    if (GUI.Button(new Rect(2075 + (8 * player.NickName.Length), 300 + (28 * playerList), 40, 25), "Mute"))
+                                    if (GUI.Button(new Rect(2075 + (8 * trueName.Length), 300 + (28 * playerList), 40, 25), "Mute"))
                                     {
                                         foreach (GorillaScoreBoard scoreBoard in SafetyShit.leaderBoards)
                                         {
@@ -110,9 +112,16 @@ namespace StupidTemplate.Menu
                                         }
                                     }
 
-                                    if (GUI.Button(new Rect(2120 + (8 * player.NickName.Length), 300 + (28 * playerList), 40, 25), "ID"))
+                                    if (GUI.Button(new Rect(2120 + (8 * trueName.Length), 300 + (28 * playerList), 40, 25), "ID"))
                                     {
-                                        FileUtils.MakeTXTFile(player.NickName + " INFO", player.NickName.ToUpper() + " - " + player.UserId.ToUpper() + "\nCAUGHT IN: " + PhotonNetwork.CurrentRoom.Name.ToUpper(), true);
+                                        if (!Directory.Exists("BepInEx/plugins/504Brandon/PLAYER_IDS"))
+                                        {
+                                            UnityEngine.Debug.Log("MADE PLAYER IDS DIRECTORY");
+
+                                            Directory.CreateDirectory("BepInEx/plugins/504Brandon/PLAYER_IDS");
+                                        }
+
+                                        FileUtils.MakeTXTFile("PLAYER_IDS/" + player.NickName + " INFO", player.NickName.ToUpper() + " - " + player.UserId.ToUpper() + "\nCAUGHT IN: " + PhotonNetwork.CurrentRoom.Name.ToUpper(), true);
                                     }
                                 }
                             }
@@ -124,15 +133,19 @@ namespace StupidTemplate.Menu
                             foreach (Player player in PhotonNetwork.PlayerList)
                             {
                                 playerList++;
+
+                                GUI.contentColor = RigManager.GetVRRigFromPlayer(player).playerColor;
+
+                                string trueName = player.NickName;
+
                                 if (player.IsMasterClient)
-                                    GUI.contentColor = Color.cyan;
-                                else
-                                    GUI.contentColor = textColors[0];
-                                GUI.Label(new Rect(new Rect(40, 300 + (28 * playerList), 500, 360)), player.NickName);
+                                    trueName += "-M";
+
+                                GUI.Label(new Rect(40, 300 + (28 * playerList), 500, 360), trueName);
 
                                 GUI.contentColor = textColors[0];
 
-                                if (GUI.Button(new Rect(120 + (8 * player.NickName.Length), 300 + (28 * playerList), 40, 25), "Mute"))
+                                if (GUI.Button(new Rect(120 + (8 * trueName.Length), 300 + (28 * playerList), 40, 25), "Mute"))
                                 {
                                     foreach (GorillaScoreBoard scoreBoard in SafetyShit.leaderBoards)
                                     {
@@ -144,9 +157,16 @@ namespace StupidTemplate.Menu
                                     }
                                 }
 
-                                if (GUI.Button(new Rect(170 + (8 * player.NickName.Length), 300 + (28 * playerList), 40, 25), "ID"))
+                                if (GUI.Button(new Rect(170 + (8 * trueName.Length), 300 + (28 * playerList), 40, 25), "ID"))
                                 {
-                                    FileUtils.MakeTXTFile(player.NickName + " INFO", player.NickName.ToUpper() + " - " + player.UserId.ToUpper() + "\nCAUGHT IN: " + PhotonNetwork.CurrentRoom.Name.ToUpper(), true);
+                                    if (!Directory.Exists("BepInEx/plugins/504Brandon/PLAYER_IDS"))
+                                    {
+                                        UnityEngine.Debug.Log("MADE PLAYER IDS DIRECTORY");
+
+                                        Directory.CreateDirectory("BepInEx/plugins/504Brandon/PLAYER_IDS");
+                                    }
+
+                                    FileUtils.MakeTXTFile("PLAYER_IDS/" + player.NickName + " INFO", player.NickName.ToUpper() + " - " + player.UserId.ToUpper() + "\nCAUGHT IN: " + PhotonNetwork.CurrentRoom.Name.ToUpper(), true);
                                 }
                             }
                         }

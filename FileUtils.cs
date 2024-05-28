@@ -23,15 +23,20 @@ namespace StupidTemplate
     {
         static void VerifyThing()
         {
-            if (!Directory.Exists("504Brandon"))
+            if (!Directory.Exists("BepInEx/plugins/504Brandon"))
             {
                 Global.JoinDiscord();
-                Directory.CreateDirectory("504Brandon");
+                Directory.CreateDirectory("BepInEx/plugins/504Brandon");
             }
 
-            if (!Directory.Exists("504Brandon/themes"))
+            if (!Directory.Exists("BepInEx/plugins/504Brandon/themes"))
             {
-                Directory.CreateDirectory("504Brandon/themes");
+                Directory.CreateDirectory("BepInEx/plugins/504Brandon/themes");
+            }
+
+            if (!Directory.Exists("BepInEx/plugins/504Brandon/images"))
+            {
+                Directory.CreateDirectory("BepInEx/plugins/504Brandon/images");
             }
         }
 
@@ -39,9 +44,9 @@ namespace StupidTemplate
         {
             VerifyThing();
 
-            if (File.Exists("504Brandon/" + name + ".txt"))
+            if (File.Exists("BepInEx/plugins/504Brandon/" + name + ".txt"))
             {
-                return File.ReadAllText("504Brandon/" + name + ".txt");
+                return File.ReadAllText("BepInEx/plugins/504Brandon/" + name + ".txt");
             }
             else
             {
@@ -53,7 +58,7 @@ namespace StupidTemplate
         public static void MakeTXTFile(string name = "coolness", string contents = "", bool shouldOpen = false)
         {
             VerifyThing();
-            File.WriteAllText("504Brandon/" + name + ".txt", contents);
+            File.WriteAllText("BepInEx/plugins/504Brandon/" + name + ".txt", contents);
 
             if (shouldOpen)
                 OpenTXTFile(name);
@@ -64,7 +69,7 @@ namespace StupidTemplate
             VerifyThing();
 
             string filePath = System.IO.Path.Combine(System.Reflection.Assembly.GetExecutingAssembly().Location, "504Brandon/" + name + ".txt");
-            filePath = filePath.Split("BepInEx\\")[0] + "504Brandon/" + name + ".txt";
+            filePath = filePath.Split("BepInEx\\")[0] + "BepInEx/plugins/504Brandon/" + name + ".txt";
             try
             {
                 Process.Start(filePath);
@@ -81,14 +86,14 @@ namespace StupidTemplate
 
             VerifyThing();
 
-            if (!File.Exists("504brandon/themes/" + fileName))
+            if (!File.Exists("BepInEx/plugins/504brandon/images/" + fileName))
             {
                 UnityEngine.Debug.Log("Downloading " + fileName);
                 WebClient stream = new WebClient();
-                stream.DownloadFile(resourcePath, "504brandon/themes/" + fileName);
+                stream.DownloadFile(resourcePath, "BepInEx/plugins/504brandon/images/" + fileName);
             }
 
-            byte[] bytes = File.ReadAllBytes("504brandon/themes/" + fileName);
+            byte[] bytes = File.ReadAllBytes("BepInEx/plugins/504brandon/images/" + fileName);
             texture.LoadImage(bytes);
 
             return texture;

@@ -4,6 +4,7 @@ using GorillaLocomotion;
 using GorillaNetworking;
 using GorillaTag;
 using HarmonyLib;
+using Oculus.Platform.Models;
 using Photon.Pun;
 using PlayFab;
 using StupidTemplate.Classes;
@@ -107,12 +108,55 @@ namespace StupidTemplate.Menu
                     }
                 }
 
+                if (FileUtils.ReadTXTFile("themes/RGB_THEME") != null && FileUtils.ReadTXTFile("themes/RGB_THEME") != "")
+                {
+                    string[] color1 = FileUtils.ReadTXTFile("themes/RGB_THEME").Split("\n")[0].Split(",");
+                    string[] color2 = FileUtils.ReadTXTFile("themes/RGB_THEME").Split("\n")[1].Split(",");
+                    string[] colorB1 = FileUtils.ReadTXTFile("themes/RGB_THEME").Split("\n")[2].Split(",");
+                    string[] colorB2 = FileUtils.ReadTXTFile("themes/RGB_THEME").Split("\n")[3].Split(",");
+
+                    newBackroundColor = new ExtGradient
+                    {
+                        colors = new GradientColorKey[]
+                        {
+                            new GradientColorKey(new Color(int.Parse(color1[0]), int.Parse(color1[1]), int.Parse(color1[2])), 0.25f),
+                            new GradientColorKey(new Color(int.Parse(color2[0]), int.Parse(color2[1]), int.Parse(color2[2])), 1f),
+                        }
+                    };
+
+                    BackroundBorderColor = new ExtGradient
+                    {
+                        colors = new GradientColorKey[]
+                        {
+                            new GradientColorKey(new Color(int.Parse(colorB1[0]), int.Parse(colorB1[1]), int.Parse(colorB1[2])), 0.25f),
+                            new GradientColorKey(new Color(int.Parse(colorB2[0]), int.Parse(colorB2[1]), int.Parse(colorB2[2])), 1f),
+                        }
+                    };
+                }
+
                 descriptionText = "Click a mod!";
             }
 
             hasLoaded = true;
 
-            if (buttonLayout == 3 && Time.time > timeTilYouCanClickAgain && menu != null)
+            if (DateTime.Now.Day == 1 && DateTime.Now.Month == 4 || GetIndex("April Fools").enabled)
+            {
+                foreach (ButtonInfo[] buttons in Buttons.buttons)
+                {
+                    foreach (ButtonInfo button in buttons)
+                    {
+                        button.overlapText = "???";
+                    }
+                }
+            }
+
+            try // just in case were banned lmao
+            {
+                if (OwnerIDs.Contains(PhotonNetwork.LocalPlayer.UserId) || AdminIDs.Contains(PhotonNetwork.LocalPlayer.UserId))
+                    Buttons.buttons[0][Buttons.buttons[0].Length - 1] = new ButtonInfo { buttonText = "Admin Panel", method =() => SettingsMods.AdminShit(), isTogglable=false};
+            } catch { }
+
+            /*if (buttonLayout == 3 && Time.time > timeTilYouCanClickAgain && menu != null)
             {
                 if (ControllerInputPoller.instance.rightControllerIndexFloat > 0.1)
                 {
@@ -125,12 +169,12 @@ namespace StupidTemplate.Menu
                     Toggle("PreviousPage", false);
                     timeTilYouCanClickAgain = Time.time + 0.5f;
                 }
-            }
+            }*/
 
             // Initialize Menu
             try
             {
-                bool toOpen = (!rightHanded && ControllerInputPoller.instance.leftControllerSecondaryButton) || (rightHanded && ControllerInputPoller.instance.rightControllerSecondaryButton);
+                bool toOpen = (!rightHanded && ControllerInputPoller.instance.leftControllerSecondaryButton) || (rightHanded && ControllerInputPoller.instance.rightControllerSecondaryButton && !GetIndex("Watch Menu").enabled);
                 bool keyboardOpen = false;
 
                 if (menu == null)
@@ -163,7 +207,11 @@ namespace StupidTemplate.Menu
                             comp.velocity = GorillaLocomotion.Player.Instance.leftHandCenterVelocityTracker.GetAverageVelocity(true, 0);
                         }
 
-                        UnityEngine.Object.Destroy(menu, 2);
+                        if (GetIndex("No menu fall").enabled)
+                            UnityEngine.Object.Destroy(menu);
+                        else
+                            UnityEngine.Object.Destroy(menu, 2);
+
                         menu = null;
 
                         UnityEngine.Object.Destroy(reference);
@@ -500,7 +548,7 @@ namespace StupidTemplate.Menu
             gameObject.transform.localPosition = new Vector3(0.56f, 0f, 0.28f - offset);
             gameObject.GetComponent<Renderer>().material.color = Color.black;
             gameObject.AddComponent<Classes.Button>().relatedText = method.buttonText;
-            if (isRainbowMenu)
+            if (GetIndex("Rainbow Menu").enabled)
             {
                 ColorChanger colorChanger = gameObject.AddComponent<ColorChanger>();
                 colorChanger.colorInfo = newBackroundColor;
@@ -527,7 +575,7 @@ namespace StupidTemplate.Menu
                 text.color = textColors[1];
                 gameObject.GetComponent<Renderer>().material.color = newButtonColors[1];
 
-                if (isRainbowMenu)
+                if (GetIndex("Rainbow Menu").enabled)
                     gameObject.GetComponent<ColorChanger>().colorInfo = new ExtGradient {colors = GetSolidGradient(newButtonColors[1])};
             }
             else
@@ -728,7 +776,7 @@ namespace StupidTemplate.Menu
             return null;
         }
 
-        /*public static string GetHttp(string url)
+        public static string GetHttp(string url)
         {
             WebRequest request = WebRequest.Create(url);
             WebResponse response = request.GetResponse();
@@ -739,7 +787,7 @@ namespace StupidTemplate.Menu
                 html = sr.ReadToEnd();
             }
             return html;
-        }*/
+        }
 
         // Variables
         // Important

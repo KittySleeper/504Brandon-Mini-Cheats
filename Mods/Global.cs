@@ -52,6 +52,15 @@ namespace StupidTemplate.Mods
             PlayerPrefs.Save();
         }
 
+        public static void fakeSetName(string PlayerName)
+        {
+            GorillaComputer.instance.currentName = PlayerName;
+            PhotonNetwork.LocalPlayer.NickName = PlayerName;
+            GorillaComputer.instance.offlineVRRigNametagText.text = PlayerName;
+            GorillaComputer.instance.savedName = PlayerName;
+            PlayerPrefs.SetString("playerName", PlayerName);
+        }
+
         public static void SaveMods()
         {
             string ModList = "";
@@ -94,6 +103,12 @@ namespace StupidTemplate.Mods
             flySpeed = int.Parse(FileUtils.ReadTXTFile("MOVEMENT").Split("\n")[1]);
             veolocityMultiplyer = int.Parse(FileUtils.ReadTXTFile("MOVEMENT").Split("\n")[2]);
 
+            if (FileUtils.ReadTXTFile("PROJECTILE") == null)
+                FileUtils.MakeTXTFile("PROJECTILE", "0\n1");
+
+            ProjectileType = int.Parse(FileUtils.ReadTXTFile("PROJECTILE").Split("\n")[0]);
+            RainRangeMultiplyer = int.Parse(FileUtils.ReadTXTFile("PROJECTILE").Split("\n")[1]);
+
             if (FileUtils.ReadTXTFile("themes/BORDERTHEME") == null)
                 FileUtils.MakeTXTFile("themes/BORDERTHEME", "0");
 
@@ -111,9 +126,10 @@ namespace StupidTemplate.Mods
                 FileUtils.MakeTXTFile("FONT", "0");
 
             currentFontNum = int.Parse(FileUtils.ReadTXTFile("FONT"));
+            currentFont = fonts[currentFontNum];
 
             if (FileUtils.ReadTXTFile("MODS") == null)
-                FileUtils.MakeTXTFile("MODS", "Should Save Mods\nFPS Counter\nDisconnect Button\nNotifications\nRight Hand\nMenu Border\nAnti Report");
+                FileUtils.MakeTXTFile("MODS", "Should Save Mods\nFPS Counter\nDisconnect Button\nNotifications\nRight Hand\nMenu Border\nAnti Report\nPlayer Tracker");
 
             rightHanded = FileUtils.ReadTXTFile("MODS").Contains("Right Handed");
         }

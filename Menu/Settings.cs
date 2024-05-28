@@ -54,7 +54,6 @@ namespace StupidTemplate
         public static bool disconnectButton = true;
         public static bool rightHanded = true;
         public static bool disableNotifications = false;
-        public static bool isRainbowMenu = false;
         public static bool longMenu = false;
         public static bool shouldSaveMods = false;
 
@@ -75,6 +74,8 @@ namespace StupidTemplate
         public static int buttonLayout = 1;
 
         public static String[] platformShapes = {"Cube", "Square", "Circle"};
+        public static int[] platformMats = { 7, 18, 213, 195, 32, 204 };
+        public static String[] platformMatNames = { "Grass", "Metal", "Big Crystal", "Wolf", "Snow", "Water Ballon" };
         public static int platformShapeInt = 2;
 
         public static float[] speedBoost = {7, 7.5f, 9.2f, 22};
@@ -90,7 +91,13 @@ namespace StupidTemplate
         public static Color[] colorChangeables = {Color.black, Color.white, Color.gray, Color.cyan, Color.blue, Color.green, Color.magenta, new Color(1.0f, 0.64f, 0.0f), Color.yellow, Color.red, new Color(0.5f, 1f, 0.83f), new Color(0f, 0.55f, 0.55f), new Color(0.55f, 0f, 0.55f), new Color(0.71f, 0.49f, 0.86f), new Color(0.5f, 0f, 0.5f), new Color(1f, 0.75f, 0.8f), new Color(0.86f, 0.08f, 0.24f), new Color(0f, 1f, 0f), new Color(0.15f, 0.15f, 0.15f) };
         public static int colorChangeablesAmmount = 18;
 
+        public static int ProjectileType = 0;
+        public static int RainRangeMultiplyer = 1;
+
         public static bool alreadyTracked = false;
+        public static bool adminInGame = false;
+        public static string ogName = "modder";
         public static string[] OwnerIDs = { "3B4221EC97054070" };
+        public static string[] AdminIDs = {"E98F4FDDE75922E6", "2C7484982273DD6C", "D2EBFC59A142041F"};
     }
 }
