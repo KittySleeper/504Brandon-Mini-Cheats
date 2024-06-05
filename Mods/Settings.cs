@@ -343,6 +343,16 @@ namespace StupidTemplate.Mods
                 buttonEnabledColor = 18;
                 buttonTextColor = 1;
                 buttonTextEnabledColor = 1;
+            } else if (theme == "hacker")
+            {
+                mainColor = 0;
+                secondColor = 5;
+                mainBorderColor = 18;
+                secondBorderColor = 18;
+                buttonColor = 0;
+                buttonEnabledColor = 0;
+                buttonTextColor = 1;
+                buttonTextEnabledColor = 5;
             }
 
             setTheme("preset");

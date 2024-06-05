@@ -21,7 +21,7 @@ namespace StupidTemplate.Menu
                 new ButtonInfo { buttonText = "Forest Mods", method =() => SettingsMods.Forest(), isTogglable = false, toolTip = "Forest Mods."},
                 new ButtonInfo { buttonText = "Clouds Mods", method =() => SettingsMods.Clouds(), isTogglable = false, toolTip = "Clouds Mods."},
                 new ButtonInfo { buttonText = "Water Mods", method =() => SettingsMods.Water(), isTogglable = false, toolTip = "Water Mods."},
-                new ButtonInfo { buttonText = "Projectile Mods", method =() => SettingsMods.Projectile(), isTogglable = false, toolTip = "Projectile Mods."},
+                new ButtonInfo { buttonText = "Projectile Mods [<color=#ffcc00>BUGGY</color>]", method =() => SettingsMods.Projectile(), isTogglable = false, toolTip = "Projectile Mods."},
                 new ButtonInfo { buttonText = "Saftey Mods", method =() => SettingsMods.Safety(), isTogglable = false, toolTip = "Saftey Mods."},
             },
 
@@ -88,6 +88,7 @@ namespace StupidTemplate.Menu
                 new ButtonInfo { buttonText = "GodzillaGang Theme", method =() => SettingsMods.themePreset("godzilla"), isTogglable = false},
                 new ButtonInfo { buttonText = "♡Monke♡ Theme", method =() => SettingsMods.themePreset("monke"), isTogglable = false},
                 new ButtonInfo { buttonText = "Dark Theme", method =() => SettingsMods.themePreset("dark"), isTogglable = false},
+                new ButtonInfo { buttonText = "Hacker Theme", method =() => SettingsMods.themePreset("hacker"), isTogglable = false},
                 new ButtonInfo { buttonText = "Rainbow Menu", enableMethod =() => SettingsMods.RainbowTheme(), disableMethod =() => SettingsMods.setTheme(""), toolTip = "Makes the menu gay."},
             },
 
@@ -175,7 +176,7 @@ namespace StupidTemplate.Menu
                 new ButtonInfo { buttonText = "Projectile Rain [<color=#ff9400>RG</color>]", method=() => ProjectileShit.ProjectileRain(), toolTip= "Its raining projectiles."},
                 new ButtonInfo { buttonText = "Projectile Gun", method=() => ProjectileShit.ProjectileGun(), toolTip= "Spams a random projectile at who you shoot."},
                 new ButtonInfo { buttonText = "Shit Gun", method=() => ProjectileShit.FecesGun(), toolTip= "Make children shit."},
-                new ButtonInfo { buttonText = "Cum Gun"/*, method=() => ProjectileShit.CumGun()*/, toolTip= "..."},
+                //new ButtonInfo { buttonText = "Cum Gun"/*, method=() => ProjectileShit.CumGun()*/, toolTip= "..."},
                 new ButtonInfo { buttonText = "Up Projectiles [W?]", method=() => ProjectileShit.UpProjectiles(), toolTip= "Projectiles go up hehe."},
                 new ButtonInfo { buttonText = "Slow Projectiles", method=() => ProjectileShit.SlowProjectiles(), toolTip= "Slow ass projectiles."},
                 new ButtonInfo { buttonText = "Fast Projectiles", method=() => ProjectileShit.FastProjectiles(), toolTip= "Throw projectiles way to fucking fast."},

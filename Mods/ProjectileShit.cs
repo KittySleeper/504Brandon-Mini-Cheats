@@ -60,7 +60,8 @@ namespace StupidTemplate.Mods
                     component.randomizeColor = true;
                     component.transform.position = position;
                     GorillaTagger.Instance.GetComponent<Rigidbody>().velocity = velocity;
-                    GorillaTagger.Instance.offlineVRRig.SetThrowableProjectileColor(true, color);
+                    GorillaTagger.Instance.offlineVRRig.LeftThrowableProjectileColor = color;
+                    GorillaTagger.Instance.offlineVRRig.RightThrowableProjectileColor = color;
                     GameObject.Find("Player Objects/Player VR Controller/GorillaPlayer/EquipmentInteractor").GetComponent<EquipmentInteractor>().ReleaseLeftHand();
                     GorillaTagger.Instance.GetComponent<Rigidbody>().velocity = velocity2;
                     component.transform.position = position2;
@@ -108,7 +109,7 @@ namespace StupidTemplate.Mods
                 else
                     color = projColor;
 
-                Projectile(fullProjectileNames[ProjectileType], Player.Instance.rightControllerTransform.position, Player.Instance.rightControllerTransform.forward - Player.Instance.rightControllerTransform.up * 7.5f, color, false);
+                Projectile(fullProjectileNames[ProjectileType], Player.Instance.rightControllerTransform.position, Player.Instance.rightControllerTransform.forward - Player.Instance.rightControllerTransform.up * 8.5f, color, false);
             }
         }
         public static void ProjectileRain()
@@ -134,7 +135,7 @@ namespace StupidTemplate.Mods
         {
             if (ControllerInputPoller.instance.rightGrab)
             {
-                Projectile("FishFood", GorillaTagger.Instance.bodyCollider.transform.position + new Vector3(0f, -0.3f, 0f), new Vector3(0f, -1f, 0f), projColor, false);
+                Projectile("FishFood", GorillaTagger.Instance.bodyCollider.transform.position + new Vector3(0f, -0.5f, 0f), new Vector3(0f, -1f, 0f), projColor, false);
             }
         }
         public static void Semen()
@@ -193,8 +194,7 @@ namespace StupidTemplate.Mods
 
             if (player != null)
             {
-                int randomInt = UnityEngine.Random.Range(0, 5);
-                Projectile(fullProjectileNames[randomInt], player.rightHandTransform.position, player.rightHandTransform.forward - (player.rightHandTransform.up * projectileSpeed), projColor, false);
+                Projectile("Snowball", player.rightHandTransform.position, player.rightHandTransform.forward - (player.rightHandTransform.up * 7.5f), projColor, false);
             }
         }
         public static void FecesGun()

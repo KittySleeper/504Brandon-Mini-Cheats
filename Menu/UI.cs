@@ -15,6 +15,9 @@ using static UnityEngine.UI.GridLayoutGroup;
 using System.EnterpriseServices;
 using ExitGames.Client.Photon.StructWrapping;
 using Photon.Voice.Unity;
+using Oculus.Platform.Models;
+using HarmonyLib;
+using UnityEngine.UIElements;
 
 namespace StupidTemplate.Menu
 {
@@ -25,6 +28,7 @@ namespace StupidTemplate.Menu
         public static int UIPage = 0;
         public static float leftCooldown = 0;
         public static float rightCooldown = 0;
+        public static string modsOn = "";
         private bool showGUI = true;
 
         public void OnGUI()
@@ -70,6 +74,26 @@ namespace StupidTemplate.Menu
                     else
                         GUI.Label(new Rect(45, 40, 500, 40), PluginInfo.Name + " V:" + PluginInfo.Version);
                 }
+
+                foreach (ButtonInfo[] buttons in Buttons.buttons)
+                {
+                    foreach (ButtonInfo button in buttons)
+                    {
+                        if (button.enabled)
+                            modsOn += "\n" + button.buttonText;
+                    }
+                }
+
+                if (rightHanded)
+                    GUI.Label(new Rect(new Rect(40, 5, 99999, 99999)), modsOn);
+                else
+                    GUI.Label(new Rect(new Rect(2005, 5, 99999, 99999)), modsOn);
+                
+                modsOn = "";
+
+                /*Buttons.buttons[18] = new ButtonInfo[] {
+                    new ButtonInfo { buttonText = "Return to Main", method =() => Global.ReturnHome(), isTogglable = false, toolTip = "Returns to the main page of the menu."},
+                };*/
 
                 if (!GetIndex("OG GUI UI").enabled)
                 {
