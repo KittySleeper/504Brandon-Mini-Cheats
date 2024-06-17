@@ -47,87 +47,94 @@ namespace StupidTemplate.Mods
             buttonsType = 5;
         }
 
-        public static void Themes()
+        public static void CheatSettings()
         {
             pageNumber = 0;
             curWatchMod = 0;
             buttonsType = 6;
         }
 
-        public static void MiscellaneousMods()
+        public static void Themes()
         {
             pageNumber = 0;
             curWatchMod = 0;
             buttonsType = 7;
         }
 
-        public static void Movement()
+        public static void MiscellaneousMods()
         {
             pageNumber = 0;
             curWatchMod = 0;
             buttonsType = 8;
         }
 
-        public static void Rig()
+        public static void Movement()
         {
             pageNumber = 0;
             curWatchMod = 0;
             buttonsType = 9;
         }
 
-        public static void Cheats()
+        public static void Rig()
         {
             pageNumber = 0;
             curWatchMod = 0;
             buttonsType = 10;
         }
 
-        public static void OP()
+        public static void Cheats()
         {
             pageNumber = 0;
             curWatchMod = 0;
             buttonsType = 11;
         }
 
-        public static void Forest()
+        public static void OP()
         {
             pageNumber = 0;
             curWatchMod = 0;
             buttonsType = 12;
         }
 
-        public static void Clouds()
+        public static void Forest()
         {
             pageNumber = 0;
             curWatchMod = 0;
             buttonsType = 13;
         }
 
-        public static void Water()
+        public static void Clouds()
         {
             pageNumber = 0;
             curWatchMod = 0;
             buttonsType = 14;
         }
 
-        public static void Projectile()
+        public static void Water()
         {
             pageNumber = 0;
             curWatchMod = 0;
             buttonsType = 15;
         }
 
-        public static void Safety()
+        public static void Projectile()
         {
             pageNumber = 0;
             curWatchMod = 0;
             buttonsType = 16;
         }
-        public static void AdminShit()
+
+        public static void Safety()
         {
             pageNumber = 0;
             curWatchMod = 0;
             buttonsType = 17;
+        }
+        public static void AdminShit()
+        {
+            pageNumber = 0;
+            curWatchMod = 0;
+            buttonsType = 18;
         }
 
         public static void RightHand()
@@ -464,6 +471,21 @@ namespace StupidTemplate.Mods
             }
         }
 
+        public static void RandomMenuName()
+        {
+            string[] randomNames = { "ModderX." + PluginInfo.Version, "ShibaGTs <color=grey>DARK</color> Menu\n<color=yellow>" + PluginInfo.Version + "</color>", "ShibaGT Genesis v" + PluginInfo.Version, "ii's Stupid Menu", "Rexon Free" };
+            menuNameHehe = randomNames[UnityEngine.Random.Range(0, randomNames.Length)];
+
+            RecreateMenu();
+        }
+
+        public static void ResetMenuName()
+        {
+            menuNameHehe = PluginInfo.Name;
+
+            RecreateMenu();
+        }
+
         public static void setTheme(string changeing = "")
         {
             if (changeing == "firstColor")
@@ -548,6 +570,23 @@ namespace StupidTemplate.Mods
             }
 
             RecreateMenu();
+        }
+
+        public static void ChangeTracersColor()
+        {
+            tracersColor++;
+            if (tracersColor > colorChangeablesAmmount)
+                tracersColor = 0;
+
+            FileUtils.MakeTXTFile("ADVANTAGE", tracersColor + "\n" + taggedTracersColor);
+        }
+        public static void ChangeTracersTaggedColor()
+        {
+            taggedTracersColor++;
+            if (taggedTracersColor > colorChangeablesAmmount)
+                taggedTracersColor = 0;
+
+            FileUtils.MakeTXTFile("ADVANTAGE", tracersColor + "\n" + taggedTracersColor);
         }
     }
 }

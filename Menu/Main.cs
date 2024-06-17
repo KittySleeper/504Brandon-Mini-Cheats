@@ -108,12 +108,10 @@ namespace StupidTemplate.Menu
                     }
                 }
 
-                if (FileUtils.ReadTXTFile("themes/RGB_THEME") != null && FileUtils.ReadTXTFile("themes/RGB_THEME") != "")
+                /*if (FileUtils.ReadTXTFile("themes/RGB_THEME") != null && FileUtils.ReadTXTFile("themes/RGB_THEME") != "")
                 {
                     string[] color1 = FileUtils.ReadTXTFile("themes/RGB_THEME").Split("\n")[0].Split(",");
                     string[] color2 = FileUtils.ReadTXTFile("themes/RGB_THEME").Split("\n")[1].Split(",");
-                    string[] colorB1 = FileUtils.ReadTXTFile("themes/RGB_THEME").Split("\n")[2].Split(",");
-                    string[] colorB2 = FileUtils.ReadTXTFile("themes/RGB_THEME").Split("\n")[3].Split(",");
 
                     newBackroundColor = new ExtGradient
                     {
@@ -123,16 +121,31 @@ namespace StupidTemplate.Menu
                             new GradientColorKey(new Color(int.Parse(color2[0]), int.Parse(color2[1]), int.Parse(color2[2])), 1f),
                         }
                     };
+                }
+
+                if (FileUtils.ReadTXTFile("themes/RGB_THEME_BORDER") != null && FileUtils.ReadTXTFile("themes/RGB_THEME_BORDER") != "")
+                {
+                    string[] color1 = FileUtils.ReadTXTFile("themes/RGB_THEME_BORDER").Split("\n")[0].Split(",");
+                    string[] color2 = FileUtils.ReadTXTFile("themes/RGB_THEME_BORDER").Split("\n")[1].Split(",");
 
                     BackroundBorderColor = new ExtGradient
                     {
                         colors = new GradientColorKey[]
                         {
-                            new GradientColorKey(new Color(int.Parse(colorB1[0]), int.Parse(colorB1[1]), int.Parse(colorB1[2])), 0.25f),
-                            new GradientColorKey(new Color(int.Parse(colorB2[0]), int.Parse(colorB2[1]), int.Parse(colorB2[2])), 1f),
+                            new GradientColorKey(new Color(int.Parse(color1[0]), int.Parse(color1[1]), int.Parse(color1[2])), 0.25f),
+                            new GradientColorKey(new Color(int.Parse(color2[0]), int.Parse(color2[1]), int.Parse(color2[2])), 1f),
                         }
                     };
                 }
+
+                if (FileUtils.ReadTXTFile("themes/RGB_THEME_BUTTON") != null && FileUtils.ReadTXTFile("themes/RGB_THEME_BUTTON") != "")
+                {
+                    string[] color1 = FileUtils.ReadTXTFile("themes/RGB_THEME_BUTTON").Split("\n")[0].Split(",");
+                    string[] color2 = FileUtils.ReadTXTFile("themes/RGB_THEME_BUTTON").Split("\n")[1].Split(",");
+
+                    newButtonColors[0] = new Color(int.Parse(color1[0]), int.Parse(color1[1]), int.Parse(color1[2]));
+                    newButtonColors[1] = new Color(int.Parse(color2[0]), int.Parse(color2[1]), int.Parse(color2[2]));
+                }*/
 
                 descriptionText = "Click a mod!";
             }
@@ -323,6 +336,13 @@ namespace StupidTemplate.Menu
             canvasScaler.dynamicPixelsPerUnit = 1000f;
 
             // Title and FPS
+            string pageNumText = " <color=grey>[</color><color=white>" + (pageNumber + 1).ToString() + "</color><color=grey>]</color>";
+
+            if (menuNameHehe == "Rexon Free")
+                pageNumText = " [P" + pageNumber + "]";
+            if (menuNameHehe == "ModderX.1.0" || menuNameHehe.Contains("Shiba"))
+                pageNumText = "";
+
             Text text = new GameObject
             {
                 transform =
@@ -331,7 +351,7 @@ namespace StupidTemplate.Menu
                     }
             }.AddComponent<Text>();
             text.font = currentFont;
-            text.text = PluginInfo.Name + " <color=grey>[</color><color=white>" + (pageNumber + 1).ToString() + "</color><color=grey>]</color>";
+            text.text = menuNameHehe + pageNumText;
             text.fontSize = 1;
             text.color = textColors[0];
             text.supportRichText = true;
@@ -608,6 +628,12 @@ namespace StupidTemplate.Menu
 
         public static void RecenterMenu(bool isRightHanded, bool isKeyboardCondition)
         {
+            try
+            {
+                TPC = GameObject.Find("Player Objects/Third Person Camera/Shoulder Camera").GetComponent<Camera>();
+            }
+            catch { }
+
             if (!isKeyboardCondition)
             {
                 if (!isRightHanded)
@@ -622,14 +648,15 @@ namespace StupidTemplate.Menu
                     rotation += new Vector3(0f, 0f, 180f);
                     menu.transform.rotation = Quaternion.Euler(rotation);
                 }
+
+                if (GetIndex("Bark Menu").enabled /*|| GetIndex("Joystick Menu").enabled*/)
+                {
+                    menu.transform.transform.position = GorillaTagger.Instance.headCollider.transform.position + new Vector3(0f, 0.025f, 0.55f);
+                    menu.transform.rotation = Quaternion.Euler(-90, 100, 0);
+                }
             }
             else
             {
-                try
-                {
-                    TPC = GameObject.Find("Player Objects/Third Person Camera/Shoulder Camera").GetComponent<Camera>();
-                }
-                catch { }
                 if (TPC != null)
                 {
                     TPC.transform.position = new Vector3(-999f, -999f, -999f);

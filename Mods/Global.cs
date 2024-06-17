@@ -7,6 +7,7 @@ using PlayFab;
 using GorillaNetworking;
 using StupidTemplate.Menu;
 using System.Diagnostics;
+using System.Drawing;
 
 namespace StupidTemplate.Mods
 {
@@ -61,6 +62,15 @@ namespace StupidTemplate.Mods
             PlayerPrefs.SetString("playerName", PlayerName);
         }
 
+        public static void setColorCode(UnityEngine.Color colorCode)
+        {
+            PlayerPrefs.SetFloat("redValue", colorCode.r);
+            PlayerPrefs.SetFloat("greenValue", colorCode.g);
+            PlayerPrefs.SetFloat("blueValue", colorCode.b);
+            GorillaTagger.Instance.UpdateColor(colorCode.r, colorCode.g, colorCode.b);
+            PlayerPrefs.Save();
+        }
+
         public static void SaveMods()
         {
             string ModList = "";
@@ -109,6 +119,12 @@ namespace StupidTemplate.Mods
             ProjectileType = int.Parse(FileUtils.ReadTXTFile("PROJECTILE").Split("\n")[0]);
             RainRangeMultiplyer = int.Parse(FileUtils.ReadTXTFile("PROJECTILE").Split("\n")[1]);
 
+            if (FileUtils.ReadTXTFile("ADVANTAGE") == null)
+                FileUtils.MakeTXTFile("ADVANTAGE", "5\n9");
+
+            tracersColor = int.Parse(FileUtils.ReadTXTFile("ADVANTAGE").Split("\n")[0]);
+            taggedTracersColor = int.Parse(FileUtils.ReadTXTFile("ADVANTAGE").Split("\n")[1]);
+
             if (FileUtils.ReadTXTFile("themes/BORDERTHEME") == null)
                 FileUtils.MakeTXTFile("themes/BORDERTHEME", "0");
 
@@ -129,7 +145,7 @@ namespace StupidTemplate.Mods
             currentFont = fonts[currentFontNum];
 
             if (FileUtils.ReadTXTFile("MODS") == null)
-                FileUtils.MakeTXTFile("MODS", "Should Save Mods\nFPS Counter\nDisconnect Button\nNotifications\nRight Hand\nMenu Border\nAnti Report\nPlayer Tracker");
+                FileUtils.MakeTXTFile("MODS", "Should Save Mods\nFPS Counter\nDisconnect Button\nNotifications\nRight Hand\nMenu Border\nAnti Report");
 
             rightHanded = FileUtils.ReadTXTFile("MODS").Contains("Right Handed");
         }

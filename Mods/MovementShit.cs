@@ -110,6 +110,23 @@ namespace StupidTemplate.Mods
                     colorChanger.Start();
                 }
                 GunThingie.transform.position = raycastHit.point;
+
+               /*GameObject line = new GameObject();
+                LineRenderer liner = line.AddComponent<LineRenderer>();
+                liner.startColor = colorChangeables[tracersColor];
+                liner.endColor = colorChangeables[tracersColor];
+                liner.startWidth = 0.055f;
+                liner.endWidth = 0.055f;
+                liner.positionCount = 2;
+                liner.useWorldSpace = true;
+                liner.SetPosition(0, Player.Instance.rightControllerTransform.position);
+                liner.SetPosition(1, GunThingie.transform.position);
+                liner.material.shader = Shader.Find("GUI/Text Shader");
+                ColorChanger colorChangerl = line.AddComponent<ColorChanger>();
+                colorChangerl.colorInfo = newBackroundColor;
+                colorChangerl.Start();
+                UnityEngine.Object.Destroy(line, Time.deltaTime);*/
+
                 if (ControllerInputPoller.instance.rightControllerIndexFloat > 0f)
                 {
                     Player.Instance.transform.position = GunThingie.transform.position;

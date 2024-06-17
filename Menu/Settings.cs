@@ -7,9 +7,11 @@ namespace StupidTemplate
 {
     internal class Settings
     {
+        public static string menuNameHehe = PluginInfo.Name;
+
         public static ExtGradient backgroundColor = new ExtGradient { isRainbow = true };
 
-        public static ExtGradient newBackroundColor = new ExtGradient //im too lazy to replace backround color itself rn okay?
+        public static ExtGradient newBackroundColor = new ExtGradient //i will never make this part of the background color lmaooooooo
         {
             colors = new GradientColorKey[]
             {
@@ -72,6 +74,9 @@ namespace StupidTemplate
         public static int PNGTheme = 0;
         public static int BorderPNGTheme = 0;
         public static int buttonLayout = 1;
+
+        public static int tracersColor = 5;
+        public static int taggedTracersColor = 9;
 
         public static String[] platformShapes = {"Cube", "Square", "Circle"};
         public static int[] platformMats = { 7, 18, 213, 195, 32, 204 };

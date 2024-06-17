@@ -56,7 +56,8 @@ namespace StupidTemplate.Mods
                         "LMAIE.",
                         "LMAIO."
                     };
-                    SnowballThrowable component = GameObject.Find("Player Objects/Local VRRig/Local Gorilla Player/rig/body/shoulder.L/upper_arm.L/forearm.L/hand.L/palm.01.L/TransferrableItemLeftHand/" + fullProjectileNames[Array.IndexOf(fullProjectileNames, projectileName)] + "LeftAnchor").transform.Find(array2[Array.IndexOf(fullProjectileNames, projectileName)]).GetComponent<SnowballThrowable>(); Vector3 position2 = component.transform.position;
+                    SnowballThrowable component = GameObject.Find("Player Objects/Local VRRig/Local Gorilla Player/rig/body/shoulder.L/upper_arm.L/forearm.L/hand.L/palm.01.L/TransferrableItemLeftHand/" + fullProjectileNames[Array.IndexOf(fullProjectileNames, projectileName)] + "LeftAnchor").transform.Find(array2[Array.IndexOf(fullProjectileNames, projectileName)]).GetComponent<SnowballThrowable>(); 
+                    Vector3 position2 = component.transform.position;
                     component.randomizeColor = true;
                     component.transform.position = position;
                     GorillaTagger.Instance.GetComponent<Rigidbody>().velocity = velocity;
@@ -66,6 +67,8 @@ namespace StupidTemplate.Mods
                     GorillaTagger.Instance.GetComponent<Rigidbody>().velocity = velocity2;
                     component.transform.position = position2;
                     component.randomizeColor = false;
+
+                    // component.projectilePrefab.tag = "CupidBow_Projectile";
 
                     SafetyShit.RpcFlush();
                 }

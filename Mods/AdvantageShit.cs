@@ -104,24 +104,40 @@ namespace StupidTemplate.Mods
             }
         }
 
-        public static void Chams()
+        static VRRig Target;
+
+        public static void tagAllHunt()
+        {
+            if (PhotonNetwork.CurrentRoom.CustomProperties.ToString().Contains("HUNT") && !GorillaLocomotion.Player.Instance.disableMovement)
+            {
+                Target = RigManager.GetVRRigFromPlayer(UnityEngine.Object.FindFirstObjectByType<GorillaHuntComputer>().myTarget);
+                GorillaTagger.Instance.offlineVRRig.enabled = false;
+                GorillaTagger.Instance.offlineVRRig.transform.position = Target.transform.position - new Vector3(0f, 3.7f, 0f);
+                GorillaLocomotion.Player.Instance.rightControllerTransform.position = Target.transform.position;
+            }
+            else
+            {
+                Target = null;
+                GorillaTagger.Instance.offlineVRRig.enabled = true;
+            }
+        }
+
+        public static void ESP()
         {
             foreach (VRRig vrrig in GorillaParent.instance.vrrigs)
             {
                 if (vrrig != GorillaTagger.Instance.offlineVRRig)
                 {
                     vrrig.mainSkin.material.shader = Shader.Find("GUI/Text Shader");
-                    vrrig.mainSkin.material.color = Color.green;
+                    vrrig.mainSkin.material.color = colorChangeables[tracersColor];
 
                     if (vrrig.mainSkin.material.name.Contains("fected"))
-                    {
-                        vrrig.mainSkin.material.color = Color.red;
-                    }
+                        vrrig.mainSkin.material.color = colorChangeables[taggedTracersColor];
                 }
             }
         }
 
-        public static void KillChams()
+        public static void ESPOff()
         {
             foreach (VRRig vrrig in GorillaParent.instance.vrrigs)
             {
@@ -131,6 +147,33 @@ namespace StupidTemplate.Mods
 
                     if (!vrrig.mainSkin.material.name.Contains("fected"))
                         vrrig.mainSkin.material.color = vrrig.playerColor;
+                }
+            }
+        }
+
+        public static void Tracers()
+        {
+            foreach (VRRig vrrig in GorillaParent.instance.vrrigs)
+            {
+                if (vrrig != GorillaTagger.Instance.offlineVRRig)
+                {
+                    GameObject line = new GameObject();
+                    LineRenderer liner = line.AddComponent<LineRenderer>();
+                    liner.startColor = colorChangeables[tracersColor];
+                    liner.endColor = colorChangeables[tracersColor];
+                    if (vrrig.mainSkin.material.name.Contains("fected"))
+                    {
+                        liner.startColor = colorChangeables[taggedTracersColor];
+                        liner.endColor = colorChangeables[taggedTracersColor];
+                    }
+                    liner.startWidth = 0.055f;
+                    liner.endWidth = 0.055f;
+                    liner.positionCount = 2;
+                    liner.useWorldSpace = true;
+                    liner.SetPosition(0, Player.Instance.rightControllerTransform.position);
+                    liner.SetPosition(1, vrrig.transform.position);
+                    liner.material.shader = Shader.Find("GUI/Text Shader");
+                    UnityEngine.Object.Destroy(line, Time.deltaTime);
                 }
             }
         }

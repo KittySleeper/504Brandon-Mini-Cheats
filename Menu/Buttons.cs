@@ -30,6 +30,7 @@ namespace StupidTemplate.Menu
                 new ButtonInfo { buttonText = "Menu Settings", method =() => SettingsMods.MenuSettings(), isTogglable = false, toolTip = "Opens the settings for the menu."},
                 new ButtonInfo { buttonText = "Movement Settings", method =() => SettingsMods.MovementSettings(), isTogglable = false, toolTip = "Opens the movement settings for the menu."},
                 new ButtonInfo { buttonText = "Projectile Settings", method =() => SettingsMods.ProjectileSettings(), isTogglable = false, toolTip = "Opens the projectile settings for the menu."},
+                new ButtonInfo { buttonText = "Cheat Settings", method =() => SettingsMods.CheatSettings(), isTogglable = false, toolTip = "Opens the cheat settings for the menu."},
             },
 
             new ButtonInfo[] { // Menu Settings
@@ -52,7 +53,9 @@ namespace StupidTemplate.Menu
                 new ButtonInfo { buttonText = "OG GUI UI", toolTip = "Makes the GUI look like the classic one."},
                 new ButtonInfo { buttonText = "Long Menu", enableMethod =() => SettingsMods.LongMenu(), disableMethod =() => SettingsMods.DisableLongMenu(), toolTip = "You Ruined The Silly."},
                 new ButtonInfo { buttonText = "Right Hand", enableMethod =() => SettingsMods.RightHand(), disableMethod =() => SettingsMods.LeftHand(), toolTip = "Puts the menu on your right hand."},
+                new ButtonInfo { buttonText = "Bark Menu", toolTip = "Makes the menu more like bark."},
                 new ButtonInfo { buttonText = "Watch Menu", method =() => SettingsMods.WatchMenu(), toolTip = "Turns the menu into a watch."},
+                new ButtonInfo { buttonText = "Random Menu Name", enableMethod = () => SettingsMods.RandomMenuName(), disableMethod = () => SettingsMods.ResetMenuName(), toolTip = "Makes the menu a random name."},
                 new ButtonInfo { buttonText = "Notifications", enableMethod =() => SettingsMods.EnableNotifications(), disableMethod =() => SettingsMods.DisableNotifications()},
                 new ButtonInfo { buttonText = "FPS Counter", enableMethod =() => SettingsMods.EnableFPSCounter(), disableMethod =() => SettingsMods.DisableFPSCounter(), toolTip = "Toggles the FPS counter."},
                 new ButtonInfo { buttonText = "Disconnect Button", enableMethod =() => SettingsMods.EnableDisconnectButton(), disableMethod =() => SettingsMods.DisableDisconnectButton(), toolTip = "Toggles the disconnect button."},
@@ -82,6 +85,12 @@ namespace StupidTemplate.Menu
                 new ButtonInfo { buttonText = "Change Rain Range", method =() => SettingsMods.ChangeRainMulti(), toolTip = "Change Projectiles Rain Range.", isTogglable = false},
             },
 
+            new ButtonInfo[] { // Projectile Settings
+                new ButtonInfo { buttonText = "Return to Settings", method =() => SettingsMods.EnterSettings(), isTogglable = false, toolTip = "Returns to the main settings page for the menu."},
+                new ButtonInfo { buttonText = "Change Tracer Colors", method =() => SettingsMods.ChangeTracersColor(), toolTip = "Changes the color of the tracers and esp.", isTogglable = false},
+                new ButtonInfo { buttonText = "Change Tagged Tracer Colors", method =() => SettingsMods.ChangeTracersTaggedColor(), toolTip = "Changes the color of the tagged tracers and esp.", isTogglable = false},
+            },
+
             new ButtonInfo[] { // Theme Presets
                 new ButtonInfo { buttonText = "Return to Settings", method =() => SettingsMods.EnterSettings(), isTogglable = false, toolTip = "Opens the movement settings for the menu."},
                 new ButtonInfo { buttonText = "504Brandon Theme", method =() => SettingsMods.themePreset("brandon"), isTogglable = false},
@@ -97,9 +106,8 @@ namespace StupidTemplate.Menu
                 new ButtonInfo { buttonText = "Fuck Leaderboard", method=() => RandomShit.fuckLeaderBoard(), toolTip= "Kinda breaks leaderboard name."},
                 new ButtonInfo { buttonText = "Make QuitBox Platform", enableMethod=() => RandomShit.MakeQuitBoxPlatform(), disableMethod=() => RandomShit.DeleteQuitBoxPlatform(), toolTip= "Makes it so the quitbox is just a bit platform you can sit on."},
                 new ButtonInfo { buttonText = "NameTag+", method=() => RandomShit.Nametag(), toolTip= "Makes it so you can see the players info on their nametag eg: color and player token."},
-                new ButtonInfo { buttonText = "Player Tracker", toolTip= "Makes it so people can track yo ass."},
+                new ButtonInfo { buttonText = "Impossible Color [CS?]", method=() => RandomShit.ImpossibleColor(), toolTip= "Makes you a color nobody else can pick"},
                 new ButtonInfo { buttonText = "April Fools", toolTip= "???"},
-                //new ButtonInfo { buttonText = "Ban Self", method=() => RandomShit.BanSelf(), toolTip= "Why did i add this?"},
             },
             new ButtonInfo[] { // Movement Mods
                 new ButtonInfo { buttonText = "Return to Main", method =() => Global.ReturnHome(), isTogglable = false, toolTip = "Returns to the main page of the menu."},
@@ -129,7 +137,9 @@ namespace StupidTemplate.Menu
                 new ButtonInfo { buttonText = "Return to Main", method =() => Global.ReturnHome(), isTogglable = false, toolTip = "Returns to the main page of the menu."},
                 new ButtonInfo { buttonText = "Tag Gun", method =() => AdvantageShit.TagGun(), toolTip = "Aim And Tag."},
                 new ButtonInfo { buttonText = "Tag All", method=() => AdvantageShit.tagAll(), toolTip= "Tag Everyone."},
-                new ButtonInfo { buttonText = "Chams", method=() => AdvantageShit.Chams(), disableMethod=() => AdvantageShit.KillChams(), toolTip= "See people through shit."},
+                new ButtonInfo { buttonText = "Hunt Tag All", method=() => AdvantageShit.tagAllHunt(), toolTip= "Tag Everyone."},
+                new ButtonInfo { buttonText = "ESP", method=() => AdvantageShit.ESP(), disableMethod=() => AdvantageShit.ESPOff(), toolTip= "See people through shit."},
+                new ButtonInfo { buttonText = "Tracers", method=() => AdvantageShit.Tracers(), toolTip= "See people through shit."},
             },
 
            new ButtonInfo[] { // OP Mods lol
